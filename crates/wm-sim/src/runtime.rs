@@ -1,6 +1,12 @@
-use crate::{bounded, consequences::apply_match, planning::PlanError, rng, roll};
+use crate::{
+    bounded,
+    consequences::apply_match,
+    planning::{PlanError, validate_plan},
+    rng, roll,
+};
 use serde::{Deserialize, Serialize};
 use wm_domain::game::*;
+use wm_domain::match_rules::MatchDefinition;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct QueuedInstruction {
@@ -95,8 +101,36 @@ impl Session {
         agents: Vec<RoadAgent>,
         trust: i32,
         relationships: Vec<(String, String, i32)>,
-    ) -> Self {
-        Self {
+    ) -> Result<Self, PlanError> {
+        // Validate at the simulator boundary as well as the booking boundary.
+        // A non-UI caller must not silently execute an unsupported match label.
+        for segment in &card {
+            if let SegmentPlan::Match(plan) = &segment.content {
+                let participant = |id: &str| {
+                    workers
+                        .iter()
+                        .find(|worker| worker.id == id)
+                        .ok_or_else(|| {
+                            PlanError(
+                                "A booked participant is missing from the show snapshot.".into(),
+                            )
+                        })
+                };
+                let agent = agents
+                    .iter()
+                    .find(|agent| agent.id == plan.agent_id)
+                    .ok_or_else(|| {
+                        PlanError("The booked road agent is missing from the show snapshot.".into())
+                    })?;
+                validate_plan(
+                    plan,
+                    participant(&plan.worker_a)?,
+                    participant(&plan.worker_b)?,
+                    agent,
+                )?;
+            }
+        }
+        Ok(Self {
             seed: seed.to_string(),
             rng_position: "0".into(),
             show_id,
@@ -113,7 +147,7 @@ impl Session {
             reports: Vec::new(),
             pending: Vec::new(),
             relationships,
-        }
+        })
     }
 
     fn emit(
@@ -257,9 +291,9 @@ impl Session {
             let Some(ref finish) = instruction.finish else {
                 return Err(PlanError("Choose the revised finish.".into()));
             };
-            if matches!(finish, Finish::Draw | Finish::NoContest)
-                != current.plan.winner_id.is_none()
-            {
+            let mut revised = current.plan.clone();
+            revised.finish = finish.clone();
+            if MatchDefinition::try_from(&revised).is_err() {
                 return Err(PlanError("Live communication cannot change the locked result. Choose another finish for that result.".into()));
             }
         }

@@ -83,6 +83,29 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
         agent_id: office.agents[0].id,
         beats: vec![],
     };
+    // Invalid core rules must fail before a card/revision mutation reaches SQLite.
+    for (match_type, winner, finish) in [
+        ("Tag", Some(a.id.clone()), Finish::Pinfall),
+        ("Singles", Some("outsider".into()), Finish::Pinfall),
+        ("Singles", Some(a.id.clone()), Finish::Draw),
+        ("Singles", None, Finish::Submission),
+    ] {
+        let mut invalid = plan.clone();
+        invalid.match_type = match_type.into();
+        invalid.winner_id = winner;
+        invalid.finish = finish;
+        assert!(
+            repo.save_segment(SaveSegmentRequest {
+                save_id: "loop".into(),
+                show_id: office.show.id,
+                revision: office.show.revision,
+                segment_id: None,
+                content: SegmentPlan::Match(invalid),
+            })
+            .is_err()
+        );
+        assert_eq!(repo.career_office("loop").unwrap().show, office.show);
+    }
     let card = repo
         .save_segment(SaveSegmentRequest {
             save_id: "loop".into(),

@@ -1,9 +1,28 @@
 use thiserror::Error;
 use wm_domain::game::*;
+use wm_domain::match_rules::{MatchDefinition, ParticipationRule, VictoryRule};
 
 #[derive(Debug, Error)]
 #[error("{0}")]
 pub struct PlanError(pub String);
+
+/// Structural validity is distinct from engine support. Future bookers can use
+/// the domain contract without accidentally running team matches as singles.
+pub fn validate_engine_support(definition: &MatchDefinition) -> Result<(), PlanError> {
+    definition
+        .validate()
+        .map_err(|e| PlanError(e.to_string()))?;
+    if definition.slots.len() != 2
+        || definition.sides.len() != 2
+        || definition.rules.participation != ParticipationRule::AllActive
+        || definition.rules.victory != VictoryRule::OneFall
+    {
+        return Err(PlanError(
+            "This booking is structurally valid, but tag, team, multi-person and elimination simulation is not available yet.".into(),
+        ));
+    }
+    Ok(())
+}
 
 pub fn validate_plan(
     plan: &MatchPlan,
@@ -21,17 +40,8 @@ pub fn validate_plan(
     if agent.id != plan.agent_id {
         return invalid("The assigned road agent is unavailable.");
     }
-    let no_winner = matches!(plan.finish, Finish::Draw | Finish::NoContest);
-    if no_winner != plan.winner_id.is_none()
-        || plan
-            .winner_id
-            .as_ref()
-            .is_some_and(|id| id != &a.id && id != &b.id)
-    {
-        return invalid(
-            "The booked winner must participate; draws and no contests have no winner.",
-        );
-    }
+    let definition = MatchDefinition::try_from(plan).map_err(|e| PlanError(e.to_string()))?;
+    validate_engine_support(&definition)?;
     if plan
         .protected_worker_id
         .as_ref()
@@ -52,9 +62,6 @@ pub fn validate_plan(
         return invalid(
             "Use 2–60 minutes, pace/risk 1–5, freedom 0–100 and a short match purpose (up to 60 beats).",
         );
-    }
-    if !["Singles", "No disqualification"].contains(&plan.match_type.as_str()) {
-        return invalid("This engine supports singles and no-disqualification singles.");
     }
     let mut last = 0;
     for (i, beat) in plan.beats.iter().enumerate() {

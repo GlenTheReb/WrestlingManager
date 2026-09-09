@@ -31,6 +31,22 @@ export type Finish = "pinfall" | "submission" | "countOut" | "disqualification" 
 
 export type MatchPlan = { matchType: string, workerA: string, workerB: string, winnerId: string | null, finish: Finish, cleanFinish: boolean, durationSeconds: number, style: string, pace: number, risk: number, freedom: number, purpose: string, protectedWorkerId: string | null, agentId: number, beats: Array<PlannedBeat>, };
 
+export type ParticipantSlot = { id: string, workerId: string, sideId: string, };
+
+export type MatchSide = { id: string, };
+
+export type ParticipationRule = "allActive" | "tag";
+
+export type VictoryRule = "oneFall" | "elimination";
+
+export type MatchRules = { participation: ParticipationRule, victory: VictoryRule, };
+
+export type DecisionMethod = "pinfall" | "submission" | "countOut" | "disqualification";
+
+export type BookedResult = { "outcome": "decision", winningSideId: string, method: DecisionMethod, decidingSlotId: string | null, defeatedSlotId: string | null, } | { "outcome": "draw", } | { "outcome": "noContest", };
+
+export type MatchDefinition = { slots: Array<ParticipantSlot>, sides: Array<MatchSide>, rules: MatchRules, result: BookedResult, };
+
 export type AnglePlan = { participants: Array<string>, purpose: string, durationSeconds: number, };
 
 export type SegmentPlan = { "kind": "match", "plan": MatchPlan } | { "kind": "angle", "plan": AnglePlan };
