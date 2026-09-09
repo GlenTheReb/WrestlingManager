@@ -507,7 +507,8 @@ impl SaveRepository {
             agents(&tx)?,
             trust,
             relationships,
-        );
+        )
+        .map_err(|e| rule(e.to_string()))?;
         tx.execute(
             "INSERT INTO show_runtime(show_id,snapshot) VALUES(?1,?2)",
             params![show_id, encode(&session)?],

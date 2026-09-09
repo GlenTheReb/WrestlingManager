@@ -7,10 +7,12 @@ rust-version.workspace = true
 [dependencies]
 serde.workspace = true
 thiserror.workspace = true
-ts-rs.workspace = true
+# Serde enforces unknown-field rejection at runtime; it does not alter TS shapes.
+ts-rs = { workspace = true, features = ["no-serde-warnings"] }
 
 [dev-dependencies]
 proptest.workspace = true
+serde_json.workspace = true
 
 [[bin]]
 name = "export-contracts"

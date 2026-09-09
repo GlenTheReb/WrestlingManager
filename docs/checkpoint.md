@@ -1,5 +1,9 @@
 # Wrestling Manager checkpoint — 9 September 2026
 
+Current handoff: [WM-001 — Match-rule core](tickets/WM-001.md), on
+`feature/wm-001-match-rule-core` from committed baseline `3d74c7a`. The records below describe
+earlier increments and their publication status at the time; use the ticket for current state.
+
 Latest increment completed after the owner resumed implementation. No routing, delegation,
 commits, pushes or publication. The earlier foundation record is retained below for context.
 

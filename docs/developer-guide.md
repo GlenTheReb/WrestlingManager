@@ -196,3 +196,86 @@ For long saves, profile the snapshot and event tables before inventing a more el
 - The Rust format, Clippy and generated-contract commands explained above remain the same.
   All commands should be run from the repository root. Use the .cmd suffix in PowerShell
   when executable resolution or script execution policy would otherwise select pnpm.ps1.
+
+## WM-001 developer learning
+
+The outcome is one shared definition of match membership and results, used by booking
+validation and simulator construction. `crates/wm-domain/src/match_rules.rs` owns the rules;
+`crates/wm-sim/src/planning.rs` checks which valid formats this engine can actually execute.
+`runtime.rs` now returns a success or rule error when constructing a session. `career.rs`
+propagates that error before writing a runtime snapshot inside its existing transaction.
+
+### 1. Why separate a worker, a participant slot and a side?
+
+A worker is a person in the world. A slot is their place in this match. A side is the group
+competing together for this match, even if they have no permanent team record. Storing the
+result as “array element 0 wins” would change its meaning when the interface reordered the
+participants. Stable slot/side IDs preserve those references. A substitution can change a
+slot's worker while leaving its role in the booking intact; the UI should make that inherited
+booking visible. Permanent teams alone would make ad-hoc alliances unnecessarily difficult.
+
+The reusable strategy is to distinguish identity from display order and from membership.
+Choose references that survive the user operations you intend to support, then test those
+operations. The generated-layout test reverses both lists and substitutes a wrestler before
+checking the result and membership rules.
+
+### 2. Why use a result enum instead of several optional winner fields?
+
+An enum expresses mutually exclusive possibilities: a decision, a draw or a no contest.
+Only a decision contains a winning side and a decisive method. `Option<String>` is still useful
+for individual actors in a whole-side count-out or disqualification. Pinfall/submission require
+both actors, and validation checks that they belong to opposing sides. Rust and the generated
+TypeScript union express the same shape, reducing disagreement across the desktop boundary.
+
+Types are not sufficient by themselves: JSON arrives at runtime and can contain contradictory
+fields. A new test found that Serde's unit enum variants ignored extra fields even with the
+unknown-field restriction. Empty struct variants (`Draw {}`) enforce rejection. Test actual
+serialisation/deserialisation instead of assuming a compiler type proves external data is valid.
+
+### 3. Why adapt old singles plans instead of migrating every save immediately?
+
+`MatchDefinition::try_from(&MatchPlan)` reads the old plan and builds a validated, temporary
+definition. The old plan remains the only persisted source of truth. This avoids both a risky
+save-format change before expanded simulation exists and two editable winner fields drifting
+apart. The tradeoff is a temporary adapter and a deliberate later migration when team plans
+become persisted inputs. It is not a permanent justification for keeping the two-worker model.
+
+Separate business validity from implementation capability: a three-team booking can make
+sense while the current simulator cannot run it. The capability check rejects it explicitly.
+This pattern supports gradual upgrades without either corrupting data or pretending unfinished
+features work. WM-002/003 must add real runtime support before relaxing that check.
+
+### 4. How do you prove a refactor preserved a seeded simulation?
+
+First capture evidence before changing production code. WM-001 recorded fingerprints of a
+347-second snapshot, its completed state and all emitted events from baseline `3d74c7a`.
+The golden test checks those exact outputs after the change. Its FNV-1a hash is a compact
+regression fingerprint, not a cryptographic guarantee. Semantic tests add meaningful assertions:
+the booked winner stays fixed, all existing finishes work, chunk sizes and serialised resume
+agree, and SQLite rejects invalid bookings without changing the card revision.
+
+A golden test alone covers only one scenario and can fail for harmless serialisation changes.
+Property tests explore broader inputs but cannot prove old output compatibility. Use both,
+investigate differences, and never update a golden constant just to make a failing test pass.
+
+## WM-001 commands used
+
+- `pnpm.cmd rust test -p wm-domain -p wm-sim -p wm-persistence` selects the three affected Rust
+  packages with repeated `-p` options. It runs their unit/integration tests and examples marked
+  as documentation tests. A nonzero exit means compilation or an assertion failed; inspect the
+  named failure before rerunning. Tests use temporary saves and are safe to rerun.
+- `pnpm.cmd rust run -p wm-domain --bin export-contracts` runs the contract generator and
+  rewrites `packages/contracts/src/generated.ts` from Rust definitions. Adding `-- --check`
+  passes `--check` to that program instead of Cargo, checking drift without writing. Generate
+  after editing types; check in validation. Both are safe to rerun.
+- `pnpm.cmd rust clippy --workspace --all-targets -- -D warnings` checks every Rust package and
+  target, including tests, with warnings treated as errors. It catches suspicious code; passing
+  does not prove simulation correctness. It does not modify player saves.
+- `pnpm.cmd check` runs formatting, frontend lint, type checks, UI tests and the frontend build.
+  It verifies the generated contracts still fit the app. It is safe to rerun, but does not build
+  the native executable or prove real desktop-to-database communication.
+- `pnpm.cmd rust build -p wm-desktop --features custom-protocol` embeds the previously built
+  frontend in the debug desktop executable. Run after `pnpm.cmd check` or `pnpm.cmd build` so
+  the assets are current. `pnpm.cmd test:desktop` then exercises real booking, playback,
+  restart/resume and results using isolated saves under `.artifacts`. It opens a temporary
+  game window and closes only processes it owns; it is safe to rerun.

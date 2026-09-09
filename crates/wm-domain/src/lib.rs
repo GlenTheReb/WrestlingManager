@@ -7,6 +7,7 @@ use thiserror::Error;
 use ts_rs::TS;
 
 pub mod game;
+pub mod match_rules;
 
 pub const CURRENT_ENGINE_VERSION: &str = "0.2.0";
 pub const CURRENT_SCHEMA_VERSION: u32 = 3;

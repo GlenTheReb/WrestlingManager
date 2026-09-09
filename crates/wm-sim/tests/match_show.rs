@@ -1,8 +1,9 @@
 use proptest::prelude::*;
 use wm_domain::game::*;
+use wm_domain::match_rules::*;
 use wm_sim::{
     content::{base_pack, generate_world, initial_agents},
-    planning::{agent_plan, validate_plan},
+    planning::{agent_plan, validate_engine_support, validate_plan},
     runtime::Session,
 };
 
@@ -50,7 +51,188 @@ fn session(seed: u64) -> Session {
             content: SegmentPlan::Match(plan),
         },
     ];
-    Session::new(seed, 1, card, workers, agents, 65, vec![])
+    Session::new(seed, 1, card, workers, agents, 65, vec![]).unwrap()
+}
+
+// FNV-1a is only a compact regression fingerprint, not a security checksum.
+fn fingerprint(bytes: &[u8]) -> u64 {
+    bytes.iter().fold(0xcbf29ce484222325, |hash, byte| {
+        (hash ^ u64::from(*byte)).wrapping_mul(0x100000001b3)
+    })
+}
+
+#[test]
+fn engine_0_2_0_singles_golden_output() {
+    let mut sim = session(42);
+    let mut events = sim.advance(347);
+    let snapshot = serde_json::to_vec(&sim).unwrap();
+    let partial = fingerprint(&snapshot);
+    let mut sim: Session = serde_json::from_slice(&snapshot).unwrap();
+    events.extend(sim.advance(3600));
+    let final_state = fingerprint(&serde_json::to_vec(&sim).unwrap());
+    let event_stream = fingerprint(&serde_json::to_vec(&events).unwrap());
+    // Captured from 3d74c7a before WM-001 changed production code. Changing these
+    // requires an explicit engine compatibility decision, not a fixture refresh.
+    assert_eq!(partial, 0x4684442da96784de, "legacy snapshot drift");
+    assert_eq!(final_state, 0xe4d5bf56f4341bb6, "final state drift");
+    assert_eq!(event_stream, 0x4f9f05ce15f9c76f, "event stream drift");
+    assert_eq!(events.len(), 108);
+}
+
+#[test]
+fn every_legacy_finish_converts_and_simulates_without_changing_the_booked_result() {
+    for match_type in ["Singles", "No disqualification"] {
+        for finish in [
+            Finish::Pinfall,
+            Finish::Submission,
+            Finish::CountOut,
+            Finish::Disqualification,
+            Finish::Draw,
+            Finish::NoContest,
+        ] {
+            for winner_b in [false, true] {
+                let source = session(9);
+                let mut card = vec![source.card[0].clone()];
+                let SegmentPlan::Match(plan) = &mut card[0].content else {
+                    unreachable!()
+                };
+                plan.match_type = match_type.into();
+                plan.finish = finish.clone();
+                plan.winner_id = finish.decision_method().map(|_| {
+                    if winner_b {
+                        plan.worker_b.clone()
+                    } else {
+                        plan.worker_a.clone()
+                    }
+                });
+                let saved_plan = serde_json::to_value(&plan).unwrap();
+                let definition = MatchDefinition::try_from(&*plan).unwrap();
+                validate_engine_support(&definition).unwrap();
+                let winners: Vec<_> = definition.winning_worker_ids().map(str::to_owned).collect();
+                assert_eq!(
+                    winners,
+                    plan.winner_id.clone().into_iter().collect::<Vec<_>>()
+                );
+                assert_eq!(serde_json::to_value(&plan).unwrap(), saved_plan);
+                let expected_winner = plan.winner_id.clone();
+                let mut sim =
+                    Session::new(9, 1, card, source.workers, source.agents, 65, vec![]).unwrap();
+                sim.advance(3600);
+                assert!(sim.complete);
+                assert_eq!(sim.reports[0].winner_id, expected_winner);
+                assert_eq!(sim.reports[0].changes.len(), 2);
+            }
+        }
+    }
+}
+
+#[test]
+fn future_formats_are_structurally_valid_but_not_silently_simulated_as_singles() {
+    let source = session(1);
+    let SegmentPlan::Match(plan) = &source.card[0].content else {
+        unreachable!()
+    };
+    let singles = MatchDefinition::try_from(plan).unwrap();
+    for size in [2, 3] {
+        for participation in [ParticipationRule::Tag, ParticipationRule::AllActive] {
+            let mut team = singles.clone();
+            for side in ["a", "b"] {
+                for member in 1..size {
+                    team.slots.push(ParticipantSlot {
+                        id: format!("slot-{side}-{member}"),
+                        side_id: format!("side-{side}"),
+                        worker_id: format!("additional-{side}-{member}"),
+                    });
+                }
+            }
+            team.rules.participation = participation;
+            team.validate().unwrap();
+            assert!(
+                validate_engine_support(&team)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("not available yet")
+            );
+        }
+    }
+    let mut elimination = singles.clone();
+    elimination.rules.victory = VictoryRule::Elimination;
+    elimination.validate().unwrap();
+    assert!(validate_engine_support(&elimination).is_err());
+    let mut three_way = singles;
+    three_way.sides.push(MatchSide {
+        id: "side-c".into(),
+    });
+    three_way.slots.push(ParticipantSlot {
+        id: "slot-c".into(),
+        side_id: "side-c".into(),
+        worker_id: "third-worker".into(),
+    });
+    three_way.validate().unwrap();
+    assert!(validate_engine_support(&three_way).is_err());
+
+    for label in ["Tag", "Trios", "Triple threat", "Singles typo"] {
+        let mut card = source.card.clone();
+        let SegmentPlan::Match(plan) = &mut card[0].content else {
+            unreachable!()
+        };
+        plan.match_type = label.into();
+        assert!(
+            Session::new(
+                1,
+                1,
+                card,
+                source.workers.clone(),
+                source.agents.clone(),
+                65,
+                vec![]
+            )
+            .is_err()
+        );
+    }
+}
+
+#[test]
+fn simulator_rejects_invalid_booked_results_and_missing_people_before_start() {
+    let source = session(2);
+    for (finish, winner) in [
+        (Finish::Pinfall, None),
+        (Finish::Submission, Some("outsider".to_owned())),
+        (Finish::Draw, Some(source.workers[0].id.clone())),
+        (Finish::NoContest, Some(source.workers[1].id.clone())),
+    ] {
+        let mut card = source.card.clone();
+        let SegmentPlan::Match(plan) = &mut card[0].content else {
+            unreachable!()
+        };
+        plan.finish = finish;
+        plan.winner_id = winner;
+        assert!(
+            Session::new(
+                2,
+                1,
+                card,
+                source.workers.clone(),
+                source.agents.clone(),
+                65,
+                vec![]
+            )
+            .is_err()
+        );
+    }
+    assert!(
+        Session::new(
+            2,
+            1,
+            source.card.clone(),
+            vec![],
+            source.agents.clone(),
+            65,
+            vec![]
+        )
+        .is_err()
+    );
+    assert!(Session::new(2, 1, source.card, source.workers, vec![], 65, vec![]).is_err());
 }
 
 #[test]

@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use ts_rs::{Config, TS};
 use wm_domain::game::*;
+use wm_domain::match_rules::*;
 use wm_domain::{CreateGameRequest, IpcError, PromotionOverview, SaveSummary};
 
 fn generated_contracts() -> String {
@@ -24,6 +25,14 @@ fn generated_contracts() -> String {
         PlannedBeat::decl(&config),
         Finish::decl(&config),
         MatchPlan::decl(&config),
+        ParticipantSlot::decl(&config),
+        MatchSide::decl(&config),
+        ParticipationRule::decl(&config),
+        VictoryRule::decl(&config),
+        MatchRules::decl(&config),
+        DecisionMethod::decl(&config),
+        BookedResult::decl(&config),
+        MatchDefinition::decl(&config),
         AnglePlan::decl(&config),
         SegmentPlan::decl(&config),
         Segment::decl(&config),
