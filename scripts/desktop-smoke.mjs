@@ -1,6 +1,6 @@
 // Real Windows WebView2 + Tauri + SQLite. No mocked IPC or browser save substitute.
 import { spawn } from 'node:child_process';
-import { mkdir, mkdtemp, access } from 'node:fs/promises';
+import { mkdir, mkdtemp, access, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,6 +14,7 @@ await mkdir(artifacts, { recursive: true });
 const isolated = await mkdtemp(path.join(artifacts, 'desktop-smoke-'));
 const savesDirectory = path.join(isolated, 'saves');
 const errors = [];
+let launchNumber = 0;
 
 async function freePort() {
   const server = createServer();
@@ -26,6 +27,7 @@ async function freePort() {
 }
 
 async function launch() {
+  const launchId = ++launchNumber;
   const port = await freePort();
   const process = spawn(binary, [], {
     cwd: root,
@@ -33,12 +35,17 @@ async function launch() {
     env: {
       ...globalThis.process.env,
       WM_SAVE_DIR: savesDirectory,
-      WEBVIEW2_USER_DATA_FOLDER: path.join(isolated, 'webview'),
+      WEBVIEW2_USER_DATA_FOLDER: path.join(isolated, `webview-${launchId}`),
       WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS: `--remote-debugging-port=${port}`,
     },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   let diagnostic = '';
+  let spawnError;
+  let connectionError;
+  process.on('error', (error) => {
+    spawnError = error;
+  });
   process.stdout.on('data', (chunk) => {
     diagnostic += chunk.toString();
   });
@@ -47,21 +54,24 @@ async function launch() {
   });
   let browser;
   try {
-    for (let attempt = 0; attempt < 80; attempt++) {
+    const deadline = Date.now() + 60_000;
+    while (Date.now() < deadline) {
+      if (spawnError) throw spawnError;
       if (process.exitCode !== null)
         throw new Error(`Desktop exited: ${diagnostic.slice(-2500)}`);
       try {
         browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`, {
-          timeout: 800,
+          timeout: Math.min(5000, deadline - Date.now()),
         });
         break;
-      } catch {
+      } catch (error) {
+        connectionError = error;
         await new Promise((resolve) => setTimeout(resolve, 250));
       }
     }
     if (!browser)
       throw new Error(
-        `WebView2 debugger did not start: ${diagnostic.slice(-2500)}`,
+        `WebView2 debugger connection failed: ${connectionError?.message}\nDesktop output: ${diagnostic.slice(-2500)}`,
       );
     const context = browser.contexts()[0];
     let page = context.pages()[0];
@@ -72,6 +82,10 @@ async function launch() {
     ).toBeVisible();
     return { process, browser, page };
   } catch (error) {
+    await writeFile(
+      path.join(isolated, `launch-${launchId}.log`),
+      `${error.stack}\n\nDesktop output:\n${diagnostic}`,
+    );
     if (browser) await browser.close();
     process.kill();
     throw error;

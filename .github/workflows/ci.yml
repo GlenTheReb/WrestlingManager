@@ -2,7 +2,15 @@ name: Foundation checks
 
 on:
   push:
+    branches:
+      - main
+      - feature/initial-skeleton
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: foundation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -36,5 +44,8 @@ jobs:
         if: always()
         with:
           name: desktop-screenshots
-          path: .artifacts/*.png
+          path: |
+            .artifacts/*.png
+            .artifacts/desktop-smoke-*/*.log
+          include-hidden-files: true
           if-no-files-found: ignore
