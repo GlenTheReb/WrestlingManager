@@ -279,3 +279,52 @@ investigate differences, and never update a golden constant just to make a faili
   the assets are current. `pnpm.cmd test:desktop` then exercises real booking, playback,
   restart/resume and results using isolated saves under `.artifacts`. It opens a temporary
   game window and closes only processes it owns; it is safe to rerun.
+
+## CI repair: developer learning
+
+### Why did one PR have two Foundation checks?
+
+A commit pushed to a branch with an open PR emits two different GitHub events: `push` and
+`pull_request`. An unrestricted workflow responds to both. `.github/workflows/ci.yml` now runs
+push checks only on integration branches (`main` and the current `feature/initial-skeleton`),
+while feature branches are checked through PR events. The tradeoff is intentional: an unreviewed
+feature branch without a PR has no automatic checks; a manual run is available when needed.
+Concurrency cancels older runs for the same PR/ref, but alone would not prevent duplicate triggers.
+
+The native smoke test remains a local release gate. GitHub's hosted Windows runner started the
+Tauri process but refused every connection to WebView2's local debugger endpoint for 60 seconds.
+That prevents browser automation from reaching the game and does not indicate a failed gameplay
+assertion. Hosted CI still compiles the native executable and requires every Rust/frontend test.
+Run the desktop smoke on a logged-in Windows machine, or add a suitable interactive self-hosted
+runner later, rather than weakening the smoke test or reporting an infrastructure failure as a
+product regression.
+
+### Why can local tests pass while a desktop smoke test fails in CI?
+
+They validate different boundaries. Rust tests exercise the engine and saves; UI tests use
+mocked native calls. The desktop smoke test additionally requires a real Windows process,
+WebView2 and a debugger connection before it reaches any gameplay assertions. Find the first
+failed workflow step and its actual exception before changing application logic. Here both
+original runs passed tests/builds but failed debugger attachment, and an empty catch hid the
+connection error. `scripts/desktop-smoke.mjs` now retains that error and writes a launch log.
+
+### What makes a startup retry useful rather than masking a bug?
+
+Bound total elapsed time, retain the last cause and still fail when the deadline expires.
+The smoke test permits up to 60 seconds for cold startup and up to five seconds per handshake.
+A fresh WebView2 profile per launch avoids reusing a still-closing browser process; the career
+directory stays the same so the restart test still verifies persisted game state. Increasing
+timeouts is not proof of a fix: the same workflow must pass on the hosted Windows runner.
+
+## CI repair: commands used
+
+- `pnpm.cmd install --frozen-lockfile` restores the versions already recorded in the new
+  Documents checkout. It fails if the manifest requires changing the lockfile; it does not
+  upgrade dependencies. Safe to rerun, but it recreates the ignored `node_modules` directory.
+- `pnpm.cmd exec prettier --check .github/workflows/ci.yml scripts/desktop-smoke.mjs` parses and
+  checks formatting of the changed files without rewriting them. It does not validate GitHub's
+  event semantics; the hosted run list verifies that only a PR event runs for the new commit.
+- `pnpm.cmd lint` checks the smoke script with the repository's lint rules. `pnpm.cmd test:desktop`
+  then exercises the actual executable and creates isolated test data. No native code changed,
+  so local checks reused the previously verified executable from baseline `29219ba`; GitHub
+  rebuilds the executable independently. Player careers are unaffected by these checks.
