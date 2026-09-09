@@ -1,0 +1,322 @@
+{
+  "formatVersion": 1,
+  "name": "UWF Founding World",
+  "backgrounds": [
+    {
+      "nationality": "British",
+      "language": "English",
+      "school": "Northbridge Wrestling Academy",
+      "style": "Technical",
+      "history": "Learned mat wrestling on small town halls, with a patient veteran as a mentor.",
+      "firstNames": ["Rowan", "Elliot", "Callum", "Jamie", "Morgan"],
+      "lastNames": ["Vale", "Mercer", "Reed", "Holt", "Ashford"]
+    },
+    {
+      "nationality": "British",
+      "language": "English",
+      "school": "Ironworks Training Hall",
+      "style": "Power",
+      "history": "Came through rugby and strength training before learning to work a wrestling crowd.",
+      "firstNames": ["Gareth", "Owen", "Lewis", "Toby", "Fraser"],
+      "lastNames": ["Flint", "Ward", "Cross", "Rook", "Hale"]
+    },
+    {
+      "nationality": "Mexican",
+      "language": "Spanish",
+      "school": "Escuela del Sol",
+      "style": "Lucha",
+      "history": "Trained in a local lucha school, learning balance, rapid exchanges and audience connection.",
+      "firstNames": ["Mateo", "Diego", "Rafael", "Emilio", "Tomás"],
+      "lastNames": ["Luna", "Vega", "Salas", "Ríos", "Cruz"]
+    },
+    {
+      "nationality": "Japanese",
+      "language": "Japanese",
+      "school": "Higashi Dojo",
+      "style": "Strong style",
+      "history": "A demanding dojo education emphasised conditioning, striking and respect for opponents.",
+      "firstNames": ["Ren", "Haruto", "Kaito", "Sora", "Yuto"],
+      "lastNames": ["Mori", "Hayashi", "Takeda", "Arai", "Ishida"]
+    },
+    {
+      "nationality": "American",
+      "language": "English",
+      "school": "Lakefront Wrestling School",
+      "style": "Entertainment",
+      "history": "Worked community theatre before finding an audience on the independent wrestling circuit.",
+      "firstNames": ["Cameron", "Adrian", "Jesse", "Logan", "Blake"],
+      "lastNames": ["Sterling", "Harlow", "Bishop", "Monroe", "West"]
+    },
+    {
+      "nationality": "Canadian",
+      "language": "English",
+      "school": "Prairie Grappling Club",
+      "style": "Sports",
+      "history": "Competed in amateur wrestling before adapting competitive habits to a worked performance.",
+      "firstNames": ["Noah", "Liam", "Cole", "Drew", "Evan"],
+      "lastNames": ["Bennett", "Brooks", "Frost", "Lake", "Grant"]
+    },
+    {
+      "nationality": "Irish",
+      "language": "English",
+      "school": "Docklands Wrestling Collective",
+      "style": "Hardcore",
+      "history": "Made a name in rough independent venues, then sought safer ways to deliver believable danger.",
+      "firstNames": ["Cian", "Ronan", "Finn", "Dara", "Niall"],
+      "lastNames": ["Keane", "Doyle", "Byrne", "Quinn", "Walsh"]
+    },
+    {
+      "nationality": "Australian",
+      "language": "English",
+      "school": "Harbour Performance Centre",
+      "style": "Comedy",
+      "history": "A background in physical comedy became a distinctive wrestling act built around timing.",
+      "firstNames": ["Alex", "Tate", "Riley", "Casey", "Jordan"],
+      "lastNames": ["Banks", "Clarke", "Hayes", "Stone", "Miller"]
+    }
+  ],
+  "moves": [
+    {
+      "id": "lockup",
+      "name": "Collar-and-elbow tie-up",
+      "style": "Basic",
+      "difficulty": 2,
+      "risk": 1,
+      "staminaCost": 1,
+      "minStrength": 1,
+      "proficiency": 70,
+      "signature": false
+    },
+    {
+      "id": "headlock",
+      "name": "Side headlock takeover",
+      "style": "Basic",
+      "difficulty": 3,
+      "risk": 1,
+      "staminaCost": 1,
+      "minStrength": 1,
+      "proficiency": 70,
+      "signature": false
+    },
+    {
+      "id": "armdrag",
+      "name": "Arm drag",
+      "style": "Basic",
+      "difficulty": 4,
+      "risk": 1,
+      "staminaCost": 2,
+      "minStrength": 1,
+      "proficiency": 70,
+      "signature": false
+    },
+    {
+      "id": "slam",
+      "name": "Body slam",
+      "style": "Basic",
+      "difficulty": 4,
+      "risk": 2,
+      "staminaCost": 3,
+      "minStrength": 8,
+      "proficiency": 70,
+      "signature": false
+    },
+    {
+      "id": "dropkick",
+      "name": "Standing dropkick",
+      "style": "Basic",
+      "difficulty": 6,
+      "risk": 2,
+      "staminaCost": 3,
+      "minStrength": 1,
+      "proficiency": 70,
+      "signature": false
+    },
+    {
+      "id": "suplex",
+      "name": "Snap suplex",
+      "style": "Basic",
+      "difficulty": 6,
+      "risk": 2,
+      "staminaCost": 3,
+      "minStrength": 7,
+      "proficiency": 70,
+      "signature": false
+    },
+    {
+      "id": "chain",
+      "name": "Wristlock reversal sequence",
+      "style": "Technical",
+      "difficulty": 8,
+      "risk": 1,
+      "staminaCost": 2,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "bridge",
+      "name": "Bridging Northern Lights suplex",
+      "style": "Technical",
+      "difficulty": 12,
+      "risk": 3,
+      "staminaCost": 4,
+      "minStrength": 7,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "powerbomb",
+      "name": "Sit-out powerbomb",
+      "style": "Power",
+      "difficulty": 11,
+      "risk": 4,
+      "staminaCost": 5,
+      "minStrength": 14,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "powerslam",
+      "name": "Spinning powerslam",
+      "style": "Power",
+      "difficulty": 8,
+      "risk": 3,
+      "staminaCost": 4,
+      "minStrength": 12,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "hurricanrana",
+      "name": "Running hurricanrana",
+      "style": "Lucha",
+      "difficulty": 11,
+      "risk": 3,
+      "staminaCost": 4,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "moonsault",
+      "name": "Top-rope moonsault",
+      "style": "Lucha",
+      "difficulty": 15,
+      "risk": 5,
+      "staminaCost": 6,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "roundhouse",
+      "name": "Spinning roundhouse kick",
+      "style": "Strong style",
+      "difficulty": 10,
+      "risk": 3,
+      "staminaCost": 3,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "lariat",
+      "name": "Short-arm lariat",
+      "style": "Strong style",
+      "difficulty": 9,
+      "risk": 3,
+      "staminaCost": 4,
+      "minStrength": 9,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "ddt",
+      "name": "Dramatic reverse DDT",
+      "style": "Entertainment",
+      "difficulty": 8,
+      "risk": 2,
+      "staminaCost": 3,
+      "minStrength": 4,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "comeback",
+      "name": "Corner escape and running clothesline",
+      "style": "Entertainment",
+      "difficulty": 6,
+      "risk": 2,
+      "staminaCost": 3,
+      "minStrength": 3,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "takedown",
+      "name": "Double-leg takedown",
+      "style": "Sports",
+      "difficulty": 7,
+      "risk": 2,
+      "staminaCost": 3,
+      "minStrength": 5,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "kneebar",
+      "name": "Rolling kneebar",
+      "style": "Sports",
+      "difficulty": 12,
+      "risk": 3,
+      "staminaCost": 3,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "brawl",
+      "name": "Ringside forearm exchange",
+      "style": "Hardcore",
+      "difficulty": 5,
+      "risk": 3,
+      "staminaCost": 3,
+      "minStrength": 4,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "neckbreaker",
+      "name": "Swinging neckbreaker",
+      "style": "Hardcore",
+      "difficulty": 9,
+      "risk": 4,
+      "staminaCost": 4,
+      "minStrength": 5,
+      "proficiency": 75,
+      "signature": true
+    },
+    {
+      "id": "feint",
+      "name": "Feigned stumble into a schoolboy",
+      "style": "Comedy",
+      "difficulty": 7,
+      "risk": 1,
+      "staminaCost": 2,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": false
+    },
+    {
+      "id": "misdirection",
+      "name": "Misdirection rope-running sequence",
+      "style": "Comedy",
+      "difficulty": 11,
+      "risk": 2,
+      "staminaCost": 4,
+      "minStrength": 1,
+      "proficiency": 75,
+      "signature": true
+    }
+  ]
+}

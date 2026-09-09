@@ -1,0 +1,34 @@
+{
+  "name": "wrestling-manager",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=11 <12"
+  },
+  "scripts": {
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/desktop.ps1 dev",
+    "dev:web": "pnpm --filter @wm/desktop dev",
+    "build": "pnpm --filter @wm/desktop build",
+    "build:desktop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/desktop.ps1 build --no-bundle",
+    "build:desktop:debug": "pnpm build && pnpm rust build -p wm-desktop --features custom-protocol",
+    "rust": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/cargo.ps1",
+    "typecheck": "pnpm --filter @wm/desktop typecheck",
+    "lint": "eslint apps/desktop/src apps/desktop/*.ts scripts/*.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm --filter @wm/desktop test",
+    "test:desktop": "node scripts/desktop-smoke.mjs",
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "eslint": "10.10.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.4.0",
+    "prettier": "3.9.6",
+    "typescript-eslint": "8.69.0"
+  }
+}

@@ -1,0 +1,17 @@
+[package]
+name = "wm-domain"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
+ts-rs.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
+
+[[bin]]
+name = "export-contracts"
+path = "src/bin/export_contracts.rs"

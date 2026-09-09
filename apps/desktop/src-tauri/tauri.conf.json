@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Wrestling Manager",
+  "version": "0.1.0",
+  "identifier": "com.wrestlingmanager.game",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Wrestling Manager",
+        "width": 1280,
+        "height": 880,
+        "minWidth": 760,
+        "minHeight": 600,
+        "center": true,
+        "fullscreen": true,
+        "decorations": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: data:; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'self'; frame-src 'none'",
+      "capabilities": ["main-capability"]
+    }
+  },
+  "bundle": { "active": false, "icon": [] }
+}
