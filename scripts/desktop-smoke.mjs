@@ -144,6 +144,16 @@ try {
   const first = page.locator('tbody button').first();
   await first.click();
   await expect(page.getByRole('dialog')).toBeVisible();
+  await page
+    .getByRole('button', { name: 'Person & traits', exact: true })
+    .click();
+  await expect(
+    page.getByRole('heading', { name: 'Shared qualities', exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText('No exceptional-trait evidence recorded yet.'),
+  ).toBeVisible();
+  await page.screenshot({ path: path.join(artifacts, 'worker-identity.png') });
   await page.getByRole('button', { name: 'Moveset', exact: true }).click();
   await page.screenshot({ path: path.join(artifacts, 'worker-moves.png') });
   await page.getByRole('button', { name: 'Close panel' }).click();

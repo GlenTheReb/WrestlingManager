@@ -6,6 +6,7 @@ rust-version.workspace = true
 
 [dependencies]
 serde.workspace = true
+chrono = { version = "0.4", default-features = false, features = ["std"] }
 thiserror.workspace = true
 # Serde enforces unknown-field rejection at runtime; it does not alter TS shapes.
 ts-rs = { workspace = true, features = ["no-serde-warnings"] }

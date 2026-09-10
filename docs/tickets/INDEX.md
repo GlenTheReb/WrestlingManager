@@ -4,6 +4,11 @@ Use [the execution guide](EXECUTION-GUIDE.md) before implementing any capability
 not numeric order, decides which thin slice creates the next playable outcome. Every capability file
 records destination context; a separate execution ticket is still required before code changes.
 
+Latest execution: [WM-022.1 — Combined identity implementation](WM-022.1.md), awaiting commit/review authority.
+Next people-system capability: WM-023 relationships and interactions (requires a scoped execution ticket).
+Supporting design: [PD-103 naming and event rules](../personality-and-trait-rules.md).
+WM-022 and PD-103 are implemented locally; WM-023 remains planned.
+
 ## Match and booking
 
 - [WM-001 — Match-rule core](WM-001.md) — complete
@@ -34,7 +39,7 @@ records destination context; a separate execution ticket is still required befor
 - [WM-020 — Wrestler stat hierarchy](WM-020.md) — implemented, verified and pushed
   - [WM-020.1 — Canonical wrestler-rating system implementation](WM-020.1.md) — execution record
 - [WM-021 — Roster discovery and filtering](WM-021.md)
-- [WM-022 — Wrestler identity and personality](WM-022.md)
+- [WM-022 — Wrestler identity and personality](WM-022.md) — implemented locally, all four slices
 - [WM-023 — Wrestler relationships and interactions](WM-023.md)
 - [WM-024 — Wrestler profile and career hub](WM-024.md)
 - [WM-025 — Real-life and kayfabe separation](WM-025.md)

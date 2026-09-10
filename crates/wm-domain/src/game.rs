@@ -42,6 +42,8 @@ pub struct Worker {
     pub background: String,
     pub personality: String,
     pub ambition: String,
+    #[serde(default)]
+    pub identity: crate::identity::PersonIdentity,
     pub style: String,
     pub weight_kg: i32,
     pub attributes: WrestlerAttributes,
@@ -60,6 +62,7 @@ pub struct RosterRow {
     pub style: String,
     pub archetype: String,
     pub overall: i32,
+    pub personality_description: String,
     pub groups: crate::ratings::GroupScores,
     pub condition: Condition,
 }
@@ -73,6 +76,7 @@ impl From<&Worker> for RosterRow {
             style: worker.style.clone(),
             archetype: summary.archetype,
             overall: summary.overall.get(),
+            personality_description: worker.identity.describe(None).text,
             groups: summary.groups,
             condition: worker.condition.clone(),
         }
@@ -395,6 +399,9 @@ pub struct WorkerProfile {
     pub worker: Worker,
     pub wrestling: WrestlingSummary,
     pub history: Vec<SegmentReport>,
+    pub personality_description: crate::identity::PersonalityDescription,
+    pub biography: String,
+    pub exceptional_traits: crate::traits::TraitOverview,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]

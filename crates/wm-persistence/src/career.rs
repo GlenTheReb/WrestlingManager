@@ -31,12 +31,15 @@ pub(super) fn initialise_gameplay(
     let version: u32 = connection.pragma_query_value(None, "user_version", |r| r.get(0))?;
     if version >= 2 {
         super::news::migrate(connection)?;
-        return super::ratings::migrate(connection, migration);
+        super::ratings::migrate(connection, migration)?;
+        return super::identity::migrate(connection, migration);
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     if transaction.pragma_query_value::<u32, _>(None, "user_version", |r| r.get(0))? >= 2 {
         transaction.commit()?;
-        return super::news::migrate(connection);
+        super::news::migrate(connection)?;
+        super::ratings::migrate(connection, migration)?;
+        return super::identity::migrate(connection, migration);
     }
     let seed = metadata_value(&transaction, "seed")?.ok_or(PersistenceError::InvalidDatabase)?;
     let seed = wm_domain::Seed::parse(&seed)?.get();
@@ -58,9 +61,10 @@ pub(super) fn initialise_gameplay(
     }
     transaction.execute("INSERT INTO shows(name,show_date,status,revision) VALUES('UWF Thursday Night',?1,'draft',0)",[&date])?;
     transaction.execute("INSERT INTO audience(id,trust) VALUES(1,65)", [])?;
+    // This transaction is a recoverable schema-2 checkpoint. Later migrations may fail and retry.
     transaction.execute(
-        "UPDATE metadata SET value=?1 WHERE key='engine_version'",
-        [CURRENT_ENGINE_VERSION],
+        "UPDATE metadata SET value='0.2.0' WHERE key='engine_version'",
+        [],
     )?;
     transaction.execute(
         "UPDATE metadata SET value='2' WHERE key='schema_version'",
@@ -72,18 +76,22 @@ pub(super) fn initialise_gameplay(
     }
     transaction.commit()?;
     super::news::migrate(connection)?;
-    super::ratings::migrate(connection, migration)
+    super::ratings::migrate(connection, migration)?;
+    super::identity::migrate(connection, migration)
 }
 
 fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceError> {
+    w.identity
+        .validate()
+        .map_err(|_| PersistenceError::InvalidDatabase)?;
     w.wrestling_style
         .validate()
         .map_err(|_| PersistenceError::InvalidDatabase)?;
-    connection.execute("INSERT INTO workers(id,name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,wrestling_style,condition,moves)
-        VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16)
+    connection.execute("INSERT INTO workers(id,name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,wrestling_style,condition,moves,identity)
+        VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17)
         ON CONFLICT(id) DO UPDATE SET age=excluded.age,style=excluded.style,attributes=excluded.attributes,wrestling_style=excluded.wrestling_style,condition=excluded.condition,moves=excluded.moves",
         params![w.id,w.name,w.age,w.style,w.nationality,w.language,w.school,w.background,w.personality,w.ambition,w.weight_kg,w.appearance_fee,
-            encode(&w.attributes)?,encode(&w.wrestling_style)?,encode(&w.condition)?,encode(&w.moves)?])?;
+            encode(&w.attributes)?,encode(&w.wrestling_style)?,encode(&w.condition)?,encode(&w.moves)?,encode(&w.identity)?])?;
     Ok(())
 }
 
@@ -91,6 +99,14 @@ fn worker(connection: &Connection, id: &str) -> Result<Worker, PersistenceError>
     let row=connection.query_row("SELECT name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,wrestling_style,condition,moves FROM workers WHERE id=?1",[id],|r|{
         Ok((r.get::<_,String>(0)?,r.get::<_,i32>(1)?,r.get::<_,String>(2)?,r.get::<_,String>(3)?,r.get::<_,String>(4)?,r.get::<_,String>(5)?,r.get::<_,String>(6)?,r.get::<_,String>(7)?,r.get::<_,String>(8)?,r.get::<_,i32>(9)?,r.get::<_,i32>(10)?,r.get::<_,String>(11)?,r.get::<_,String>(12)?,r.get::<_,String>(13)?,r.get::<_,String>(14)?))
     }).optional()?.ok_or_else(||rule("That wrestler is not in this career."))?;
+    let identity: wm_domain::identity::PersonIdentity = decode(connection.query_row(
+        "SELECT identity FROM workers WHERE id=?1",
+        [id],
+        |r| r.get(0),
+    )?)?;
+    identity
+        .validate()
+        .map_err(|_| PersistenceError::InvalidDatabase)?;
     let worker = Worker {
         id: id.into(),
         name: row.0,
@@ -102,6 +118,7 @@ fn worker(connection: &Connection, id: &str) -> Result<Worker, PersistenceError>
         background: row.6,
         personality: row.7,
         ambition: row.8,
+        identity,
         weight_kg: row.9,
         appearance_fee: row.10,
         attributes: decode(row.11)?,
@@ -291,17 +308,28 @@ impl SaveRepository {
         let connection = self.career_connection(save_id)?;
         let search = search.chars().take(80).collect::<String>();
         let total = connection.query_row(
-            "SELECT COUNT(*) FROM workers WHERE instr(lower(name),lower(?1))>0",
+            "SELECT COUNT(*) FROM workers WHERE instr(lower(name),lower(?1))>0 OR instr(lower(nationality),lower(?1))>0 OR instr(lower(school),lower(?1))>0 OR EXISTS(SELECT 1 FROM json_each(workers.identity,'$.languages') WHERE instr(lower(json_extract(value,'$.name')),lower(?1))>0)",
             [&search],
             |r| r.get(0),
         )?;
         let ids = connection
-            .prepare("SELECT id FROM workers WHERE instr(lower(name),lower(?1))>0 ORDER BY name COLLATE NOCASE,id LIMIT ?2 OFFSET ?3")?
+            .prepare("SELECT id FROM workers WHERE instr(lower(name),lower(?1))>0 OR instr(lower(nationality),lower(?1))>0 OR instr(lower(school),lower(?1))>0 OR EXISTS(SELECT 1 FROM json_each(workers.identity,'$.languages') WHERE instr(lower(json_extract(value,'$.name')),lower(?1))>0) ORDER BY name COLLATE NOCASE,id LIMIT ?2 OFFSET ?3")?
             .query_map(params![search,limit.clamp(1,64),offset],|row|row.get::<_,String>(0))?
             .collect::<rusqlite::Result<Vec<_>>>()?;
+        let company = read_overview(&connection)?.promotion_id;
         let rows = ids
             .iter()
-            .map(|id| worker(&connection, id).map(|worker| RosterRow::from(&worker)))
+            .map(|id| {
+                worker(&connection, id).map(|worker| {
+                    let mut row = RosterRow::from(&worker);
+                    row.personality_description = worker
+                        .identity
+                        .for_viewer(Some(&company))
+                        .describe(Some(&company))
+                        .text;
+                    row
+                })
+            })
             .collect::<Result<Vec<_>, _>>()?;
         Ok(RosterPage { rows, total })
     }
@@ -319,12 +347,28 @@ impl SaveRepository {
             .query_map([id], |r| r.get::<_, String>(0))?
             .map(|r| decode(r?))
             .collect::<Result<_, _>>()?;
-        let worker = worker(&connection, id)?;
+        let mut worker = worker(&connection, id)?;
+        let company = read_overview(&connection)?.promotion_id;
+        worker.identity = worker.identity.for_viewer(Some(&company));
+        let personality_description = worker.identity.describe(Some(&company));
+        worker.personality = personality_description.text.clone();
+        worker.ambition = worker.identity.motivation_text();
+        let biography = worker.identity.biography_text(
+            &worker.name,
+            &worker.nationality,
+            &worker.school,
+            &worker.background,
+            worker.condition.matches,
+        );
+        let exceptional_traits = super::identity::ledger(&connection, id)?.view(Some(&company));
         let wrestling = worker.wrestling_style.summary(&worker.attributes);
         Ok(WorkerProfile {
             worker,
             wrestling,
             history,
+            personality_description,
+            biography,
+            exceptional_traits,
         })
     }
 
@@ -636,6 +680,7 @@ impl SaveRepository {
         }
         let date = next_date(&current, 1)?;
         tx.execute("UPDATE promotions SET current_date=?1", [&date])?;
+        super::identity::expire(&tx, &date)?;
         let ids = tx
             .prepare("SELECT id FROM workers ORDER BY id")?
             .query_map([], |r| r.get::<_, String>(0))?

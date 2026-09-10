@@ -37,6 +37,9 @@ The present development build includes:
 - A seeded fictional world with 40 wrestlers, individual attributes, condition and movesets.
 - Six visible 0–100 rating groups with 37 sub-stats, nine Discipline Fits, style-specific Overall,
   Archetypes, Approach and Specialisations.
+- Persistent personality, shared qualities, motivations, languages, hobbies and factual biographies
+  in a Person & traits profile tab. Evidence-based exceptional-trait rules are implemented; their
+  future media, wellness and sponsor systems do not yet produce events or apply effects.
 - Show cards containing matches and angles, with ordering, editing and capacity rules.
 - Road-agent planning, manual spots, control periods and protected-wrestler instructions.
 - Deterministic, second-by-second show simulation with pause, playback speeds and live messages.
@@ -50,7 +53,7 @@ multi-person and elimination structures can now be represented by the rules mode
 runtime simulation and booking interface are upcoming work. The planned 2.5D presentation has
 not been added; the live match currently uses a simulation event view.
 
-See the [current ticket](docs/tickets/WM-020.md), [ticket index](docs/tickets/INDEX.md),
+See the [current ticket](docs/tickets/WM-022.md), [ticket index](docs/tickets/INDEX.md),
 [ordered roadmap](docs/model-task-plan.md) and [milestones](docs/milestones.md) for the exact
 development state.
 

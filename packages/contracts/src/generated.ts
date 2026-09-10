@@ -11,6 +11,48 @@ export type IpcError = { code: string, message: string, };
 
 export type Rating100 = number;
 
+export type IdentityVisibility = { "kind": "public" } | { "kind": "company", "companyId": string } | { "kind": "hidden" };
+
+export type Assessment = { value: Rating100 | null, visibility: IdentityVisibility, source: string, };
+
+export type PersonalityField = "ambition" | "sociability" | "empathy" | "loyalty" | "ego" | "integrity" | "temperament" | "outspokenness";
+
+export type QualityField = "communication" | "leadership" | "creativity" | "personalAdaptability" | "organisation" | "professionalism" | "workEthic" | "stressManagement" | "teaching";
+
+export type Motivation = "achievement" | "fame" | "money" | "stability" | "belonging" | "wrestlingCraft" | "entertainment" | "creativeInfluence" | "exploration" | "legacy";
+
+export type Motivations = { primary: Motivation, secondary: Array<Motivation>, };
+
+export type Hobby = "gaming" | "music" | "acting" | "fashion" | "fitness" | "combatSports" | "sports" | "cars" | "travel" | "cooking" | "outdoors" | "reading" | "art" | "collecting" | "charity" | "nightlife";
+
+export type Involvement = "casual" | "regular" | "passionate";
+
+export type LanguageLevel = "basic" | "conversational" | "fluent";
+
+export type BiographyMode = "authored" | "organic" | "hybrid";
+
+export type SpokenLanguage = { name: string, proficiency: LanguageLevel | null, native: boolean, };
+
+export type Interest = { hobby: Hobby, involvement: Involvement, };
+
+export type Biography = { mode: BiographyMode, authoredText: string, birthplace: string | null, debutYear: number | null, trainers: Array<string>, previousOccupations: Array<string>, };
+
+export type PersonIdentity = { personality: { [key in PersonalityField]?: Assessment }, qualities: { [key in QualityField]?: Assessment }, motivations: Motivations | null, languages: Array<SpokenLanguage>, hobbies: Array<Interest>, biography: Biography, };
+
+export type PersonalityDescriptor = { field: string, label: string, source: string, };
+
+export type PersonalityDescription = { ruleVersion: number, text: string, partial: boolean, reasons: Array<PersonalityDescriptor>, };
+
+export type ExceptionalTrait = "mediaLiability" | "wellnessComplianceRisk" | "sponsorFriendly" | "companyIcon" | "crossoverCelebrity";
+
+export type TraitStatus = "inactive" | "active" | "elevated" | "historical";
+
+export type TraitState = { traitId: ExceptionalTrait, companyId: string | null, visibility: IdentityVisibility, status: TraitStatus, evidenceIds: Array<string>, };
+
+export type TraitTransition = { date: string, ruleVersion: number, from: TraitStatus, state: TraitState, reason: string, };
+
+export type TraitOverview = { states: Array<TraitState>, history: Array<TraitTransition>, hasEvidence: boolean, };
+
 export type MovementAttributes = { acceleration: Rating100, ringSpeed: Rating100, agility: Rating100, acrobatics: Rating100, jumping: Rating100, flexibility: Rating100, balance: Rating100, };
 
 export type PhysicalityAttributes = { strength: Rating100, stamina: Rating100, toughness: Rating100, recovery: Rating100, injuryResistance: Rating100, };
@@ -55,9 +97,9 @@ export type Condition = { fatigue: number, confidence: number, morale: number, m
 
 export type Move = { id: string, name: string, style: string, difficulty: number, risk: number, staminaCost: number, minStrength: number, proficiency: number, signature: boolean, };
 
-export type Worker = { id: string, name: string, age: number, nationality: string, language: string, school: string, background: string, personality: string, ambition: string, style: string, weightKg: number, attributes: WrestlerAttributes, wrestlingStyle: WrestlingStyleProfile, condition: Condition, moves: Array<Move>, appearanceFee: number, };
+export type Worker = { id: string, name: string, age: number, nationality: string, language: string, school: string, background: string, personality: string, ambition: string, identity: PersonIdentity, style: string, weightKg: number, attributes: WrestlerAttributes, wrestlingStyle: WrestlingStyleProfile, condition: Condition, moves: Array<Move>, appearanceFee: number, };
 
-export type RosterRow = { id: string, name: string, age: number, style: string, archetype: string, overall: number, groups: GroupScores, condition: Condition, };
+export type RosterRow = { id: string, name: string, age: number, style: string, archetype: string, overall: number, personalityDescription: string, groups: GroupScores, condition: Condition, };
 
 export type RosterPage = { rows: Array<RosterRow>, total: number, };
 
@@ -127,7 +169,7 @@ export type AgentAdvice = { plan: MatchPlan, notes: Array<string>, };
 
 export type CareerOffice = { promotion: PromotionOverview, show: ShowCard, agents: Array<RoadAgent>, rosterCount: number, media: Array<MediaPost>, recentShows: Array<ShowCard>, };
 
-export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, };
+export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, };
 
 export type NewsItem = { id: number, category: string, title: string, body: string, date: string, showId: number | null, workerId: string | null, read: boolean, };
 

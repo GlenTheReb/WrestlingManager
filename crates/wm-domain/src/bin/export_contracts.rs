@@ -4,8 +4,10 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use ts_rs::{Config, TS};
 use wm_domain::game::*;
+use wm_domain::identity::*;
 use wm_domain::match_rules::*;
 use wm_domain::ratings::*;
+use wm_domain::traits::*;
 use wm_domain::{CreateGameRequest, IpcError, PromotionOverview, SaveSummary};
 
 fn generated_contracts() -> String {
@@ -16,6 +18,27 @@ fn generated_contracts() -> String {
         SaveSummary::decl(&config),
         IpcError::decl(&config),
         Rating100::decl(&config),
+        IdentityVisibility::decl(&config),
+        Assessment::decl(&config),
+        PersonalityField::decl(&config),
+        QualityField::decl(&config),
+        Motivation::decl(&config),
+        Motivations::decl(&config),
+        Hobby::decl(&config),
+        Involvement::decl(&config),
+        LanguageLevel::decl(&config),
+        BiographyMode::decl(&config),
+        SpokenLanguage::decl(&config),
+        Interest::decl(&config),
+        Biography::decl(&config),
+        PersonIdentity::decl(&config),
+        PersonalityDescriptor::decl(&config),
+        PersonalityDescription::decl(&config),
+        ExceptionalTrait::decl(&config),
+        TraitStatus::decl(&config),
+        TraitState::decl(&config),
+        TraitTransition::decl(&config),
+        TraitOverview::decl(&config),
         MovementAttributes::decl(&config),
         PhysicalityAttributes::decl(&config),
         RingcraftAttributes::decl(&config),

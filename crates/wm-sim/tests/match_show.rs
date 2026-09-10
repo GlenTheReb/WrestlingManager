@@ -79,7 +79,7 @@ fn generated_duplicate_names_use_clear_deterministic_ordinals() {
 }
 
 #[test]
-fn engine_0_3_0_singles_golden_output() {
+fn engine_0_4_0_singles_golden_output() {
     let mut sim = session(42);
     let mut events = sim.advance(347);
     let snapshot = serde_json::to_vec(&sim).unwrap();
@@ -88,12 +88,31 @@ fn engine_0_3_0_singles_golden_output() {
     events.extend(sim.advance(3600));
     let final_state = fingerprint(&serde_json::to_vec(&sim).unwrap());
     let event_stream = fingerprint(&serde_json::to_vec(&events).unwrap());
-    // WM-020 deliberately changes the worker snapshot and ability mapping under
-    // engine 0.3.0. Future changes still require an explicit compatibility decision.
-    assert_eq!(partial, 0x2a61c1ce511bf238, "engine snapshot drift");
-    assert_eq!(final_state, 0xda372424d3db94ee, "final state drift");
+    // WM-022 changes the serialized worker identity; match event output stays unchanged.
     assert_eq!(event_stream, 0xa741f1eb4e898d39, "event stream drift");
     assert_eq!(events.len(), 108);
+    assert_eq!(
+        (partial, final_state),
+        (11415513778334552897, 4471617209222952147),
+        "identity snapshot drift"
+    );
+}
+
+#[test]
+fn identities_are_deterministic_valid_and_do_not_stereotype_personality_by_background() {
+    let a = generate_world(42, &base_pack());
+    let b = generate_world(42, &base_pack());
+    assert_eq!(a, b);
+    assert_ne!(a[0].identity, generate_world(43, &base_pack())[0].identity);
+    for worker in &a {
+        worker.identity.validate().unwrap();
+        assert_eq!(worker.identity.languages[0].name, worker.language);
+        assert!(worker.identity.hobbies.len() <= 5);
+    }
+    let mut alternate = base_pack();
+    alternate.backgrounds[0].nationality = "Changed nationality".into();
+    let c = generate_world(42, &alternate);
+    assert_eq!(a[0].identity.personality, c[0].identity.personality);
 }
 
 #[test]

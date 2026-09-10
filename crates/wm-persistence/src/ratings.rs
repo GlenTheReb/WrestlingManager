@@ -79,7 +79,7 @@ pub(super) fn migrate(
 ) -> Result<(), PersistenceError> {
     let tx = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let version: u32 = tx.pragma_query_value(None, "user_version", |row| row.get(0))?;
-    if version == 4 {
+    if version >= 4 {
         return Ok(());
     }
     if version != 3 {
@@ -146,7 +146,7 @@ pub(super) fn migrate(
     }
     tx.execute(
         "UPDATE metadata SET value=?1 WHERE key='engine_version'",
-        [CURRENT_ENGINE_VERSION],
+        ["0.3.0"],
     )?;
     tx.execute(
         "UPDATE metadata SET value='4' WHERE key='schema_version'",

@@ -32,7 +32,7 @@ fn article(
 pub(super) fn migrate(connection: &mut Connection) -> Result<(), PersistenceError> {
     let tx = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     let version: u32 = tx.pragma_query_value(None, "user_version", |r| r.get(0))?;
-    if version == 3 {
+    if version >= 3 {
         return Ok(());
     }
     if version != 2 {
