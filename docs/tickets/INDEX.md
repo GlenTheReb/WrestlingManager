@@ -31,7 +31,7 @@ records destination context; a separate execution ticket is still required befor
 
 ## People and creative
 
-- [WM-020 — Wrestler stat hierarchy](WM-020.md) — implemented and verified; uncommitted
+- [WM-020 — Wrestler stat hierarchy](WM-020.md) — implemented, verified and pushed
   - [WM-020.1 — Canonical wrestler-rating system implementation](WM-020.1.md) — execution record
 - [WM-021 — Roster discovery and filtering](WM-021.md)
 - [WM-022 — Wrestler identity and personality](WM-022.md)

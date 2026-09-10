@@ -1,14 +1,13 @@
 # Wrestling Manager checkpoint — 9 September 2026
 
 Current handoff: [WM-020 — Wrestler stat hierarchy](tickets/WM-020.md) is implemented and verified,
-but remains uncommitted on `feature/wm-020-wrestler-rating-system`. WM-001–042 have context packets linked by
+committed as `2677ffd` and pushed on `feature/wm-020-wrestler-rating-system`. WM-001–042 have context packets linked by
 [the capability index](tickets/INDEX.md). [Playable milestones](milestones.md) govern vertical slices;
 [the execution guide](tickets/EXECUTION-GUIDE.md), [template](tickets/TICKET-TEMPLATE.md) and
-[decision register](product-decisions.md) govern model-ready implementation handoffs. No commit,
-push or publication has been made for WM-020.
+[decision register](product-decisions.md) govern model-ready implementation handoffs.
 
-Latest increment completed after the owner resumed implementation. No routing, delegation,
-commits, pushes or publication. The earlier foundation record is retained below for context.
+The documentation plan is committed as `67a0c0c` and pushed on the same branch. The earlier
+foundation record is retained below for context.
 
 WM-020 adds the canonical six-group/37-sub-stat 0–100 system, nine Discipline Fits, Approach,
 Specialisations, curated Archetypes, current-style Overall, deterministic content conversion,
@@ -102,31 +101,31 @@ drag/drop compile but do not yet have dedicated interaction regression tests.
 ## Files and launch
 
 Run `pnpm.cmd dev` from the project root, or open `target/debug/wm-desktop.exe` after the debug
-build. Real player saves are under `%APPDATA%\com.wrestlingmanager.game\saves`. Source, docs and
-binary remain local; no Git checkpoint commit has been created.
+build. Real player saves are under `%APPDATA%\com.wrestlingmanager.game\saves`. The WM-020 code
+and roadmap documentation are committed and pushed; generated `output/` and `tmp/` artifacts remain local.
 
 ## SDD entry points and implementation record
 
 Read the ignored root SDD.md first. Exact heading references for this checkpoint:
 
 - Current checkpoint and execution pointer: SDD.md:3
-- Confirmed direction: SDD.md:63; moveset requirements: SDD.md:111
-- Implemented player loop: SDD.md:120
-- Architecture and file ownership: SDD.md:163
-- Commands and data contracts: SDD.md:189
-- Content and world generation: SDD.md:203
-- Simulation contract: SDD.md:218
-- Persistence and upgrade safety: SDD.md:265
-- Desktop layout and editing safety: SDD.md:297
-- Verification at checkpoint: SDD.md:323
-- Known limitations: SDD.md:341
-- Resume order: SDD.md:355
-- Latest WM/news implementation and verification: SDD.md:408
-- Manual model selection plan: SDD.md:441
-- WM-001 match-rule core: SDD.md:450
-- Planned wrestler depth backlog: SDD.md:523
-- Complete planned product architecture: SDD.md:552
-- Model-ready planning contract: SDD.md:602
+- Confirmed direction: SDD.md:66; moveset requirements: SDD.md:114
+- Implemented player loop: SDD.md:123
+- Architecture and file ownership: SDD.md:166
+- Commands and data contracts: SDD.md:192
+- Content and world generation: SDD.md:206
+- Simulation contract: SDD.md:221
+- Persistence and upgrade safety: SDD.md:268
+- Desktop layout and editing safety: SDD.md:300
+- Verification at checkpoint: SDD.md:326
+- Known limitations: SDD.md:344
+- Resume order: SDD.md:358
+- Latest WM/news implementation and verification: SDD.md:411
+- Manual model selection plan: SDD.md:444
+- WM-001 match-rule core: SDD.md:453
+- Planned wrestler depth backlog: SDD.md:526
+- Complete planned product architecture: SDD.md:555
+- Model-ready planning contract: SDD.md:605
 
 These sections supersede the foundation-era implemented-status descriptions in older docs.
 The appended final-evidence section records the actual native result. Developer concepts,
