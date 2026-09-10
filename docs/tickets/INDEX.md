@@ -4,7 +4,8 @@ Use [the execution guide](EXECUTION-GUIDE.md) before implementing any capability
 not numeric order, decides which thin slice creates the next playable outcome. Every capability file
 records destination context; a separate execution ticket is still required before code changes.
 
-Latest execution: [WM-022.1 — Combined identity implementation](WM-022.1.md), awaiting commit/review authority.
+Latest execution: [WM-022.1 — Combined identity implementation](WM-022.1.md), committed and pushed;
+pull request pending.
 Next people-system capability: WM-023 relationships and interactions (requires a scoped execution ticket).
 Supporting design: [PD-103 naming and event rules](../personality-and-trait-rules.md).
 WM-022 and PD-103 are implemented locally; WM-023 remains planned.
