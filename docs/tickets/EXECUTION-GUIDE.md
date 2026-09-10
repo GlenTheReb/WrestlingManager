@@ -92,18 +92,18 @@ fourth or fifth, it is likely to create incoherent state. Stop and revise the ti
 
 Every execution ticket records its impact on this matrix:
 
-| Contract | Required question |
-| -------- | ----------------- |
-| Domain | What is the single canonical type and stable identity? |
-| Persistence | Does the save schema change, and how do old/paused careers upgrade? |
-| Simulation | Does deterministic behavior or its fingerprint change intentionally? |
-| Commands | What bounded query/mutation exists, with revision and validation behavior? |
-| Interface | What loading, empty, error, unknown and keyboard states exist? |
-| History | Which dated event explains the change later? |
-| AI | Can CPU companies use the same rule without privileged information? |
-| Modding | Are IDs, catalogues and validation stable enough for future custom content? |
-| Presentation | Which facts/cues are exposed without deciding outcomes? |
-| Safety | Can the action duplicate, overwrite, exploit or reveal hidden information? |
+| Contract     | Required question                                                           |
+| ------------ | --------------------------------------------------------------------------- |
+| Domain       | What is the single canonical type and stable identity?                      |
+| Persistence  | Does the save schema change, and how do old/paused careers upgrade?         |
+| Simulation   | Does deterministic behavior or its fingerprint change intentionally?        |
+| Commands     | What bounded query/mutation exists, with revision and validation behavior?  |
+| Interface    | What loading, empty, error, unknown and keyboard states exist?              |
+| History      | Which dated event explains the change later?                                |
+| AI           | Can CPU companies use the same rule without privileged information?         |
+| Modding      | Are IDs, catalogues and validation stable enough for future custom content? |
+| Presentation | Which facts/cues are exposed without deciding outcomes?                     |
+| Safety       | Can the action duplicate, overwrite, exploit or reveal hidden information?  |
 
 Write “no impact” with a reason; never leave a row implicit.
 

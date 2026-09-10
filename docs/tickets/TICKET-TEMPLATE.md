@@ -39,24 +39,24 @@ is the smallest coherent slice.
 
 | Direction | Types, facts or commands | Authority |
 | --------- | ------------------------ | --------- |
-| Owns | ... | ... |
-| Consumes | ... | ... |
-| Emits | ... | ... |
+| Owns      | ...                      | ...       |
+| Consumes  | ...                      | ...       |
+| Emits     | ...                      | ...       |
 
 ## Cross-system impact
 
-| Contract | Impact or reason for no impact |
-| -------- | ------------------------------ |
-| Domain | ... |
-| Persistence | ... |
-| Simulation | ... |
-| Commands | ... |
-| Interface | ... |
-| History | ... |
-| AI | ... |
-| Modding | ... |
-| Presentation | ... |
-| Safety | ... |
+| Contract     | Impact or reason for no impact |
+| ------------ | ------------------------------ |
+| Domain       | ...                            |
+| Persistence  | ...                            |
+| Simulation   | ...                            |
+| Commands     | ...                            |
+| Interface    | ...                            |
+| History      | ...                            |
+| AI           | ...                            |
+| Modding      | ...                            |
+| Presentation | ...                            |
+| Safety       | ...                            |
 
 ## Acceptance criteria
 
