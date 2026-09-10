@@ -13,6 +13,13 @@ import { useNavigation } from '../navigation';
 import { ErrorNotice, Panel, Meter, Overlay, currency } from '../game-ui';
 import s from '../Game.module.css';
 
+const humanize = (value: string) =>
+  value
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/^./, (letter) => letter.toUpperCase());
+
+const scoreClass = (value: number) => (value >= 85 ? s.good : '');
+
 export function Roster({ saveId }: { saveId: string }) {
   const [search, setSearch] = useState(''),
     [offset, setOffset] = useState(0);
@@ -36,9 +43,30 @@ export function Roster({ saveId }: { saveId: string }) {
         ),
       },
       { accessorKey: 'age', header: 'Age' },
-      { accessorKey: 'style', header: 'Style' },
-      { accessorKey: 'psychology', header: 'Psych' },
-      { accessorKey: 'stamina', header: 'Stam' },
+      { accessorKey: 'archetype', header: 'Archetype' },
+      { accessorKey: 'overall', header: 'Style OVR' },
+      { id: 'movement', header: 'MOV', accessorFn: (r) => r.groups.movement },
+      {
+        id: 'physicality',
+        header: 'PHY',
+        accessorFn: (r) => r.groups.physicality,
+      },
+      { id: 'ringcraft', header: 'RIN', accessorFn: (r) => r.groups.ringcraft },
+      {
+        id: 'psychology',
+        header: 'PSY',
+        accessorFn: (r) => r.groups.psychology,
+      },
+      {
+        id: 'fundamentals',
+        header: 'FUN',
+        accessorFn: (r) => r.groups.fundamentals,
+      },
+      {
+        id: 'entertainment',
+        header: 'ENT',
+        accessorFn: (r) => r.groups.entertainment,
+      },
       {
         id: 'fatigue',
         header: 'Fatigue',
@@ -94,7 +122,7 @@ export function Roster({ saveId }: { saveId: string }) {
             }}
           />
         </label>
-        <span>{roster.data?.total ?? 0} wrestlers · attributes out of 20</span>
+        <span>{roster.data?.total ?? 0} wrestlers · ratings out of 100</span>
         <div className={s.spacer} />
         <button
           disabled={!offset}
@@ -192,6 +220,7 @@ export function ProfilePanel({
   });
   const [tab, setTab] = useState<'overview' | 'moves' | 'history'>('overview');
   const w = profile.data?.worker;
+  const wrestling = profile.data?.wrestling;
   return (
     <Overlay title={w?.name ?? 'Wrestler profile'} onClose={onClose}>
       {profile.isError ? (
@@ -210,12 +239,13 @@ export function ProfilePanel({
             </div>
             <div>
               <h3>
-                {w.style} · {w.age} years old
+                {wrestling?.archetype ?? w.style} · {w.age} years old
               </h3>
               <p>
                 {w.nationality} · {w.weightKg} kg · {w.language}
               </p>
               <span>
+                Current-style overall {wrestling?.overall ?? '—'} ·{' '}
                 {w.personality} · {w.school}
               </span>
             </div>
@@ -238,12 +268,67 @@ export function ProfilePanel({
           <div className={s.overlayBody}>
             {tab === 'overview' ? (
               <div className={s.profileGrid}>
-                <Panel title="Abilities">
+                <Panel title="Six base ratings">
                   <dl className={s.attributes}>
-                    {Object.entries(w.attributes).map(([key, value]) => (
-                      <div key={key}>
-                        <dt>{key}</dt>
-                        <dd className={value >= 15 ? s.good : ''}>{value}</dd>
+                    {Object.entries(wrestling?.groups ?? {}).map(
+                      ([key, value]) => (
+                        <div key={key}>
+                          <dt>{humanize(key)}</dt>
+                          <dd className={scoreClass(value)}>{value}</dd>
+                        </div>
+                      ),
+                    )}
+                  </dl>
+                </Panel>
+                <Panel title="Style identity">
+                  <dl className={s.attributes}>
+                    <div>
+                      <dt>Primary Discipline</dt>
+                      <dd>{humanize(wrestling?.primary ?? '')}</dd>
+                    </div>
+                    <div>
+                      <dt>Secondary Disciplines</dt>
+                      <dd>
+                        {wrestling?.secondaries.map(humanize).join(', ') ||
+                          'None'}
+                      </dd>
+                    </div>
+                    {Object.entries(w.wrestlingStyle.approach).map(
+                      ([key, value]) => (
+                        <div key={key}>
+                          <dt>{humanize(key)}</dt>
+                          <dd>{humanize(value)}</dd>
+                        </div>
+                      ),
+                    )}
+                    <div>
+                      <dt>Specialisations</dt>
+                      <dd>
+                        {w.wrestlingStyle.specialisations
+                          .map(humanize)
+                          .join(', ') || 'None'}
+                      </dd>
+                    </div>
+                  </dl>
+                </Panel>
+                {Object.entries(w.attributes).map(([group, values]) => (
+                  <Panel key={group} title={`${humanize(group)} sub-stats`}>
+                    <dl className={s.attributes}>
+                      {Object.entries(values).map(([key, value]) => (
+                        <div key={key}>
+                          <dt>{humanize(key)}</dt>
+                          <dd className={scoreClass(value)}>{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </Panel>
+                ))}
+                <Panel title="Discipline Fits">
+                  <dl className={s.attributes}>
+                    {wrestling?.disciplineFits.map((fit) => (
+                      <div key={fit.discipline}>
+                        <dt>{humanize(fit.discipline)}</dt>
+                        <dd className={scoreClass(fit.score)}>{fit.score}</dd>
                       </div>
                     ))}
                   </dl>

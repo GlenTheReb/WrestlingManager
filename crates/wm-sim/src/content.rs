@@ -1,7 +1,8 @@
 use crate::{rng, roll};
 use serde::Deserialize;
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use wm_domain::game::*;
+use wm_domain::ratings::{LegacyAttributes, WrestlerAttributes, WrestlingStyleProfile};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -71,18 +72,33 @@ pub fn base_pack() -> ContentPack {
         .expect("shipped content is validated in tests")
 }
 
+fn roman_ordinal(mut value: usize) -> String {
+    let mut result = String::new();
+    for (number, numeral) in [(10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")] {
+        while value >= number {
+            result.push_str(numeral);
+            value -= number;
+        }
+    }
+    result
+}
+
 pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
     let mut random = rng(seed, 0);
-    let mut names = BTreeSet::new();
+    let mut name_counts = BTreeMap::new();
     (0..40)
         .map(|i| {
             let b = &pack.backgrounds[i % pack.backgrounds.len()];
             let first = &b.first_names[roll(&mut random, b.first_names.len() as u32) as usize];
             let last = &b.last_names[roll(&mut random, b.last_names.len() as u32) as usize];
-            let mut name = format!("{first} {last}");
-            if !names.insert(name.clone()) {
-                name = format!("{first} {last} {}", i + 1);
-            }
+            let base_name = format!("{first} {last}");
+            let occurrence = name_counts.entry(base_name.clone()).or_insert(0);
+            *occurrence += 1;
+            let name = if *occurrence == 1 {
+                base_name
+            } else {
+                format!("{base_name} {}", roman_ordinal(*occurrence))
+            };
             let age = match i {
                 0 => 19,
                 1 => 43,
@@ -93,7 +109,7 @@ pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
             } else {
                 6 + roll(&mut random, 9)
             };
-            let attributes = Attributes {
+            let legacy = LegacyAttributes {
                 strength,
                 technical: (8 + roll(&mut random, 7) + i32::from(b.style == "Technical") * 3)
                     .min(20),
@@ -105,6 +121,9 @@ pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
                 improvisation: 6 + roll(&mut random, 12),
                 experience: (age - 16).clamp(1, 20),
             };
+            let attributes = WrestlerAttributes::from_legacy(&legacy, &b.style);
+            let wrestling_style =
+                WrestlingStyleProfile::from_legacy(&legacy, &b.style, &attributes);
             let moves = pack
                 .moves
                 .iter()
@@ -141,6 +160,7 @@ pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
                     74 + roll(&mut random, 28)
                 },
                 attributes,
+                wrestling_style,
                 condition: Condition {
                     fatigue: roll(&mut random, 12),
                     confidence: 50 + roll(&mut random, 26),

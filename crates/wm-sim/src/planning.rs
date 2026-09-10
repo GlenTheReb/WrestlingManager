@@ -148,7 +148,7 @@ pub fn agent_plan(
             .moves
             .iter()
             .filter(|m| {
-                m.min_strength <= worker.attributes.strength
+                m.min_strength <= worker.attributes.sim_strength()
                     && (agent.safety < 14 || m.risk <= plan.risk)
                     && (fraction < 80 || agent.psychology < 14 || m.stamina_cost < 6)
             })

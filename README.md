@@ -35,6 +35,8 @@ The present development build includes:
 
 - A native, fullscreen Windows application with persistent management navigation and shortcuts.
 - A seeded fictional world with 40 wrestlers, individual attributes, condition and movesets.
+- Six visible 0–100 rating groups with 37 sub-stats, nine Discipline Fits, style-specific Overall,
+  Archetypes, Approach and Specialisations.
 - Show cards containing matches and angles, with ordering, editing and capacity rules.
 - Road-agent planning, manual spots, control periods and protected-wrestler instructions.
 - Deterministic, second-by-second show simulation with pause, playback speeds and live messages.
@@ -48,8 +50,9 @@ multi-person and elimination structures can now be represented by the rules mode
 runtime simulation and booking interface are upcoming work. The planned 2.5D presentation has
 not been added; the live match currently uses a simulation event view.
 
-See the [current ticket](docs/tickets/WM-001.md), [ordered roadmap](docs/model-task-plan.md) and
-[vertical-slice plan](docs/vertical-slice.md) for the exact development state.
+See the [current ticket](docs/tickets/WM-020.md), [ticket index](docs/tickets/INDEX.md),
+[ordered roadmap](docs/model-task-plan.md) and [milestones](docs/milestones.md) for the exact
+development state.
 
 ## Run the development build
 

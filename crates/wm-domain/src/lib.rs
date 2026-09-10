@@ -8,9 +8,10 @@ use ts_rs::TS;
 
 pub mod game;
 pub mod match_rules;
+pub mod ratings;
 
-pub const CURRENT_ENGINE_VERSION: &str = "0.2.0";
-pub const CURRENT_SCHEMA_VERSION: u32 = 3;
+pub const CURRENT_ENGINE_VERSION: &str = "0.3.0";
+pub const CURRENT_SCHEMA_VERSION: u32 = 4;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SaveId(String);

@@ -22,7 +22,7 @@ fn legacy_upgrade_keeps_identity_finances_and_an_independently_readable_backup()
     assert_eq!(updated.name, "My retained promotion");
     assert_eq!(updated.cash_pence, 12345678);
     assert_eq!(updated.current_date, "2026-02-12");
-    assert_eq!(updated.schema_version, 3);
+    assert_eq!(updated.schema_version, 4);
     assert_eq!(repo.career_office("legacy").unwrap().roster_count, 40);
     let backup_path = directory.path().join("legacy.sqlite3.v1.bak");
     let backup = rusqlite::Connection::open(&backup_path).unwrap();
@@ -128,7 +128,7 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
     drop(repo);
     // Restore the precise previous schema while preserving a live show's snapshot.
     let prior = rusqlite::Connection::open(directory.path().join("loop.sqlite3")).unwrap();
-    prior.execute_batch("DROP TABLE news_items; PRAGMA user_version=2; UPDATE metadata SET value='2' WHERE key='schema_version';").unwrap();
+    prior.execute_batch("DROP TABLE news_items; PRAGMA user_version=2; UPDATE metadata SET value='2' WHERE key='schema_version'; UPDATE metadata SET value='0.2.0' WHERE key='engine_version';").unwrap();
     drop(prior);
     let repo = SaveRepository::new(directory.path());
     assert_eq!(repo.live_show("loop", card.id).unwrap(), partial);

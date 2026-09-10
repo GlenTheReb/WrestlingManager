@@ -2,6 +2,7 @@
 
 mod career;
 mod news;
+mod ratings;
 
 use rusqlite::{Connection, OpenFlags, OptionalExtension, params};
 use std::fs;
@@ -331,13 +332,12 @@ fn validate_compatibility(connection: &Connection) -> Result<(), PersistenceErro
 
     let engine_version =
         metadata_value(connection, "engine_version")?.ok_or(PersistenceError::InvalidDatabase)?;
-    if engine_version
-        != if schema_version == 1 {
-            "0.1.0"
-        } else {
-            CURRENT_ENGINE_VERSION
-        }
-    {
+    let expected_engine = match schema_version {
+        1 => "0.1.0",
+        2 | 3 => "0.2.0",
+        _ => CURRENT_ENGINE_VERSION,
+    };
+    if engine_version != expected_engine {
         return Err(PersistenceError::UnsupportedEngine);
     }
 

@@ -387,7 +387,7 @@ function PlanEditor({
     );
     if (
       plan.durationSeconds > 1200 &&
-      workers.some((w) => w.attributes.stamina < 13)
+      workers.some((w) => w.attributes.physicality.stamina < 65)
     )
       warnings.push(
         'The planned length exceeds one or both wrestlers’ conditioning. Expect fatigue and less reliable execution late on.',

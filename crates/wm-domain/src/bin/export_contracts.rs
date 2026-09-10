@@ -5,6 +5,7 @@ use std::process::ExitCode;
 use ts_rs::{Config, TS};
 use wm_domain::game::*;
 use wm_domain::match_rules::*;
+use wm_domain::ratings::*;
 use wm_domain::{CreateGameRequest, IpcError, PromotionOverview, SaveSummary};
 
 fn generated_contracts() -> String {
@@ -14,7 +15,27 @@ fn generated_contracts() -> String {
         PromotionOverview::decl(&config),
         SaveSummary::decl(&config),
         IpcError::decl(&config),
-        Attributes::decl(&config),
+        Rating100::decl(&config),
+        MovementAttributes::decl(&config),
+        PhysicalityAttributes::decl(&config),
+        RingcraftAttributes::decl(&config),
+        PsychologyAttributes::decl(&config),
+        FundamentalsAttributes::decl(&config),
+        EntertainmentAttributes::decl(&config),
+        WrestlerAttributes::decl(&config),
+        Discipline::decl(&config),
+        Tempo::decl(&config),
+        Structure::decl(&config),
+        Presentation::decl(&config),
+        Contact::decl(&config),
+        RiskApproach::decl(&config),
+        Specialisation::decl(&config),
+        WrestlingApproach::decl(&config),
+        DisciplineEvidence::decl(&config),
+        WrestlingStyleProfile::decl(&config),
+        GroupScores::decl(&config),
+        DisciplineFit::decl(&config),
+        WrestlingSummary::decl(&config),
         Condition::decl(&config),
         Move::decl(&config),
         Worker::decl(&config),

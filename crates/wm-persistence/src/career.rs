@@ -30,7 +30,8 @@ pub(super) fn initialise_gameplay(
 ) -> Result<(), PersistenceError> {
     let version: u32 = connection.pragma_query_value(None, "user_version", |r| r.get(0))?;
     if version >= 2 {
-        return super::news::migrate(connection);
+        super::news::migrate(connection)?;
+        return super::ratings::migrate(connection, migration);
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     if transaction.pragma_query_value::<u32, _>(None, "user_version", |r| r.get(0))? >= 2 {
@@ -70,23 +71,27 @@ pub(super) fn initialise_gameplay(
         transaction.execute("INSERT INTO domain_events(event_type,occurred_on,payload) VALUES('save_upgraded',?1,'{\"schemaVersion\":2}')",[&date])?;
     }
     transaction.commit()?;
-    super::news::migrate(connection)
+    super::news::migrate(connection)?;
+    super::ratings::migrate(connection, migration)
 }
 
 fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceError> {
-    connection.execute("INSERT INTO workers(id,name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,condition,moves)
-        VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15)
-        ON CONFLICT(id) DO UPDATE SET age=excluded.age,attributes=excluded.attributes,condition=excluded.condition,moves=excluded.moves",
+    w.wrestling_style
+        .validate()
+        .map_err(|_| PersistenceError::InvalidDatabase)?;
+    connection.execute("INSERT INTO workers(id,name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,wrestling_style,condition,moves)
+        VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16)
+        ON CONFLICT(id) DO UPDATE SET age=excluded.age,style=excluded.style,attributes=excluded.attributes,wrestling_style=excluded.wrestling_style,condition=excluded.condition,moves=excluded.moves",
         params![w.id,w.name,w.age,w.style,w.nationality,w.language,w.school,w.background,w.personality,w.ambition,w.weight_kg,w.appearance_fee,
-            encode(&w.attributes)?,encode(&w.condition)?,encode(&w.moves)?])?;
+            encode(&w.attributes)?,encode(&w.wrestling_style)?,encode(&w.condition)?,encode(&w.moves)?])?;
     Ok(())
 }
 
 fn worker(connection: &Connection, id: &str) -> Result<Worker, PersistenceError> {
-    let row=connection.query_row("SELECT name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,condition,moves FROM workers WHERE id=?1",[id],|r|{
-        Ok((r.get::<_,String>(0)?,r.get::<_,i32>(1)?,r.get::<_,String>(2)?,r.get::<_,String>(3)?,r.get::<_,String>(4)?,r.get::<_,String>(5)?,r.get::<_,String>(6)?,r.get::<_,String>(7)?,r.get::<_,String>(8)?,r.get::<_,i32>(9)?,r.get::<_,i32>(10)?,r.get::<_,String>(11)?,r.get::<_,String>(12)?,r.get::<_,String>(13)?))
+    let row=connection.query_row("SELECT name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,wrestling_style,condition,moves FROM workers WHERE id=?1",[id],|r|{
+        Ok((r.get::<_,String>(0)?,r.get::<_,i32>(1)?,r.get::<_,String>(2)?,r.get::<_,String>(3)?,r.get::<_,String>(4)?,r.get::<_,String>(5)?,r.get::<_,String>(6)?,r.get::<_,String>(7)?,r.get::<_,String>(8)?,r.get::<_,i32>(9)?,r.get::<_,i32>(10)?,r.get::<_,String>(11)?,r.get::<_,String>(12)?,r.get::<_,String>(13)?,r.get::<_,String>(14)?))
     }).optional()?.ok_or_else(||rule("That wrestler is not in this career."))?;
-    Ok(Worker {
+    let worker = Worker {
         id: id.into(),
         name: row.0,
         age: row.1,
@@ -100,9 +105,15 @@ fn worker(connection: &Connection, id: &str) -> Result<Worker, PersistenceError>
         weight_kg: row.9,
         appearance_fee: row.10,
         attributes: decode(row.11)?,
-        condition: decode(row.12)?,
-        moves: decode(row.13)?,
-    })
+        wrestling_style: decode(row.12)?,
+        condition: decode(row.13)?,
+        moves: decode(row.14)?,
+    };
+    worker
+        .wrestling_style
+        .validate()
+        .map_err(|_| PersistenceError::InvalidDatabase)?;
+    Ok(worker)
 }
 fn agents(connection: &Connection) -> Result<Vec<RoadAgent>, PersistenceError> {
     connection
@@ -284,9 +295,14 @@ impl SaveRepository {
             [&search],
             |r| r.get(0),
         )?;
-        let rows=connection.prepare("SELECT id,name,age,style,json_extract(attributes,'$.psychology'),json_extract(attributes,'$.stamina'),condition FROM workers WHERE instr(lower(name),lower(?1))>0 ORDER BY name COLLATE NOCASE,id LIMIT ?2 OFFSET ?3")?
-            .query_map(params![search,limit.clamp(1,64),offset],|r|Ok((r.get::<_,String>(0)?,r.get::<_,String>(1)?,r.get::<_,i32>(2)?,r.get::<_,String>(3)?,r.get::<_,i32>(4)?,r.get::<_,i32>(5)?,r.get::<_,String>(6)?)))?
-            .map(|row|{let r=row?;Ok(RosterRow{id:r.0,name:r.1,age:r.2,style:r.3,psychology:r.4,stamina:r.5,condition:decode(r.6)?})}).collect::<Result<_,PersistenceError>>()?;
+        let ids = connection
+            .prepare("SELECT id FROM workers WHERE instr(lower(name),lower(?1))>0 ORDER BY name COLLATE NOCASE,id LIMIT ?2 OFFSET ?3")?
+            .query_map(params![search,limit.clamp(1,64),offset],|row|row.get::<_,String>(0))?
+            .collect::<rusqlite::Result<Vec<_>>>()?;
+        let rows = ids
+            .iter()
+            .map(|id| worker(&connection, id).map(|worker| RosterRow::from(&worker)))
+            .collect::<Result<Vec<_>, _>>()?;
         Ok(RosterPage { rows, total })
     }
 
@@ -303,8 +319,11 @@ impl SaveRepository {
             .query_map([id], |r| r.get::<_, String>(0))?
             .map(|r| decode(r?))
             .collect::<Result<_, _>>()?;
+        let worker = worker(&connection, id)?;
+        let wrestling = worker.wrestling_style.summary(&worker.attributes);
         Ok(WorkerProfile {
-            worker: worker(&connection, id)?,
+            worker,
+            wrestling,
             history,
         })
     }
@@ -625,12 +644,14 @@ impl SaveRepository {
         for id in ids {
             let mut w = worker(&tx, &id)?;
             let cleared = w.condition.injury_days == 1;
-            w.condition.fatigue = (w.condition.fatigue - 8 - w.attributes.stamina / 5).max(0);
+            w.condition.fatigue = (w.condition.fatigue - 8 - w.attributes.sim_stamina() / 5).max(0);
             w.condition.injury_days = (w.condition.injury_days - 1).max(0);
+            w.wrestling_style.register_day(&w.attributes);
             if birthday {
                 w.age += 1;
                 if w.age > 38 {
-                    w.attributes.stamina = (w.attributes.stamina - 1).max(1);
+                    w.attributes.physicality.stamina =
+                        w.attributes.physicality.stamina.adjusted(-1);
                 }
             }
             write_worker(&tx, &w)?;

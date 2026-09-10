@@ -70,7 +70,7 @@ export function Search({
           >
             <b>{worker.name}</b>
             <span>
-              {worker.age} · {worker.style} ·{' '}
+              {worker.age} · {worker.archetype} · Style OVR {worker.overall} ·{' '}
               {worker.condition.injuryDays ? 'Injured' : 'Available'}
             </span>
           </button>
