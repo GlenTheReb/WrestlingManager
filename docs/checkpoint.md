@@ -1,11 +1,20 @@
 # Wrestling Manager checkpoint — 9 September 2026
 
-Current handoff: [WM-001 — Match-rule core](tickets/WM-001.md), on
-`feature/wm-001-match-rule-core` from committed baseline `3d74c7a`. The records below describe
-earlier increments and their publication status at the time; use the ticket for current state.
+Current handoff: [WM-020 — Wrestler stat hierarchy](tickets/WM-020.md) is implemented and verified,
+but remains uncommitted on `feature/wm-020-wrestler-rating-system`. WM-001–042 have context packets linked by
+[the capability index](tickets/INDEX.md). [Playable milestones](milestones.md) govern vertical slices;
+[the execution guide](tickets/EXECUTION-GUIDE.md), [template](tickets/TICKET-TEMPLATE.md) and
+[decision register](product-decisions.md) govern model-ready implementation handoffs. No commit,
+push or publication has been made for WM-020.
 
 Latest increment completed after the owner resumed implementation. No routing, delegation,
 commits, pushes or publication. The earlier foundation record is retained below for context.
+
+WM-020 adds the canonical six-group/37-sub-stat 0–100 system, nine Discipline Fits, Approach,
+Specialisations, curated Archetypes, current-style Overall, deterministic content conversion,
+schema-4 migration including paused shows, explicit simulator adapters, generated contracts and
+rating inspection in roster/search/profile screens. Full roster filtering, full FM-style profiles,
+training operations and profession ratings remain in WM-021/024/032.
 
 ## Latest implementation
 
@@ -24,8 +33,34 @@ checks and the native debug build. Native smoke passed news read/badges/report l
 focus, actual Exit and the original match/show workflow. Isolated save:
 `.artifacts/desktop-smoke-4rdKfO`. News (1920x1080) and booking (1280x720) screenshots inspected.
 
-The [future task/model/thinking table](model-task-plan.md) is a manual recommendation; the
-current direct Astra High instruction remains in effect. No automatic routing enabled.
+The [future task/model/thinking table](model-task-plan.md) is a manual recommendation. This planning
+pass ran directly on GPT-5.6 Sol at High, without delegation. Sol High remains the normal complex
+implementation ceiling; Astra requires a concrete unresolved blocker and owner approval.
+
+## Latest planning direction
+
+- WM-002–010 deepen team and multi-person matches, rules, road-agent logic, move/finish structure,
+  crowd consequences, booking tools and personal movesets.
+- WM-020 now supplies exactly six visible 0–100 stat groups and the approved style model. WM-021–024
+  still own rich identity/relationships, TEW-scale discovery and the FM-style career/profile hub.
+- WM-025–029 separate real life from kayfabe and add teams/stables, championships, storylines,
+  pre-booking and a structured assisted/manual angle director.
+- WM-011–012 and WM-030–042 build company governance, auditable finance, contracts, training,
+  events/house shows, broadcast, office/inbox, journalists/social media, rival AI, inspectable CPU
+  shows, corporate networks and historical honours.
+- WM-013–019 and WM-041 deliver a renderer-neutral text-led show viewer, desktop coherence,
+  compatibility/performance evidence, native database/scenario tools and final release packaging.
+
+The numbered roadmap entries are capability briefs, not multi-week implementation branches. Each
+must be decomposed into a two-to-five-day execution ticket with exact inspected code ownership,
+intentionality answers, cross-system impact, acceptance, verification and a stop condition. M1 now
+targets a repeatable management week from thin people/company/contract/finance/profile/office slices
+alongside the existing singles loop; match/team and presentation depth then advance together.
+
+Theme songs, titantrons and full wrestler animation are deliberately outside the current direction.
+Smart lighting/effects, text, scene cards, portraits, commentary and crowd state carry presentation.
+Portrait packs are optional; sound/video packs come last and remain optional. Product catalogues such
+as stat names/weights and exact relationship rules still require owner approval inside their ticket.
 
 ## Earlier foundation inventory (historical)
 
@@ -60,8 +95,8 @@ finances are placeholders for richer management systems, not complete versions o
 
 No contracts negotiation, custom company creation, scouting/development centres, evolving
 newgen life cycles, rival AI, titles/storylines, full calendar, inbox, production/broadcasting,
-full social ecosystem, runtime mod importer, portraits or PixiJS ring presentation. No golden
-snapshot, installer, long-save soak or gameplay balancing evidence yet. Search, local undo and
+full social ecosystem, runtime mod importer, portraits or PixiJS ring presentation. WM-020 now has
+an engine-0.3 golden snapshot; no installer, long-save soak or gameplay balancing evidence yet. Search, local undo and
 drag/drop compile but do not yet have dedicated interaction regression tests.
 
 ## Files and launch
@@ -75,19 +110,23 @@ binary remain local; no Git checkpoint commit has been created.
 Read the ignored root SDD.md first. Exact heading references for this checkpoint:
 
 - Current checkpoint and execution pointer: SDD.md:3
-- Confirmed direction: SDD.md:38; moveset requirements: SDD.md:86
-- Implemented player loop: SDD.md:96
-- Architecture and file ownership: SDD.md:139
-- Commands and data contracts: SDD.md:165
-- Content and world generation: SDD.md:179
-- Simulation contract: SDD.md:191
-- Persistence and upgrade safety: SDD.md:229
-- Desktop layout and editing safety: SDD.md:256
-- Verification at checkpoint: SDD.md:277
-- Known limitations: SDD.md:294
-- Resume order: SDD.md:307
-- Latest WM/news implementation and verification: SDD.md:359
-- Manual model selection plan: SDD.md:392
+- Confirmed direction: SDD.md:63; moveset requirements: SDD.md:111
+- Implemented player loop: SDD.md:120
+- Architecture and file ownership: SDD.md:163
+- Commands and data contracts: SDD.md:189
+- Content and world generation: SDD.md:203
+- Simulation contract: SDD.md:218
+- Persistence and upgrade safety: SDD.md:265
+- Desktop layout and editing safety: SDD.md:297
+- Verification at checkpoint: SDD.md:323
+- Known limitations: SDD.md:341
+- Resume order: SDD.md:355
+- Latest WM/news implementation and verification: SDD.md:408
+- Manual model selection plan: SDD.md:441
+- WM-001 match-rule core: SDD.md:450
+- Planned wrestler depth backlog: SDD.md:523
+- Complete planned product architecture: SDD.md:552
+- Model-ready planning contract: SDD.md:602
 
 These sections supersede the foundation-era implemented-status descriptions in older docs.
 The appended final-evidence section records the actual native result. Developer concepts,
