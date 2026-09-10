@@ -603,18 +603,19 @@
 }
 .roster {
   table-layout: fixed;
+  min-width: 1320px;
 }
 .roster th:first-child {
-  width: 24%;
+  width: 180px;
 }
 .roster th:nth-child(2) {
-  width: 6%;
+  width: 52px;
 }
 .roster th:nth-child(3) {
-  width: 16%;
+  width: 150px;
 }
 .roster th:last-child {
-  width: 16%;
+  width: 130px;
 }
 .roster thead {
   position: sticky;
@@ -758,6 +759,9 @@
 .attributes dd {
   margin: 0;
   font-weight: 650;
+  max-width: 58%;
+  text-align: right;
+  overflow-wrap: anywhere;
 }
 .biography {
   grid-column: 1/-1;
@@ -1456,10 +1460,11 @@
   .mediaPanel {
     display: none;
   }
-  .roster th:nth-child(4),
-  .roster td:nth-child(4),
-  .roster th:nth-child(5),
-  .roster td:nth-child(5) {
+  .roster {
+    min-width: 650px;
+  }
+  .roster th:nth-child(n + 5):nth-child(-n + 13),
+  .roster td:nth-child(n + 5):nth-child(-n + 13) {
     display: none;
   }
   .statusBar {

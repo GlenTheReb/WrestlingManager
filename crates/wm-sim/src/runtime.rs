@@ -520,7 +520,7 @@ impl Session {
         }
         if beat.is_none()
             && current.stamina[index] < 180
-            && actor.attributes.psychology + agent.psychology > 23
+            && actor.attributes.sim_psychology() + agent.psychology > 23
         {
             current.stamina[index] = (current.stamina[index] + 85).min(1000);
             current.stamina[1 - index] = (current.stamina[1 - index] + 35).min(1000);
@@ -531,14 +531,14 @@ impl Session {
         }
         let aggressive = actor.personality == "Impulsive"
             && current.plan.freedom > 70
-            && actor.attributes.professionalism < 14;
+            && actor.attributes.sim_professionalism() < 14;
         let allowed_risk = (current.plan.risk + i32::from(aggressive)).min(5);
         let candidates: Vec<_> = actor
             .moves
             .iter()
             .filter(|m| {
                 m.risk <= allowed_risk
-                    && m.min_strength <= actor.attributes.strength
+                    && m.min_strength <= actor.attributes.sim_strength()
                     && (current.stamina[index] > 250 || m.stamina_cost <= 3)
             })
             .collect();
@@ -558,10 +558,10 @@ impl Session {
         } else {
             0
         };
-        let capability = actor.attributes.technical * 2
-            + actor.attributes.experience / 2
+        let capability = actor.attributes.sim_technical() * 2
+            + actor.wrestling_style.ring_experience.get() / 10
             + movement.proficiency / 5
-            + opponent.attributes.safety / 2;
+            + opponent.attributes.sim_safety() / 2;
         let preparation = agent.psychology / 4
             + agent.experience / 5
             + agent.communication / 5
@@ -575,10 +575,10 @@ impl Session {
             - fatigue
             - size_penalty)
             .clamp(12, 97);
-        let impossible = movement.min_strength > actor.attributes.strength + 2;
+        let impossible = movement.min_strength > actor.attributes.sim_strength() + 2;
         let success = !impossible && roll(random, 100) < chance;
         let recovery_skill =
-            (actor.attributes.improvisation + opponent.attributes.professionalism) / 2;
+            (actor.attributes.sim_improvisation() + opponent.attributes.sim_professionalism()) / 2;
         let salvaged = !success && !impossible && roll(random, 30) < recovery_skill;
         let quality = if success {
             75 + roll(random, 21)
@@ -597,8 +597,9 @@ impl Session {
         current.successes += i32::from(success);
         current.salvaged += i32::from(salvaged);
         current.mistakes += i32::from(!success && !salvaged);
-        let drain =
-            (movement.stamina_cost * current.plan.pace * 2 - actor.attributes.stamina / 5).max(3);
+        let drain = (movement.stamina_cost * current.plan.pace * 2
+            - actor.attributes.sim_stamina() / 5)
+            .max(3);
         current.stamina[index] = (current.stamina[index] - drain).max(0);
         current.stamina[1 - index] = (current.stamina[1 - index] - drain / 2).max(0);
         if let Some(used) = current
@@ -750,7 +751,8 @@ impl Session {
         let performance = Performance {
             execution: bounded((current.successes * 100 + current.salvaged * 55) / attempts),
             psychology: bounded(
-                (a.attributes.psychology + b.attributes.psychology) * 2 + agent.psychology
+                (a.attributes.sim_psychology() + b.attributes.sim_psychology()) * 2
+                    + agent.psychology
                     - current.mistakes * 2,
             ),
             engagement: bounded(current.engagement_sum / attempts),
@@ -827,7 +829,7 @@ impl Session {
                 &performance,
                 current.stamina[index],
                 current.injured[index],
-                opponent.attributes.psychology,
+                opponent.attributes.sim_psychology(),
                 &current.used_moves,
             ));
         }
@@ -878,7 +880,7 @@ impl Session {
         let ability = plan
             .participants
             .iter()
-            .map(|id| self.worker(id).attributes.charisma)
+            .map(|id| self.worker(id).attributes.sim_charisma())
             .sum::<i32>()
             / plan.participants.len() as i32;
         let quality = bounded(ability * 4 + 20 - self.crowd.fatigue / 3);
@@ -989,7 +991,7 @@ impl Session {
                             format!(
                                 "{} {}",
                                 worker.name,
-                                if worker.attributes.charisma >= 14 {
+                                if worker.attributes.sim_charisma() >= 14 {
                                     "holds the room and gives the next line time to land."
                                 } else {
                                     "has to work to keep attention on the story."

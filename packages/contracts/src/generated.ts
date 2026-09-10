@@ -9,15 +9,55 @@ export type SaveSummary = { saveId: string, promotionName: string, currentDate: 
 
 export type IpcError = { code: string, message: string, };
 
-export type Attributes = { strength: number, technical: number, psychology: number, stamina: number, charisma: number, safety: number, professionalism: number, improvisation: number, experience: number, };
+export type Rating100 = number;
+
+export type MovementAttributes = { acceleration: Rating100, ringSpeed: Rating100, agility: Rating100, acrobatics: Rating100, jumping: Rating100, flexibility: Rating100, balance: Rating100, };
+
+export type PhysicalityAttributes = { strength: Rating100, stamina: Rating100, toughness: Rating100, recovery: Rating100, injuryResistance: Rating100, };
+
+export type RingcraftAttributes = { technicalGrappling: Rating100, chainWrestling: Rating100, striking: Rating100, brawling: Rating100, submissions: Rating100, aerialWrestling: Rating100, powerOffense: Rating100, hardcoreWeapons: Rating100, countering: Rating100, };
+
+export type PsychologyAttributes = { matchStorytelling: Rating100, pacing: Rating100, selling: Rating100, crowdReading: Rating100, matchCalling: Rating100, adaptability: Rating100, };
+
+export type FundamentalsAttributes = { timing: Rating100, consistency: Rating100, safety: Rating100, bumping: Rating100, positioning: Rating100, cooperation: Rating100, };
+
+export type EntertainmentAttributes = { presence: Rating100, microphone: Rating100, characterPerformance: Rating100, crowdConnection: Rating100, };
+
+export type WrestlerAttributes = { movement: MovementAttributes, physicality: PhysicalityAttributes, ringcraft: RingcraftAttributes, psychology: PsychologyAttributes, fundamentals: FundamentalsAttributes, entertainment: EntertainmentAttributes, };
+
+export type Discipline = "technicalGrappling" | "submissionWrestling" | "luchaLibre" | "aerialWrestling" | "striking" | "powerWrestling" | "brawling" | "hardcoreWrestling" | "shootFighting";
+
+export type Tempo = "methodical" | "balanced" | "fastPaced";
+
+export type Structure = "traditional" | "escalating" | "spotDriven";
+
+export type Presentation = "sportRealistic" | "dramatic" | "spectacle" | "comedy";
+
+export type Contact = "light" | "standard" | "stiff";
+
+export type RiskApproach = "conservative" | "balanced" | "daredevil";
+
+export type Specialisation = "chainWrestling" | "catchWrestling" | "matControl" | "counterWrestling" | "jointLocks" | "chokes" | "stretchHolds" | "limbTargeting" | "ropework" | "luchaGrappling" | "luchaSequences" | "multiPersonFlow" | "diving" | "springboards" | "slingshots" | "aerialCounters" | "punches" | "kicks" | "kneesElbows" | "chopsForearms" | "lifts" | "presses" | "impactSlams" | "throws" | "clinchFighting" | "dirtyFighting" | "arenaBrawling" | "weapons" | "tablesLadders" | "environmentalOffense" | "deathmatch" | "takedowns" | "groundControl" | "groundAndPound" | "martialArtsIntegration";
+
+export type WrestlingApproach = { tempo: Tempo, structure: Structure, presentation: Presentation, contact: Contact, risk: RiskApproach, };
+
+export type DisciplineEvidence = { discipline: Discipline, movesetReadiness: Rating100, mastery: Rating100, provenPerformance: Rating100, };
+
+export type WrestlingStyleProfile = { evidence: Array<DisciplineEvidence>, approach: WrestlingApproach, specialisations: Array<Specialisation>, ringExperience: Rating100, performanceModifier: number, currentPrimary: Discipline, pendingPrimary: Discipline | null, pendingDays: number, pendingMatches: number, };
+
+export type GroupScores = { movement: Rating100, physicality: Rating100, ringcraft: Rating100, psychology: Rating100, fundamentals: Rating100, entertainment: Rating100, };
+
+export type DisciplineFit = { discipline: Discipline, score: Rating100, };
+
+export type WrestlingSummary = { groups: GroupScores, disciplineFits: Array<DisciplineFit>, primary: Discipline, secondaries: Array<Discipline>, archetype: string, overall: Rating100, developing: boolean, };
 
 export type Condition = { fatigue: number, confidence: number, morale: number, momentum: number, popularity: number, wear: number, injuryDays: number, development: number, matches: number, };
 
 export type Move = { id: string, name: string, style: string, difficulty: number, risk: number, staminaCost: number, minStrength: number, proficiency: number, signature: boolean, };
 
-export type Worker = { id: string, name: string, age: number, nationality: string, language: string, school: string, background: string, personality: string, ambition: string, style: string, weightKg: number, attributes: Attributes, condition: Condition, moves: Array<Move>, appearanceFee: number, };
+export type Worker = { id: string, name: string, age: number, nationality: string, language: string, school: string, background: string, personality: string, ambition: string, style: string, weightKg: number, attributes: WrestlerAttributes, wrestlingStyle: WrestlingStyleProfile, condition: Condition, moves: Array<Move>, appearanceFee: number, };
 
-export type RosterRow = { id: string, name: string, age: number, style: string, psychology: number, stamina: number, condition: Condition, };
+export type RosterRow = { id: string, name: string, age: number, style: string, archetype: string, overall: number, groups: GroupScores, condition: Condition, };
 
 export type RosterPage = { rows: Array<RosterRow>, total: number, };
 
@@ -87,7 +127,7 @@ export type AgentAdvice = { plan: MatchPlan, notes: Array<string>, };
 
 export type CareerOffice = { promotion: PromotionOverview, show: ShowCard, agents: Array<RoadAgent>, rosterCount: number, media: Array<MediaPost>, recentShows: Array<ShowCard>, };
 
-export type WorkerProfile = { worker: Worker, history: Array<SegmentReport>, };
+export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, };
 
 export type NewsItem = { id: number, category: string, title: string, body: string, date: string, showId: number | null, workerId: string | null, read: boolean, };
 

@@ -62,7 +62,24 @@ fn fingerprint(bytes: &[u8]) -> u64 {
 }
 
 #[test]
-fn engine_0_2_0_singles_golden_output() {
+fn generated_duplicate_names_use_clear_deterministic_ordinals() {
+    let workers = generate_world(42, &base_pack());
+    let names = workers
+        .iter()
+        .map(|worker| worker.name.as_str())
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(names.len(), workers.len());
+    assert!(names.iter().any(|name| name.ends_with(" II")));
+    assert!(names.iter().all(|name| {
+        !name
+            .split_whitespace()
+            .next_back()
+            .is_some_and(|suffix| suffix.chars().all(|character| character.is_ascii_digit()))
+    }));
+}
+
+#[test]
+fn engine_0_3_0_singles_golden_output() {
     let mut sim = session(42);
     let mut events = sim.advance(347);
     let snapshot = serde_json::to_vec(&sim).unwrap();
@@ -71,11 +88,11 @@ fn engine_0_2_0_singles_golden_output() {
     events.extend(sim.advance(3600));
     let final_state = fingerprint(&serde_json::to_vec(&sim).unwrap());
     let event_stream = fingerprint(&serde_json::to_vec(&events).unwrap());
-    // Captured from 3d74c7a before WM-001 changed production code. Changing these
-    // requires an explicit engine compatibility decision, not a fixture refresh.
-    assert_eq!(partial, 0x4684442da96784de, "legacy snapshot drift");
-    assert_eq!(final_state, 0xe4d5bf56f4341bb6, "final state drift");
-    assert_eq!(event_stream, 0x4f9f05ce15f9c76f, "event stream drift");
+    // WM-020 deliberately changes the worker snapshot and ability mapping under
+    // engine 0.3.0. Future changes still require an explicit compatibility decision.
+    assert_eq!(partial, 0x2a61c1ce511bf238, "engine snapshot drift");
+    assert_eq!(final_state, 0xda372424d3db94ee, "final state drift");
+    assert_eq!(event_stream, 0xa741f1eb4e898d39, "event stream drift");
     assert_eq!(events.len(), 108);
 }
 

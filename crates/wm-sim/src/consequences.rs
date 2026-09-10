@@ -72,12 +72,14 @@ pub fn apply_match(
     };
     c.development += learning;
     c.matches += 1;
-    worker.attributes.experience = (worker.attributes.experience + 1).min(20);
+    worker.wrestling_style.register_match(&worker.attributes);
     if c.development >= 100 {
         c.development -= 100;
-        worker.attributes.psychology = (worker.attributes.psychology + 1).min(20);
+        worker.attributes.psychology.match_storytelling =
+            worker.attributes.psychology.match_storytelling.adjusted(1);
         if worker.age < 30 {
-            worker.attributes.technical = (worker.attributes.technical + 1).min(20);
+            worker.attributes.ringcraft.technical_grappling =
+                worker.attributes.ringcraft.technical_grappling.adjusted(1);
         }
     }
     for m in &mut worker.moves {

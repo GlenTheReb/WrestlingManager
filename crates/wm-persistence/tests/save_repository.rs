@@ -43,6 +43,35 @@ fn creates_complete_game_and_reopens_it_with_an_independent_repository() {
 }
 
 #[test]
+fn rejects_a_structurally_invalid_wrestling_style_at_the_read_boundary() {
+    let temporary = tempdir().unwrap();
+    let repository = SaveRepository::new(temporary.path());
+    repository
+        .create_game(request("invalid-style", "17"))
+        .unwrap();
+    let worker_id = repository
+        .roster_page("invalid-style", "", 0, 1)
+        .unwrap()
+        .rows[0]
+        .id
+        .clone();
+
+    let connection = Connection::open(temporary.path().join("invalid-style.sqlite3")).unwrap();
+    connection
+        .execute(
+            "UPDATE workers SET wrestling_style=json_insert(wrestling_style,'$.evidence[#]',json_extract(wrestling_style,'$.evidence[0]')) WHERE id=?1",
+            [&worker_id],
+        )
+        .unwrap();
+    drop(connection);
+
+    assert!(matches!(
+        repository.worker_profile("invalid-style", &worker_id),
+        Err(PersistenceError::InvalidDatabase)
+    ));
+}
+
+#[test]
 fn duplicate_creation_never_overwrites_the_existing_save() {
     let temporary = tempdir().unwrap();
     let repository = SaveRepository::new(temporary.path());

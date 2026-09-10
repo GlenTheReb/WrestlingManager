@@ -3,6 +3,7 @@ CREATE TABLE workers (
     style TEXT NOT NULL, nationality TEXT NOT NULL, language TEXT NOT NULL, school TEXT NOT NULL,
     background TEXT NOT NULL, personality TEXT NOT NULL, ambition TEXT NOT NULL, weight_kg INTEGER NOT NULL,
     appearance_fee INTEGER NOT NULL, attributes TEXT NOT NULL CHECK(json_valid(attributes)),
+    wrestling_style TEXT NOT NULL CHECK(json_valid(wrestling_style)),
     condition TEXT NOT NULL CHECK(json_valid(condition)), moves TEXT NOT NULL CHECK(json_valid(moves))
 ) STRICT;
 CREATE INDEX workers_name ON workers(name COLLATE NOCASE);

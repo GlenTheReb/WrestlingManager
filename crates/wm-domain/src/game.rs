@@ -1,19 +1,6 @@
+use crate::ratings::{WrestlerAttributes, WrestlingStyleProfile, WrestlingSummary};
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
-#[serde(rename_all = "camelCase")]
-pub struct Attributes {
-    pub strength: i32,
-    pub technical: i32,
-    pub psychology: i32,
-    pub stamina: i32,
-    pub charisma: i32,
-    pub safety: i32,
-    pub professionalism: i32,
-    pub improvisation: i32,
-    pub experience: i32,
-}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
@@ -57,7 +44,8 @@ pub struct Worker {
     pub ambition: String,
     pub style: String,
     pub weight_kg: i32,
-    pub attributes: Attributes,
+    pub attributes: WrestlerAttributes,
+    pub wrestling_style: WrestlingStyleProfile,
     pub condition: Condition,
     pub moves: Vec<Move>,
     pub appearance_fee: i32,
@@ -70,19 +58,22 @@ pub struct RosterRow {
     pub name: String,
     pub age: i32,
     pub style: String,
-    pub psychology: i32,
-    pub stamina: i32,
+    pub archetype: String,
+    pub overall: i32,
+    pub groups: crate::ratings::GroupScores,
     pub condition: Condition,
 }
 impl From<&Worker> for RosterRow {
     fn from(worker: &Worker) -> Self {
+        let summary = worker.wrestling_style.summary(&worker.attributes);
         Self {
             id: worker.id.clone(),
             name: worker.name.clone(),
             age: worker.age,
             style: worker.style.clone(),
-            psychology: worker.attributes.psychology,
-            stamina: worker.attributes.stamina,
+            archetype: summary.archetype,
+            overall: summary.overall.get(),
+            groups: summary.groups,
             condition: worker.condition.clone(),
         }
     }
@@ -402,6 +393,7 @@ pub struct CareerOffice {
 #[serde(rename_all = "camelCase")]
 pub struct WorkerProfile {
     pub worker: Worker,
+    pub wrestling: WrestlingSummary,
     pub history: Vec<SegmentReport>,
 }
 
