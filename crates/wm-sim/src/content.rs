@@ -2,6 +2,7 @@ use crate::{rng, roll};
 use serde::Deserialize;
 use std::collections::{BTreeMap, BTreeSet};
 use wm_domain::game::*;
+use wm_domain::identity::*;
 use wm_domain::ratings::{LegacyAttributes, WrestlerAttributes, WrestlingStyleProfile};
 
 #[derive(Debug, Deserialize)]
@@ -134,7 +135,7 @@ pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
                     mv
                 })
                 .collect();
-            Worker {
+            let mut worker = Worker {
                 id: format!("worker-{:03}", i + 1),
                 name,
                 age,
@@ -154,6 +155,7 @@ pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
                     "Become the performer the company builds around."
                 }
                 .into(),
+                identity: PersonIdentity::default(),
                 weight_kg: if b.style == "Power" {
                     108 + roll(&mut random, 28)
                 } else {
@@ -174,9 +176,63 @@ pub fn generate_world(seed: u64, pack: &ContentPack) -> Vec<Worker> {
                 },
                 moves,
                 appearance_fee: 18_000 + (age * 400),
-            }
+            };
+            worker.identity = generate_identity(seed, i as u64, &worker);
+            worker
         })
         .collect()
+}
+
+/// Independent stream: adding person facts never consumes the established match/content RNG.
+fn generate_identity(seed: u64, index: u64, worker: &Worker) -> PersonIdentity {
+    let mut random = rng(
+        seed ^ 0x4944_454E_5449_5459 ^ index.wrapping_mul(0x9E37_79B9),
+        0,
+    );
+    let mut identity = PersonIdentity::default();
+    for a in identity
+        .personality
+        .values_mut()
+        .chain(identity.qualities.values_mut())
+    {
+        a.value = Some(
+            wm_domain::ratings::Rating100::new(15 + roll(&mut random, 81))
+                .expect("bounded generation"),
+        );
+        a.source = "Fictional world generation".into();
+    }
+    let primary = if worker.age > 38 && roll(&mut random, 2) == 0 {
+        Motivation::Legacy
+    } else {
+        Motivation::ALL[roll(&mut random, Motivation::ALL.len() as u32) as usize]
+    };
+    let mut choices: Vec<_> = Motivation::ALL
+        .iter()
+        .copied()
+        .filter(|m| *m != primary)
+        .collect();
+    let mut secondary = vec![];
+    for _ in 0..roll(&mut random, 3) {
+        secondary.push(choices.remove(roll(&mut random, choices.len() as u32) as usize));
+    }
+    identity.motivations = Some(Motivations { primary, secondary });
+    identity.languages.push(SpokenLanguage {
+        name: worker.language.clone(),
+        proficiency: Some(LanguageLevel::Fluent),
+        native: true,
+    });
+    // Hobbies describe interests only; no performance or misconduct modifiers are attached.
+    let mut interests = Hobby::ALL.to_vec();
+    for _ in 0..roll(&mut random, 6) {
+        let hobby = interests.remove(roll(&mut random, interests.len() as u32) as usize);
+        identity.hobbies.push(Interest {
+            hobby,
+            involvement: Involvement::ALL[roll(&mut random, 3) as usize],
+        });
+    }
+    identity.biography.debut_year = Some(2026 - (worker.age - 18).max(0));
+    identity.validate().expect("generated identity is valid");
+    identity
 }
 
 pub fn initial_agents() -> Vec<RoadAgent> {

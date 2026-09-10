@@ -88,39 +88,54 @@ fatigue. Occasional guest work may use explicitly mapped transferable attributes
 develops its dedicated Profession Skills. WM-032 owns the shared catalogue and calculation kernel;
 the capability responsible for each job owns its requirements, assignments and interface.
 
+### PD-103 personality and exceptional-trait direction — design prepared 10 September 2026
+
+The owner accepted the recommendation to retain eight personality ratings and nine shared qualities,
+clarify overlaps, use evidence for exceptional traits and support unknown information. The concrete
+[naming and event rules](personality-and-trait-rules.md) and [WM-022.1 execution ticket](tickets/WM-022.1.md)
+are implemented together following the owner's WM-022 instruction. Exact thresholds are rule-version-1
+defaults, not balance evidence; downstream management effects remain future work. This supersedes chat examples and speculative
+real-worker personality ratings.
+
+PD-009 vocabulary amendment: add Work Ethic separately from Professionalism, call shared Adaptability
+Personal Adaptability, and treat Languages as structured identity data rather than a ninth numeric
+quality. WM-022 defines the shared vocabulary; WM-032 retains profession calculation and training
+ownership. The accepted 65/20/15 role formula is unchanged. PD-102 still owns scouting discovery;
+unknown inputs and suppression of hidden values are required from the outset.
+
 ## Open decisions that block specific implementation
 
-| ID     | Required decision                                                                                                               | Blocks                                           |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| PD-102 | Visibility model for known, estimated, hidden and stale wrestler information.                                                   | WM-021, WM-024 and WM-032 scouting interfaces.   |
-| PD-103 | Personality vocabulary, intensity/scales and which traits are mechanically causal.                                              | WM-022 and downstream interactions/negotiations. |
-| PD-104 | Personal relationship categories, bounds, memories, decay and player interaction catalogue.                                     | WM-023.                                          |
-| PD-105 | Product, audience, culture, company-size and regional market taxonomies.                                                        | WM-008, WM-011 and business/world balance.       |
-| PD-106 | Character/gimmick/alignment terminology and rules for public versus private knowledge.                                          | WM-025 and creative systems.                     |
-| PD-107 | Financial difficulty layers, currency display, tax/debt detail and bankruptcy/recovery philosophy.                              | WM-042 balance and interface.                    |
-| PD-108 | Contract clause catalogue, negotiation cadence and acceptable sensitive wellness/drug-testing presentation.                     | WM-031.                                          |
-| PD-109 | First-release database editor scope and compatibility promise for third-party packs.                                            | WM-041 public format.                            |
-| PD-110 | First commercial/release milestone: required world size, content volume and supported career length.                            | Final scope for WM-018–019 and release claims.   |
-| PD-111 | Match-format rules: tag legality, fall/elimination/entry semantics, stipulation composition and quick/advanced booking control. | WM-002–005.                                      |
-| PD-112 | Road-agent authority, advice detail, live-instruction catalogue and player control over sequence/finish recovery.               | WM-006–007.                                      |
-| PD-113 | Draft autosave/recovery, undo checkpoint and reusable-template policy.                                                          | WM-009.                                          |
-| PD-114 | Move taxonomy, naming, repertoire sizes, visibility and learning/proficiency cadence.                                           | WM-010.                                          |
-| PD-115 | Playable company roles, governance permissions, owner-goal families and dismissal/resignation continuation.                     | WM-030.                                          |
-| PD-116 | Calendar granularity, event families, travel/weather depth, pricing and house-show automation.                                  | WM-033.                                          |
-| PD-117 | Broadcast/ratings abstraction, media territories, sponsor sensitivity, merchandise and production depth.                        | WM-034.                                          |
-| PD-118 | Office urgency, notification, snooze and assistant automation authority.                                                        | WM-035.                                          |
-| PD-119 | Outlet/fan taxonomy, press-response design, rumour uncertainty, random-event philosophy and celebrity limits.                   | WM-036.                                          |
-| PD-120 | Agreement, talent-trade, corporate-control and competitive-tactic catalogue and risk model.                                     | WM-037.                                          |
-| PD-121 | CPU-company difficulty philosophy, decision horizon, simulation-detail tiers and lifecycle target rates.                        | WM-038.                                          |
-| PD-122 | Historical event/detail retention, search knowledge/ranking and presentation-stream compatibility.                              | WM-013 and WM-039.                               |
-| PD-123 | Title prestige, divisions, rankings, tournaments, awards, Top 100 and Hall of Fame criteria.                                    | WM-027 and WM-040.                               |
-| PD-124 | Storyline state/objectives, angle-beat catalogue, dialogue storage and assisted-versus-manual authority.                        | WM-028–029.                                      |
-| PD-125 | Viewer timing/density/effects, WM visual direction, navigation hierarchy, shortcuts and accessibility defaults.                 | WM-014 and WM-016–017.                           |
-| PD-126 | Save backup/recovery retention, supported upgrade horizon, repair limits and engine-version policy.                             | WM-015.                                          |
-| PD-127 | Supported hardware/world/career performance budgets and representative balance ranges.                                          | WM-018.                                          |
-| PD-128 | Release channel/version/signing and supported Windows/installer policy.                                                         | WM-019.                                          |
-| PD-129 | Permanent group types, overlapping membership, chemistry/loyalty dimensions and manager/authority permissions.                  | WM-026.                                          |
-| PD-130 | World market/era granularity, company-relationship dimensions and long-save event retention.                                    | WM-012.                                          |
+| ID     | Required decision                                                                                                               | Blocks                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| PD-102 | Visibility model for known, estimated, hidden and stale wrestler information.                                                   | WM-021, WM-024 and WM-032 scouting interfaces.                       |
+| PD-103 | Rule version 1 and identity registries implemented in WM-022; balance remains unproven.                                         | Downstream event producers and effects require their owning systems. |
+| PD-104 | Personal relationship categories, bounds, memories, decay and player interaction catalogue.                                     | WM-023.                                                              |
+| PD-105 | Product, audience, culture, company-size and regional market taxonomies.                                                        | WM-008, WM-011 and business/world balance.                           |
+| PD-106 | Character/gimmick/alignment terminology and rules for public versus private knowledge.                                          | WM-025 and creative systems.                                         |
+| PD-107 | Financial difficulty layers, currency display, tax/debt detail and bankruptcy/recovery philosophy.                              | WM-042 balance and interface.                                        |
+| PD-108 | Contract clause catalogue, negotiation cadence and acceptable sensitive wellness/drug-testing presentation.                     | WM-031.                                                              |
+| PD-109 | First-release database editor scope and compatibility promise for third-party packs.                                            | WM-041 public format.                                                |
+| PD-110 | First commercial/release milestone: required world size, content volume and supported career length.                            | Final scope for WM-018–019 and release claims.                       |
+| PD-111 | Match-format rules: tag legality, fall/elimination/entry semantics, stipulation composition and quick/advanced booking control. | WM-002–005.                                                          |
+| PD-112 | Road-agent authority, advice detail, live-instruction catalogue and player control over sequence/finish recovery.               | WM-006–007.                                                          |
+| PD-113 | Draft autosave/recovery, undo checkpoint and reusable-template policy.                                                          | WM-009.                                                              |
+| PD-114 | Move taxonomy, naming, repertoire sizes, visibility and learning/proficiency cadence.                                           | WM-010.                                                              |
+| PD-115 | Playable company roles, governance permissions, owner-goal families and dismissal/resignation continuation.                     | WM-030.                                                              |
+| PD-116 | Calendar granularity, event families, travel/weather depth, pricing and house-show automation.                                  | WM-033.                                                              |
+| PD-117 | Broadcast/ratings abstraction, media territories, sponsor sensitivity, merchandise and production depth.                        | WM-034.                                                              |
+| PD-118 | Office urgency, notification, snooze and assistant automation authority.                                                        | WM-035.                                                              |
+| PD-119 | Outlet/fan taxonomy, press-response design, rumour uncertainty, random-event philosophy and celebrity limits.                   | WM-036.                                                              |
+| PD-120 | Agreement, talent-trade, corporate-control and competitive-tactic catalogue and risk model.                                     | WM-037.                                                              |
+| PD-121 | CPU-company difficulty philosophy, decision horizon, simulation-detail tiers and lifecycle target rates.                        | WM-038.                                                              |
+| PD-122 | Historical event/detail retention, search knowledge/ranking and presentation-stream compatibility.                              | WM-013 and WM-039.                                                   |
+| PD-123 | Title prestige, divisions, rankings, tournaments, awards, Top 100 and Hall of Fame criteria.                                    | WM-027 and WM-040.                                                   |
+| PD-124 | Storyline state/objectives, angle-beat catalogue, dialogue storage and assisted-versus-manual authority.                        | WM-028–029.                                                          |
+| PD-125 | Viewer timing/density/effects, WM visual direction, navigation hierarchy, shortcuts and accessibility defaults.                 | WM-014 and WM-016–017.                                               |
+| PD-126 | Save backup/recovery retention, supported upgrade horizon, repair limits and engine-version policy.                             | WM-015.                                                              |
+| PD-127 | Supported hardware/world/career performance budgets and representative balance ranges.                                          | WM-018.                                                              |
+| PD-128 | Release channel/version/signing and supported Windows/installer policy.                                                         | WM-019.                                                              |
+| PD-129 | Permanent group types, overlapping membership, chemistry/loyalty dimensions and manager/authority permissions.                  | WM-026.                                                              |
+| PD-130 | World market/era granularity, company-relationship dimensions and long-save event retention.                                    | WM-012.                                                              |
 
 ## Decision record format
 

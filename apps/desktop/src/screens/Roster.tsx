@@ -12,6 +12,7 @@ import { gameApi, errorMessage } from '../api';
 import { useNavigation } from '../navigation';
 import { ErrorNotice, Panel, Meter, Overlay, currency } from '../game-ui';
 import s from '../Game.module.css';
+import { PersonIdentityPanel } from './PersonIdentity';
 
 const humanize = (value: string) =>
   value
@@ -43,6 +44,7 @@ export function Roster({ saveId }: { saveId: string }) {
         ),
       },
       { accessorKey: 'age', header: 'Age' },
+      { accessorKey: 'personalityDescription', header: 'Personality' },
       { accessorKey: 'archetype', header: 'Archetype' },
       { accessorKey: 'overall', header: 'Style OVR' },
       { id: 'movement', header: 'MOV', accessorFn: (r) => r.groups.movement },
@@ -114,7 +116,7 @@ export function Roster({ saveId }: { saveId: string }) {
         <label>
           Find wrestler
           <input
-            placeholder="Name…"
+            placeholder="Name, nationality, language or school…"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -218,7 +220,9 @@ export function ProfilePanel({
     queryKey: ['profile', saveId, workerId],
     queryFn: () => gameApi.profile(saveId, workerId),
   });
-  const [tab, setTab] = useState<'overview' | 'moves' | 'history'>('overview');
+  const [tab, setTab] = useState<'overview' | 'identity' | 'moves' | 'history'>(
+    'overview',
+  );
   const w = profile.data?.worker;
   const wrestling = profile.data?.wrestling;
   return (
@@ -251,22 +255,33 @@ export function ProfilePanel({
             </div>
           </div>
           <nav className={s.tabs}>
-            {(['overview', 'moves', 'history'] as const).map((value) => (
-              <button
-                key={value}
-                aria-pressed={tab === value}
-                onClick={() => setTab(value)}
-              >
-                {value === 'moves'
-                  ? 'Moveset'
-                  : value === 'history'
-                    ? 'Match history'
-                    : 'Profile'}
-              </button>
-            ))}
+            {(['overview', 'identity', 'moves', 'history'] as const).map(
+              (value) => (
+                <button
+                  key={value}
+                  aria-pressed={tab === value}
+                  onClick={() => setTab(value)}
+                >
+                  {value === 'identity'
+                    ? 'Person & traits'
+                    : value === 'moves'
+                      ? 'Moveset'
+                      : value === 'history'
+                        ? 'Match history'
+                        : 'Profile'}
+                </button>
+              ),
+            )}
           </nav>
           <div className={s.overlayBody}>
-            {tab === 'overview' ? (
+            {tab === 'identity' && profile.data ? (
+              <PersonIdentityPanel
+                identity={w.identity}
+                description={profile.data.personalityDescription}
+                biography={profile.data.biography}
+                traits={profile.data.exceptionalTraits}
+              />
+            ) : tab === 'overview' ? (
               <div className={s.profileGrid}>
                 <Panel title="Six base ratings">
                   <dl className={s.attributes}>
@@ -343,9 +358,9 @@ export function ProfilePanel({
                   </div>
                 </Panel>
                 <div className={s.biography}>
-                  <p>{w.background}</p>
+                  <p>{profile.data?.biography || w.background}</p>
                   <p>
-                    <b>Ambition</b> · {w.ambition}
+                    <b>Career motivations</b> · {w.ambition}
                   </p>
                   <p>
                     Appearance agreement: {currency(w.appearanceFee)} per show.{' '}
