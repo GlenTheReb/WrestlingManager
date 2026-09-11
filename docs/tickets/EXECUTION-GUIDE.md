@@ -33,6 +33,11 @@ The implementing model reads only:
 4. Only the dependency handoff sections and code paths explicitly named by the execution ticket.
 5. Focused source symbols found by tracing the current execution path.
 
+For a player-facing slice, also read the
+[interface and integration rules](../interface-and-integration-rules.md) and inspect the focused
+TEW IX/real-world wrestling references required there. Do not broaden that research into an
+unbounded competitive review.
+
 Do not reread the entire repository, every roadmap ticket or all of `SDD.md`. If an implementation
 discovers a new cross-system invariant, record it in the SDD and the capability handoff so the next
 model does not have to rediscover it.
@@ -69,6 +74,10 @@ Before implementation, answer these questions in the execution ticket:
 5. **Reuse:** Which existing contract is extended instead of creating a parallel source of truth?
 6. **Absence:** What happens when information, scouting knowledge or optional assets are missing?
 7. **Abuse case:** How could invalid data, stale revisions, mods or repeated actions break it?
+8. **Workflow:** What does the player need to see and do here, which reference workflow was studied,
+   and how is WM faster or clearer?
+9. **Integration:** Which related systems should be visible or reachable without losing the current
+   task state?
 
 If a feature cannot answer the first three, it is probably decorative. If it cannot answer the
 fourth or fifth, it is likely to create incoherent state. Stop and revise the ticket.

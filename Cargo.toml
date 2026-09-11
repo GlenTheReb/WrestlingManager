@@ -13,7 +13,7 @@ rust-version = "1.98"
 
 [workspace.dependencies]
 proptest = "1.11.0"
-rusqlite = { version = "0.40.2", features = ["bundled", "backup"] }
+rusqlite = { version = "0.40.2", features = ["bundled", "backup", "functions"] }
 serde = { version = "1.0.229", features = ["derive"] }
 tempfile = "3.27.0"
 thiserror = "2.0.20"

@@ -9,6 +9,34 @@ export type SaveSummary = { saveId: string, promotionName: string, currentDate: 
 
 export type IpcError = { code: string, message: string, };
 
+export type SortDirection = "ascending" | "descending";
+
+export type WorkerSortKey = "relevance" | "name" | "age" | "overall" | "movement" | "physicality" | "ringcraft" | "psychology" | "fundamentals" | "entertainment" | "fatigue" | "morale" | "momentum";
+
+export type WorkerSort = { key: WorkerSortKey, direction: SortDirection, };
+
+export type NumberRange = { minimum: number | null, maximum: number | null, };
+
+export type WorkerAvailability = "any" | "cleared" | "injured";
+
+export type BlacklistMode = "include" | "exclude" | "only";
+
+export type WorkerSearchFilters = { age: NumberRange, overall: NumberRange, movement: NumberRange, physicality: NumberRange, ringcraft: NumberRange, psychology: NumberRange, fundamentals: NumberRange, entertainment: NumberRange, nationalities: Array<string>, excludedNationalities: Array<string>, languages: Array<string>, excludedLanguages: Array<string>, schools: Array<string>, excludedSchools: Array<string>, archetypes: Array<string>, excludedArchetypes: Array<string>, primaryDisciplines: Array<string>, excludedPrimaryDisciplines: Array<string>, availability: WorkerAvailability, shortlistId: number | null, blacklist: BlacklistMode, };
+
+export type WorkerSearchRequest = { text: string, filters: WorkerSearchFilters, sort: Array<WorkerSort>, offset: number, limit: number, };
+
+export type WorkerSearchHit = { worker: RosterRow, matchReason: string | null, shortlistIds: Array<number>, blacklisted: boolean, };
+
+export type WorkerSearchPage = { rows: Array<WorkerSearchHit>, total: number, };
+
+export type WorkerFilterOptions = { nationalities: Array<string>, languages: Array<string>, schools: Array<string>, archetypes: Array<string>, primaryDisciplines: Array<string>, };
+
+export type SavedWorkerView = { id: number, name: string, request: WorkerSearchRequest, columns: Array<string>, };
+
+export type WorkerShortlist = { id: number, name: string, memberCount: number, };
+
+export type WorkerDiscoveryLists = { savedViews: Array<SavedWorkerView>, shortlists: Array<WorkerShortlist>, blacklistCount: number, };
+
 export type Rating100 = number;
 
 export type IdentityVisibility = { "kind": "public" } | { "kind": "company", "companyId": string } | { "kind": "hidden" };

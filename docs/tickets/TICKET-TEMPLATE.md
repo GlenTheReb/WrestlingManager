@@ -9,6 +9,8 @@ Status: Draft. Parent capability: `WM-###`. Authorization: none. Proposed branch
 - Parent capability brief: `docs/tickets/WM-###.md`.
 - Accepted dependency handoffs: `...`.
 - Product decisions: `PD-...`.
+- UI/UX references, when player-facing: relevant TEW IX counterpart plus focused current wrestling
+  article/workflow; state what WM improves rather than copying it.
 - Current code entry points confirmed by inspection: `...`.
 
 ## Outcome and player value
@@ -25,6 +27,8 @@ is the smallest coherent slice.
 - Reused contract:
 - Missing-information behavior:
 - Main abuse/failure case:
+- Player workflow and reference improvement:
+- Related-system integration and preserved context:
 
 ## Included behavior
 

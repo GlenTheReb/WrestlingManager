@@ -42,6 +42,9 @@ The present development build includes:
   future media, wellness and sponsor systems do not yet produce events or apply effects.
 - Directional wrestler relationships, persistent memories and a Relationships profile tab with
   deterministic player conversations, management rapport, explained effects and private People mail.
+- A current-data Talent Search foundation with SQL-paged skill/identity/availability filters,
+  searchable include/exclude rules, stable sorting, configurable columns, four-person comparison,
+  durable saved views, named shortlists and a personal blacklist. Ring identities/aliases are next.
 - Show cards containing matches and angles, with ordering, editing and capacity rules.
 - Road-agent planning, manual spots, control periods and protected-wrestler instructions.
 - Deterministic, second-by-second show simulation with pause, playback speeds and live messages.
@@ -55,7 +58,7 @@ multi-person and elimination structures can now be represented by the rules mode
 runtime simulation and booking interface are upcoming work. The planned 2.5D presentation has
 not been added; the live match currently uses a simulation event view.
 
-See the [current ticket](docs/tickets/WM-023.md), [ticket index](docs/tickets/INDEX.md),
+See the [current ticket](docs/tickets/WM-021.1.md), [ticket index](docs/tickets/INDEX.md),
 [ordered roadmap](docs/model-task-plan.md) and [milestones](docs/milestones.md) for the exact
 development state.
 
@@ -102,12 +105,12 @@ Close the game before manually copying a career. A moved save must keep its orig
 
 Useful controls:
 
-| Input    | Action                                        |
-| -------- | --------------------------------------------- |
-| `F1–F6`  | Open the main management screens              |
-| `Ctrl+K` | Search wrestlers, the promotion and next show |
-| `F11`    | Toggle fullscreen                             |
-| `Escape` | Open or close the game menu                   |
+| Input    | Action                                  |
+| -------- | --------------------------------------- |
+| `F1–F6`  | Open the main management screens        |
+| `Ctrl+K` | Open and focus persistent Talent Search |
+| `F11`    | Toggle fullscreen                       |
+| `Escape` | Open or close the game menu             |
 
 **Exit game** is available from the game menu. It waits for pending operations and warns before
 discarding unsaved match instructions. `pnpm.cmd dev:web` runs the interface alone for frontend

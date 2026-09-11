@@ -40,7 +40,7 @@ export function Office({ office }: { office: CareerOffice }) {
             Study their condition, strengths and actual repertoires before
             making promises in the ring.
           </p>
-          <button onClick={() => nav('roster')}>Inspect the roster</button>
+          <button onClick={() => nav('talent')}>Open talent search</button>
         </div>
         <div className={s.brief}>
           <h3>Your road agents</h3>

@@ -18,6 +18,11 @@ import type {
   InteractionRequest,
   InteractionOutcome,
   InteractionTargetPage,
+  WorkerSearchRequest,
+  WorkerSearchPage,
+  WorkerFilterOptions,
+  WorkerDiscoveryLists,
+  RosterRow,
 } from '@wm/contracts';
 
 export const desktopAvailable = () => isTauri();
@@ -34,6 +39,56 @@ export const gameApi = {
   office: (saveId: string) => invoke<CareerOffice>('career_office', { saveId }),
   roster: (saveId: string, search = '', offset = 0, limit = 64) =>
     invoke<RosterPage>('roster_page', { saveId, search, offset, limit }),
+  workerSearch: (saveId: string, request: WorkerSearchRequest) =>
+    invoke<WorkerSearchPage>('worker_search', { saveId, request }),
+  workerFilterOptions: (saveId: string) =>
+    invoke<WorkerFilterOptions>('worker_filter_options', { saveId }),
+  workerDiscoveryLists: (saveId: string) =>
+    invoke<WorkerDiscoveryLists>('worker_discovery_lists', { saveId }),
+  saveWorkerView: (
+    saveId: string,
+    id: number | null,
+    name: string,
+    request: WorkerSearchRequest,
+    columns: string[],
+  ) =>
+    invoke<WorkerDiscoveryLists>('save_worker_view', {
+      saveId,
+      id,
+      name,
+      request,
+      columns,
+    }),
+  deleteWorkerView: (saveId: string, id: number) =>
+    invoke<WorkerDiscoveryLists>('delete_worker_view', { saveId, id }),
+  createWorkerShortlist: (saveId: string, name: string) =>
+    invoke<WorkerDiscoveryLists>('create_worker_shortlist', { saveId, name }),
+  deleteWorkerShortlist: (saveId: string, id: number) =>
+    invoke<WorkerDiscoveryLists>('delete_worker_shortlist', { saveId, id }),
+  setWorkerShortlistMember: (
+    saveId: string,
+    shortlistId: number,
+    workerId: string,
+    included: boolean,
+  ) =>
+    invoke<WorkerDiscoveryLists>('set_worker_shortlist_member', {
+      saveId,
+      shortlistId,
+      workerId,
+      included,
+    }),
+  setWorkerBlacklisted: (
+    saveId: string,
+    workerId: string,
+    blacklisted: boolean,
+  ) =>
+    invoke<WorkerDiscoveryLists>('set_worker_blacklisted', {
+      saveId,
+      workerId,
+      blacklisted,
+    }),
+  compareWorkers: (saveId: string, ids: string[]) =>
+    invoke<RosterRow[]>('compare_workers', { saveId, ids }),
   profile: (saveId: string, workerId: string) =>
     invoke<WorkerProfile>('worker_profile', { saveId, workerId }),
   relationshipTargets: (

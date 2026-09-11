@@ -3,6 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use ts_rs::{Config, TS};
+use wm_domain::discovery::*;
 use wm_domain::game::*;
 use wm_domain::identity::*;
 use wm_domain::match_rules::*;
@@ -18,6 +19,20 @@ fn generated_contracts() -> String {
         PromotionOverview::decl(&config),
         SaveSummary::decl(&config),
         IpcError::decl(&config),
+        SortDirection::decl(&config),
+        WorkerSortKey::decl(&config),
+        WorkerSort::decl(&config),
+        NumberRange::decl(&config),
+        WorkerAvailability::decl(&config),
+        BlacklistMode::decl(&config),
+        WorkerSearchFilters::decl(&config),
+        WorkerSearchRequest::decl(&config),
+        WorkerSearchHit::decl(&config),
+        WorkerSearchPage::decl(&config),
+        WorkerFilterOptions::decl(&config),
+        SavedWorkerView::decl(&config),
+        WorkerShortlist::decl(&config),
+        WorkerDiscoveryLists::decl(&config),
         Rating100::decl(&config),
         IdentityVisibility::decl(&config),
         Assessment::decl(&config),

@@ -33,7 +33,8 @@ pub(super) fn initialise_gameplay(
         super::news::migrate(connection)?;
         super::ratings::migrate(connection, migration)?;
         super::identity::migrate(connection, migration)?;
-        return super::relationships::migrate(connection, migration);
+        super::relationships::migrate(connection, migration)?;
+        return super::discovery::migrate(connection, migration);
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     if transaction.pragma_query_value::<u32, _>(None, "user_version", |r| r.get(0))? >= 2 {
@@ -41,7 +42,8 @@ pub(super) fn initialise_gameplay(
         super::news::migrate(connection)?;
         super::ratings::migrate(connection, migration)?;
         super::identity::migrate(connection, migration)?;
-        return super::relationships::migrate(connection, migration);
+        super::relationships::migrate(connection, migration)?;
+        return super::discovery::migrate(connection, migration);
     }
     let seed = metadata_value(&transaction, "seed")?.ok_or(PersistenceError::InvalidDatabase)?;
     let seed = wm_domain::Seed::parse(&seed)?.get();
@@ -80,7 +82,8 @@ pub(super) fn initialise_gameplay(
     super::news::migrate(connection)?;
     super::ratings::migrate(connection, migration)?;
     super::identity::migrate(connection, migration)?;
-    super::relationships::migrate(connection, migration)
+    super::relationships::migrate(connection, migration)?;
+    super::discovery::migrate(connection, migration)
 }
 
 pub(super) fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceError> {
@@ -95,6 +98,7 @@ pub(super) fn write_worker(connection: &Connection, w: &Worker) -> Result<(), Pe
         ON CONFLICT(id) DO UPDATE SET age=excluded.age,style=excluded.style,attributes=excluded.attributes,wrestling_style=excluded.wrestling_style,condition=excluded.condition,moves=excluded.moves",
         params![w.id,w.name,w.age,w.style,w.nationality,w.language,w.school,w.background,w.personality,w.ambition,w.weight_kg,w.appearance_fee,
             encode(&w.attributes)?,encode(&w.wrestling_style)?,encode(&w.condition)?,encode(&w.moves)?,encode(&w.identity)?])?;
+    super::discovery::refresh_worker_if_present(connection, w)?;
     Ok(())
 }
 
