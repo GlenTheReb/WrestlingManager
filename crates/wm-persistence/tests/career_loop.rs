@@ -22,7 +22,7 @@ fn legacy_upgrade_keeps_identity_finances_and_an_independently_readable_backup()
     assert_eq!(updated.name, "My retained promotion");
     assert_eq!(updated.cash_pence, 12345678);
     assert_eq!(updated.current_date, "2026-02-12");
-    assert_eq!(updated.schema_version, 6);
+    assert_eq!(updated.schema_version, 7);
     assert_eq!(repo.career_office("legacy").unwrap().roster_count, 40);
     let backup_path = directory.path().join("legacy.sqlite3.v1.bak");
     let backup = rusqlite::Connection::open(&backup_path).unwrap();
@@ -82,7 +82,7 @@ fn interrupted_version_one_upgrade_can_be_repaired_and_retried() {
     db.execute("DROP TABLE news_items", []).unwrap();
     drop(db);
 
-    assert_eq!(repo.load_game("legacy").unwrap().schema_version, 6);
+    assert_eq!(repo.load_game("legacy").unwrap().schema_version, 7);
 }
 
 #[test]
@@ -161,7 +161,7 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
     drop(repo);
     // Restore the precise previous schema while preserving a live show's snapshot.
     let prior = rusqlite::Connection::open(directory.path().join("loop.sqlite3")).unwrap();
-    prior.execute_batch("DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; DROP TABLE news_items; DROP TABLE identity_traits; PRAGMA user_version=2; UPDATE metadata SET value='2' WHERE key='schema_version'; UPDATE metadata SET value='0.2.0' WHERE key='engine_version';").unwrap();
+    prior.execute_batch("DROP TABLE worker_blacklist; DROP TABLE worker_shortlist_members; DROP TABLE worker_shortlists; DROP TABLE worker_saved_views; DROP TABLE worker_discovery_index; DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; DROP TABLE news_items; DROP TABLE identity_traits; PRAGMA user_version=2; UPDATE metadata SET value='2' WHERE key='schema_version'; UPDATE metadata SET value='0.2.0' WHERE key='engine_version';").unwrap();
     drop(prior);
     let repo = SaveRepository::new(directory.path());
     assert_eq!(repo.live_show("loop", card.id).unwrap(), partial);

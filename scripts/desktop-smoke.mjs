@@ -139,8 +139,17 @@ try {
   await page.screenshot({
     path: path.join(artifacts, 'promotion-overview.png'),
   });
-  await page.getByRole('button', { name: 'Inspect the roster' }).click();
-  await expect(page.getByText('40 wrestlers', { exact: false })).toBeVisible();
+  await page.getByRole('button', { name: 'Open talent search' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Talent Search' }),
+  ).toBeVisible();
+  await expect(page.getByText('40 workers', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Open search filters' }).click();
+  await expect(page.getByRole('complementary')).toBeVisible();
+  await expect(page.getByLabel('Find a filter')).toBeVisible();
+  await page.getByRole('button', { name: /Style OVR/ }).click();
+  await expect(page.getByText('40 workers', { exact: true })).toBeVisible();
+  await page.screenshot({ path: path.join(artifacts, 'worker-finder.png') });
   const first = page.locator('tbody button').first();
   await first.click();
   await expect(page.getByRole('dialog')).toBeVisible();

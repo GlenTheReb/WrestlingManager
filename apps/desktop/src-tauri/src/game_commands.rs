@@ -2,6 +2,7 @@ use crate::commands::run_storage;
 use tauri::State;
 use wm_domain::{
     IpcError,
+    discovery::{WorkerDiscoveryLists, WorkerFilterOptions, WorkerSearchPage, WorkerSearchRequest},
     game::*,
     relationships::{InteractionOutcome, InteractionRequest, InteractionTargetPage},
 };
@@ -27,6 +28,120 @@ pub async fn roster_page(
 ) -> Result<RosterPage, IpcError> {
     run_storage(repository.inner().clone(), move |r| {
         r.roster_page(&save_id, &search, offset, limit)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn worker_search(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    request: WorkerSearchRequest,
+) -> Result<WorkerSearchPage, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.worker_search(&save_id, request)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn worker_filter_options(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+) -> Result<WorkerFilterOptions, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.worker_filter_options(&save_id)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn worker_discovery_lists(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.worker_discovery_lists(&save_id)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn save_worker_view(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    id: Option<i32>,
+    name: String,
+    request: WorkerSearchRequest,
+    columns: Vec<String>,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.save_worker_view(&save_id, id, &name, request, columns)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn delete_worker_view(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    id: i32,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.delete_worker_view(&save_id, id)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn create_worker_shortlist(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    name: String,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.create_worker_shortlist(&save_id, &name)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn delete_worker_shortlist(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    id: i32,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.delete_worker_shortlist(&save_id, id)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn set_worker_shortlist_member(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    shortlist_id: i32,
+    worker_id: String,
+    included: bool,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.set_worker_shortlist_member(&save_id, shortlist_id, &worker_id, included)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn set_worker_blacklisted(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    worker_id: String,
+    blacklisted: bool,
+) -> Result<WorkerDiscoveryLists, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.set_worker_blacklisted(&save_id, &worker_id, blacklisted)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn compare_workers(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    ids: Vec<String>,
+) -> Result<Vec<RosterRow>, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.compare_workers(&save_id, &ids)
     })
     .await
 }

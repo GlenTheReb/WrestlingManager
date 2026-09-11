@@ -17,7 +17,8 @@ The player understands wrestler strengths and identity, sees a coherent company 
 one contract or relationship issue, books the existing match/angle card, sees an auditable financial
 effect and receives actionable follow-up in the office.
 
-Initial capability slices: WM-020, WM-022–024, WM-011, WM-030–031, WM-035 and WM-042. Use the
+Initial capability slices: WM-020–023, WM-025 before full WM-024, WM-011, WM-030–031, WM-035 and
+WM-042. Use the
 existing singles simulation rather than waiting for every match type. Exit only when the loop is
 interesting for several consecutive in-game weeks and every consequence explains its cause.
 

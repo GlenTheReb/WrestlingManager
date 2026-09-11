@@ -1,6 +1,7 @@
 //! SQLite persistence for portable Wrestling Manager save files.
 
 mod career;
+mod discovery;
 mod identity;
 mod news;
 mod ratings;
@@ -339,7 +340,9 @@ fn validate_compatibility(connection: &Connection) -> Result<(), PersistenceErro
         2 | 3 => "0.2.0",
         4 => "0.3.0",
         5 => "0.4.0",
-        _ => CURRENT_ENGINE_VERSION,
+        6 => "0.5.0",
+        7 => CURRENT_ENGINE_VERSION,
+        _ => return Err(PersistenceError::InvalidDatabase),
     };
     if engine_version != expected_engine {
         return Err(PersistenceError::UnsupportedEngine);

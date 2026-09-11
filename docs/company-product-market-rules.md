@@ -56,6 +56,11 @@ popularity, live reach, broadcast/streaming reach, cultural reach, business infr
 momentum and financial health remain separate facts. Growth unlocks opportunities while increasing
 staffing, governance, production and safety expectations.
 
+Worker popularity is 0–100 per region and remains separate from wrestling ability, current-style
+Overall, momentum, marketability and company reach. Interfaces show the region relevant to the
+current decision as the headline value and provide the regional breakdown on demand. Drawing power is
+a contextual outcome of these separate facts, not another editable universal rating.
+
 Product disagreements, audience decline and failure against authorised owner goals may contribute to
 warnings, reduced authority, demotion or dismissal. WM-030/PD-115 owns career roles and firing rules.
 A controlling owner instead loses control through applicable board, bankruptcy, acquisition or

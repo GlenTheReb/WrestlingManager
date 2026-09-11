@@ -13,7 +13,6 @@ import { Roster, ProfilePanel } from './screens/Roster';
 import { Booking } from './screens/Booking';
 import { LiveShow } from './screens/LiveShow';
 import { Reports } from './screens/Reports';
-import { Search } from './screens/Search';
 import { News } from './screens/News';
 import { ErrorNotice, Overlay, gameDate, currency } from './game-ui';
 import s from './Game.module.css';
@@ -29,7 +28,7 @@ const navigation: {
   { screen: 'booking', label: 'Shows', key: 'F3', group: 'BOOKING' },
   { screen: 'live', label: 'Live show', key: 'F4', group: 'BOOKING' },
   { screen: 'reports', label: 'Reports & media', key: 'F5', group: 'BOOKING' },
-  { screen: 'roster', label: 'Roster', key: 'F2', group: 'TALENT' },
+  { screen: 'talent', label: 'Talent search', key: 'F2', group: 'TALENT' },
 ];
 
 export function App() {
@@ -43,9 +42,9 @@ export function App() {
     inspectWorker,
     reportShowId,
     plannerDirty,
+    openWorkerFinder,
   } = useNavigation();
   const [menu, setMenu] = useState(false);
-  const [search, setSearch] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
   const pendingWrites = useIsMutating();
   const [displayError, setDisplayError] = useState('');
@@ -71,6 +70,12 @@ export function App() {
       cache.setQueryData(['office', activeSaveId], result);
       void cache.invalidateQueries({ queryKey: ['news', activeSaveId] });
       void cache.invalidateQueries({ queryKey: ['roster', activeSaveId] });
+      void cache.invalidateQueries({
+        queryKey: ['worker-search', activeSaveId],
+      });
+      void cache.invalidateQueries({
+        queryKey: ['worker-filter-options', activeSaveId],
+      });
       void cache.invalidateQueries({ queryKey: ['profile', activeSaveId] });
       void cache.invalidateQueries({
         queryKey: ['booking-roster', activeSaveId],
@@ -88,7 +93,7 @@ export function App() {
         activeSaveId
       ) {
         event.preventDefault();
-        setSearch((value) => !value);
+        openWorkerFinder();
         return;
       }
       if (event.key === 'F11') {
@@ -121,7 +126,7 @@ export function App() {
     };
     window.addEventListener('keydown', shortcut);
     return () => window.removeEventListener('keydown', shortcut);
-  }, [activeSaveId, navigate, profileId]);
+  }, [activeSaveId, navigate, openWorkerFinder, profileId]);
   const career = office.data;
   return (
     <div
@@ -157,10 +162,10 @@ export function App() {
               Inbox <b>{news.data?.unread ?? 0}</b>
             </button>
             <button
-              onClick={() => setSearch(true)}
-              title="Search people, promotion and show · Ctrl+K"
+              onClick={openWorkerFinder}
+              title="Open talent search · Ctrl+K"
             >
-              Search <kbd>Ctrl K</kbd>
+              Talent search <kbd>Ctrl K</kbd>
             </button>
             {career && (
               <>
@@ -250,7 +255,7 @@ export function App() {
               <Office office={career} />
             ) : screen === 'news' ? (
               <News key={activeSaveId} saveId={activeSaveId} />
-            ) : screen === 'roster' ? (
+            ) : screen === 'talent' ? (
               <Roster saveId={activeSaveId} />
             ) : screen === 'booking' ? (
               <Booking saveId={activeSaveId} office={career} />
@@ -280,8 +285,8 @@ export function App() {
           LOCAL CAREER · AUTOMATIC SAVING
         </span>
         <span>
-          Ctrl+K search <b>·</b> F1–F6 screens <b>·</b> F11 display <b>·</b> Esc
-          menu
+          Ctrl+K talent search <b>·</b> F1–F6 screens <b>·</b> F11 display{' '}
+          <b>·</b> Esc menu
         </span>
       </footer>
       {profileId && activeSaveId && (
@@ -290,13 +295,6 @@ export function App() {
           saveId={activeSaveId}
           workerId={profileId}
           onClose={() => inspectWorker(null)}
-        />
-      )}
-      {search && activeSaveId && career && (
-        <Search
-          saveId={activeSaveId}
-          office={career}
-          onClose={() => setSearch(false)}
         />
       )}
       {menu && (

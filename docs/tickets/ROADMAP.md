@@ -160,7 +160,8 @@ are represented honestly; profile state survives navigation; no single universal
 
 ### WM-025 — Real-life and kayfabe separation
 
-Reserved branch stem: `feature/wm-025-kayfabe-model`. Depends on WM-022–024.
+Reserved branch stem: `feature/wm-025-kayfabe-model`. Depends on WM-022–023 and accepted PD-106;
+its core model precedes full WM-024 profile integration.
 
 Outcome: separate a person, their current/previous characters, gimmicks, names, alignment, masks,
 presentation and public claims from contracts, personal relationships and real health.

@@ -6,6 +6,7 @@ use std::str::FromStr;
 use thiserror::Error;
 use ts_rs::TS;
 
+pub mod discovery;
 pub mod game;
 pub mod identity;
 pub mod match_rules;
@@ -13,8 +14,8 @@ pub mod ratings;
 pub mod relationships;
 pub mod traits;
 
-pub const CURRENT_ENGINE_VERSION: &str = "0.5.0";
-pub const CURRENT_SCHEMA_VERSION: u32 = 6;
+pub const CURRENT_ENGINE_VERSION: &str = "0.6.0";
+pub const CURRENT_SCHEMA_VERSION: u32 = 7;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SaveId(String);

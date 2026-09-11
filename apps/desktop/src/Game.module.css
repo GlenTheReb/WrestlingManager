@@ -625,6 +625,413 @@
 .roster tbody tr:hover {
   background: #223044;
 }
+.finderScreen {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  gap: 10px;
+}
+.finderHeader {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(340px, 1.3fr) auto;
+  gap: 18px;
+  align-items: end;
+  padding: 14px 18px;
+  border: 1px solid #374557;
+  background: linear-gradient(110deg, #192535, #202e40);
+}
+.finderHeader h1 {
+  margin: 2px 0 3px;
+  font-size: 1.7em;
+}
+.finderHeader span,
+.finderTools span {
+  color: var(--muted);
+  font-size: 0.82em;
+}
+.finderSearch {
+  position: relative;
+}
+.finderSearch input {
+  width: 100%;
+  padding: 12px 70px 12px 14px;
+  font-size: 1em;
+}
+.finderSearch kbd {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.finderFilterToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 104px;
+}
+.finderFilterToggle b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--gold);
+  color: #111820;
+  font-size: 0.75em;
+}
+.finderLayout {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+.finderFilters {
+  width: 300px;
+  flex: 0 0 300px;
+  overflow: auto;
+  padding: 13px;
+  border: 1px solid #374557;
+  background: #151f2b;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.finderFilters label {
+  display: grid;
+  gap: 5px;
+  color: #aebccb;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.finderFilters select {
+  width: 100%;
+}
+.finderFilterSearch {
+  width: 100%;
+}
+.finderFilterGroup {
+  border-top: 1px solid #344152;
+  padding-top: 8px;
+}
+.finderFilterGroup > summary,
+.finderAdvanced > summary,
+.finderTools summary {
+  cursor: pointer;
+  color: #d9e1e9;
+  font-weight: 650;
+}
+.finderFilterGroup > label,
+.finderFilterGroup > fieldset,
+.finderFilterGroup > section,
+.finderAdvanced > section {
+  margin-top: 10px;
+}
+.finderAdvanced {
+  margin-top: 11px;
+  border: 1px solid #344152;
+  padding: 8px;
+}
+.finderAsideHead,
+.finderTools,
+.finderSavedBar,
+.finderFooter,
+.compareTray {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.finderTools > select {
+  width: 105px;
+}
+.finderAsideHead {
+  justify-content: space-between;
+}
+.finderAsideHead button {
+  padding: 4px 8px;
+}
+.finderRange {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 5px;
+}
+.finderRange legend {
+  grid-column: 1/-1;
+  color: #aebccb;
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.finderRange input {
+  width: 100%;
+  min-width: 0;
+}
+.finderChoice {
+  display: grid;
+  gap: 7px;
+  color: #aebccb;
+  font-size: 0.78em;
+}
+.finderChoiceHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.finderChoiceHead small {
+  color: #8293a5;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.finderChoice input {
+  width: 100%;
+}
+.finderChoiceList {
+  display: grid;
+  gap: 3px;
+  max-height: 170px;
+  overflow: auto;
+  padding-right: 3px;
+}
+.finderChoiceRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 30px 30px;
+  align-items: center;
+  gap: 4px;
+}
+.finderChoiceRow span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: none;
+}
+.finderChoiceRow button {
+  padding: 3px;
+  border-color: #45566b;
+}
+.finderChoiceRow button[aria-pressed='true']:first-of-type {
+  border-color: #6fab82;
+  background: #254534;
+  color: #d8f5df;
+}
+.finderChoiceRow button[aria-pressed='true']:last-of-type {
+  border-color: #ad6c6c;
+  background: #4b292c;
+  color: #ffe0e0;
+}
+.finderResults {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #374557;
+  background: #151f2b;
+}
+.finderTools,
+.finderSavedBar,
+.finderFooter {
+  padding: 8px 11px;
+  border-bottom: 1px solid #344152;
+  background: #1c2939;
+}
+.finderTools details,
+.finderSavedBar details {
+  position: relative;
+}
+.finderPopover {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  top: 26px;
+  width: 190px;
+  max-height: 330px;
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid #657487;
+  background: #172333;
+  box-shadow: 0 12px 35px #0009;
+}
+.finderPopover label {
+  display: flex;
+  gap: 8px;
+  padding: 5px;
+}
+.finderPopover > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 2px;
+  border-bottom: 1px solid #344152;
+}
+.finderPopover > div button {
+  padding: 4px 7px;
+  white-space: nowrap;
+}
+.finderSavedBar {
+  flex-wrap: wrap;
+}
+.finderSavedBar > label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #9cacbd;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.finderSavedBar > label select {
+  width: 205px;
+}
+.finderSavedMenu {
+  position: relative;
+}
+.finderSavedMenu > summary {
+  cursor: pointer;
+}
+.finderSavedPanel {
+  position: absolute;
+  z-index: 5;
+  top: 30px;
+  right: 0;
+  width: 380px;
+  max-height: 440px;
+  overflow: auto;
+  padding: 13px;
+  border: 1px solid #657487;
+  background: #172333;
+  box-shadow: 0 12px 35px #0009;
+}
+.finderSavedPanel section {
+  display: grid;
+  gap: 7px;
+  padding: 9px 0;
+  border-bottom: 1px solid #344152;
+}
+.finderSavedPanel section:last-child {
+  border-bottom: 0;
+}
+.finderSavedPanel section > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.finderSavedPanel input {
+  min-width: 0;
+  flex: 1;
+}
+.finderActiveFilters {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 7px 11px;
+  border-bottom: 1px solid #344152;
+  background: #162230;
+}
+.finderActiveFilters button {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border-radius: 14px;
+  border-color: #586d83;
+  background: #26384b;
+  font-size: 0.78em;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.finderTableScroll {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+.finderTableScroll .roster {
+  min-width: 1150px;
+  table-layout: auto;
+}
+.finderTableScroll .roster th:first-child {
+  width: 68px;
+}
+.finderTableScroll .roster th:nth-child(2) {
+  min-width: 180px;
+}
+.sortHeader {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font: inherit;
+  white-space: nowrap;
+}
+.matchReason {
+  display: block;
+  color: #8396aa;
+  font-size: 0.72em;
+  margin-top: 2px;
+}
+.finderRowActions {
+  white-space: nowrap;
+}
+.finderRowActions button {
+  padding: 4px 7px;
+  margin-right: 4px;
+}
+.finderFooter {
+  border-top: 1px solid #344152;
+  border-bottom: 0;
+  justify-content: flex-end;
+}
+.finderFooter span {
+  margin-right: auto;
+  color: var(--muted);
+  font-size: 0.8em;
+}
+.compareTray {
+  position: fixed;
+  z-index: 6;
+  right: 28px;
+  bottom: 42px;
+  padding: 10px 13px;
+  border: 1px solid #8e754c;
+  border-top: 3px solid var(--gold);
+  background: #202d3e;
+  box-shadow: 0 12px 38px #000b;
+}
+.compareTray span {
+  color: #aebccb;
+  font-size: 0.8em;
+}
+.comparisonScroll {
+  overflow: auto;
+}
+.comparisonTable {
+  min-width: 720px;
+}
+.comparisonTable th,
+.comparisonTable td {
+  padding: 11px 13px;
+  border-bottom: 1px solid #344152;
+  text-align: center;
+}
+.comparisonTable th:first-child {
+  text-align: left;
+}
 .gameShell .nameButton {
   border: 0;
   background: none;
