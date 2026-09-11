@@ -42,8 +42,8 @@ capability packet is decomposed into small execution tickets before code changes
 
 WM-001 is implemented, verified and merged through pull request #1 at `ba706ff`.
 See [WM-001 acceptance criteria and handoff](tickets/WM-001.md) and the completed
-[WM-020 execution record](tickets/WM-020.1.md). WM-022's four slices are implemented locally together;
-see its [execution record](tickets/WM-022.1.md). Other tickets remain planned.
+[WM-020 execution record](tickets/WM-020.1.md). WM-022 is merged. WM-023's four slices are implemented
+locally together; see its [execution record](tickets/WM-023.1.md). Other tickets remain planned.
 
 | Reference order | Ticket | Outcome                                                                                           | Complete capability depends on                         | Route                 | Estimate |
 | --------------: | ------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------- | -------- |
@@ -59,7 +59,7 @@ see its [execution record](tickets/WM-022.1.md). Other tickets remain planned.
 |              10 | WM-010 | Personal movesets, signatures, finishers and learning content                                     | WM-007                                                 | Terra/Medium          | 1–2 wk   |
 |              11 | WM-020 | Six 0–100 stat groups, Disciplines, Archetypes and current-style Overall — implemented and pushed | WM-001                                                 | Completed on Sol/High | —        |
 |              12 | WM-022 | Personality, languages, hobbies, biography and trait evidence — implemented and pushed            | WM-001, PD-103                                         | Complete              | —        |
-|              13 | WM-023 | Directional relationships, memories and player interactions                                       | WM-022                                                 | Sol/High              | 2–4 wk   |
+|              13 | WM-023 | Directional relationships, memories and player interactions — implemented locally                 | WM-022                                                 | Completed on Sol/High | —        |
 |              14 | WM-021 | TEW-scale roster search, filters, sorting and saved views                                         | WM-020, WM-022–023                                     | Terra/Medium          | 2–3 wk   |
 |              15 | WM-024 | FM-style wrestler profile and career hub                                                          | WM-020–023                                             | Sol/High              | 2–4 wk   |
 |              16 | WM-025 | Real-life/kayfabe separation, characters, gimmicks and alignment                                  | WM-022–024                                             | Sol/High              | 2–3 wk   |

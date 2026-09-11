@@ -103,14 +103,41 @@ quality. WM-022 defines the shared vocabulary; WM-032 retains profession calcula
 ownership. The accepted 65/20/15 role formula is unchanged. PD-102 still owns scouting discovery;
 unknown inputs and suppression of hidden values are required from the outset.
 
+### PD-104 directional relationships and interactions — accepted 11 September 2026
+
+The owner approved directional Affinity, Respect, Trust and Tension; dated memories with retained
+history and bounded tension decay; context-sensitive player conversations; explicit cooldowns and
+management-attention costs; and lightweight personalised replies without a runtime language model.
+The concrete [relationship and interaction rules](relationship-and-interaction-rules.md) are rule
+version 1 and are implemented by WM-023. Kayfabe, match chemistry, company sentiment and contracts
+remain separate. WM-030 must later connect current-management history to playable Person roles.
+
+### PD-105 company product, audience, culture, scale and markets — accepted 11 September 2026
+
+The owner approved the [company/product/market rules](company-product-market-rules.md): declared,
+delivered and core product identity; company/brand/show scope; soft audience expectations; evidence-
+based audience estimates; dynamic regional affinity; organisation culture; seven scale labels with
+separate reach/prestige/momentum/finance; global moddable geography; local saturation; tiered world
+simulation; and a read-only shipped database with future pre-game and marked in-game editors.
+This decision is design input only and does not claim WM-008, WM-011 or the world/business systems are
+implemented.
+
+### PD-119 social-feed direction — partially accepted 11 September 2026
+
+WM-036 will provide bounded procedural social posts from persistent fan, journalist, worker, company,
+celebrity and outlet accounts. Authored compositional writing plus account voice, knowledge, bias,
+relationships, region and event facts must produce realistic variation without runtime AI. Workers and
+company accounts can be asked to promote, respond, tease, apologise or stay silent; personality,
+morale, relationship and media skill affect compliance and consequences. Independent posts, deletion
+memory, replies and uncertain rumours are supported. Exact outlet taxonomy, press rules, random-event
+catalogue and celebrity limits remain open under PD-119.
+
 ## Open decisions that block specific implementation
 
 | ID     | Required decision                                                                                                               | Blocks                                                               |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | PD-102 | Visibility model for known, estimated, hidden and stale wrestler information.                                                   | WM-021, WM-024 and WM-032 scouting interfaces.                       |
 | PD-103 | Rule version 1 and identity registries implemented in WM-022; balance remains unproven.                                         | Downstream event producers and effects require their owning systems. |
-| PD-104 | Personal relationship categories, bounds, memories, decay and player interaction catalogue.                                     | WM-023.                                                              |
-| PD-105 | Product, audience, culture, company-size and regional market taxonomies.                                                        | WM-008, WM-011 and business/world balance.                           |
 | PD-106 | Character/gimmick/alignment terminology and rules for public versus private knowledge.                                          | WM-025 and creative systems.                                         |
 | PD-107 | Financial difficulty layers, currency display, tax/debt detail and bankruptcy/recovery philosophy.                              | WM-042 balance and interface.                                        |
 | PD-108 | Contract clause catalogue, negotiation cadence and acceptable sensitive wellness/drug-testing presentation.                     | WM-031.                                                              |
@@ -124,7 +151,7 @@ unknown inputs and suppression of hidden values are required from the outset.
 | PD-116 | Calendar granularity, event families, travel/weather depth, pricing and house-show automation.                                  | WM-033.                                                              |
 | PD-117 | Broadcast/ratings abstraction, media territories, sponsor sensitivity, merchandise and production depth.                        | WM-034.                                                              |
 | PD-118 | Office urgency, notification, snooze and assistant automation authority.                                                        | WM-035.                                                              |
-| PD-119 | Outlet/fan taxonomy, press-response design, rumour uncertainty, random-event philosophy and celebrity limits.                   | WM-036.                                                              |
+| PD-119 | Remaining outlet taxonomy, press-response rules, rumour confidence, random-event catalogue and celebrity limits.                | WM-036 beyond the accepted social-feed direction.                    |
 | PD-120 | Agreement, talent-trade, corporate-control and competitive-tactic catalogue and risk model.                                     | WM-037.                                                              |
 | PD-121 | CPU-company difficulty philosophy, decision horizon, simulation-detail tiers and lifecycle target rates.                        | WM-038.                                                              |
 | PD-122 | Historical event/detail retention, search knowledge/ranking and presentation-stream compatibility.                              | WM-013 and WM-039.                                                   |

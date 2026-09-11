@@ -100,7 +100,7 @@ pub(super) fn migrate(
     }
     tx.execute(
         "UPDATE metadata SET value=?1 WHERE key='engine_version'",
-        [CURRENT_ENGINE_VERSION],
+        ["0.4.0"],
     )?;
     tx.execute(
         "UPDATE metadata SET value='5' WHERE key='schema_version'",

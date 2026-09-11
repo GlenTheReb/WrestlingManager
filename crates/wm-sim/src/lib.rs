@@ -1,6 +1,7 @@
 pub mod consequences;
 pub mod content;
 pub mod planning;
+pub mod relationships;
 pub mod runtime;
 
 use rand_chacha::ChaCha8Rng;

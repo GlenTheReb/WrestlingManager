@@ -402,6 +402,7 @@ pub struct WorkerProfile {
     pub personality_description: crate::identity::PersonalityDescription,
     pub biography: String,
     pub exceptional_traits: crate::traits::TraitOverview,
+    pub relationships: crate::relationships::RelationshipProfile,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]

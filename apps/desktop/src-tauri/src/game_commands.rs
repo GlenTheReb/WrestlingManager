@@ -1,6 +1,10 @@
 use crate::commands::run_storage;
 use tauri::State;
-use wm_domain::{IpcError, game::*};
+use wm_domain::{
+    IpcError,
+    game::*,
+    relationships::{InteractionOutcome, InteractionRequest, InteractionTargetPage},
+};
 use wm_persistence::SaveRepository;
 
 #[tauri::command]
@@ -34,6 +38,30 @@ pub async fn worker_profile(
 ) -> Result<WorkerProfile, IpcError> {
     run_storage(repository.inner().clone(), move |r| {
         r.worker_profile(&save_id, &worker_id)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn relationship_targets(
+    repository: State<'_, SaveRepository>,
+    save_id: String,
+    worker_id: String,
+    search: String,
+    offset: u32,
+    limit: u32,
+) -> Result<InteractionTargetPage, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.interaction_targets(&save_id, &worker_id, &search, offset, limit)
+    })
+    .await
+}
+#[tauri::command]
+pub async fn interact_with_worker(
+    repository: State<'_, SaveRepository>,
+    request: InteractionRequest,
+) -> Result<InteractionOutcome, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.interact_with_worker(request)
     })
     .await
 }

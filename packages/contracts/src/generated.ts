@@ -93,6 +93,34 @@ export type DisciplineFit = { discipline: Discipline, score: Rating100, };
 
 export type WrestlingSummary = { groups: GroupScores, disciplineFits: Array<DisciplineFit>, primary: Discipline, secondaries: Array<Discipline>, archetype: string, overall: Rating100, developing: boolean, };
 
+export type RelationshipMemoryKind = "sharedBackground" | "positiveExperience" | "disagreement" | "betrayal" | "support" | "reconciliation" | "managementConversation";
+
+export type InteractionKind = "introduceYourself" | "checkIn" | "praiseRecentWork" | "offerEncouragement" | "askForCreativeInput" | "discussColleague" | "clearTheAir";
+
+export type InteractionTone = "warm" | "open" | "guarded" | "defensive";
+
+export type RelationshipSignals = { affinity: string, respect: string, trust: string, tension: string, };
+
+export type RelationshipMemoryView = { id: string, occurredOn: string, kind: RelationshipMemoryKind, summary: string, active: boolean, };
+
+export type PersonalRelationshipView = { otherId: string, otherName: string, summary: string, signals: RelationshipSignals, memories: Array<RelationshipMemoryView>, };
+
+export type ManagementRelationshipView = { summary: string, signals: RelationshipSignals, revision: number, };
+
+export type RelationshipDelta = { affinity: number, respect: number, trust: number, tension: number, };
+
+export type InteractionTarget = { workerId: string, name: string, relationship: string, };
+
+export type InteractionTargetPage = { rows: Array<InteractionTarget>, total: number, };
+
+export type InteractionOption = { kind: InteractionKind, label: string, description: string, enabled: boolean, unavailableReason: string | null, attentionCost: number, cooldownUntil: string | null, requiresTarget: boolean, };
+
+export type InteractionOutcome = { requestId: string, workerId: string, kind: InteractionKind, label: string, occurredOn: string, tone: InteractionTone, response: string, factors: Array<string>, relationshipDelta: RelationshipDelta, moraleDelta: number, confidenceDelta: number, effects: Array<string>, contextWorkerId: string | null, };
+
+export type RelationshipProfile = { ruleVersion: number, management: ManagementRelationshipView, personal: Array<PersonalRelationshipView>, interactionOptions: Array<InteractionOption>, interactionHistory: Array<InteractionOutcome>, attentionRemaining: number, attentionLimit: number, };
+
+export type InteractionRequest = { saveId: string, requestId: string, workerId: string, kind: InteractionKind, contextWorkerId: string | null, expectedRevision: number, };
+
 export type Condition = { fatigue: number, confidence: number, morale: number, momentum: number, popularity: number, wear: number, injuryDays: number, development: number, matches: number, };
 
 export type Move = { id: string, name: string, style: string, difficulty: number, risk: number, staminaCost: number, minStrength: number, proficiency: number, signature: boolean, };
@@ -169,7 +197,7 @@ export type AgentAdvice = { plan: MatchPlan, notes: Array<string>, };
 
 export type CareerOffice = { promotion: PromotionOverview, show: ShowCard, agents: Array<RoadAgent>, rosterCount: number, media: Array<MediaPost>, recentShows: Array<ShowCard>, };
 
-export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, };
+export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, relationships: RelationshipProfile, };
 
 export type NewsItem = { id: number, category: string, title: string, body: string, date: string, showId: number | null, workerId: string | null, read: boolean, };
 

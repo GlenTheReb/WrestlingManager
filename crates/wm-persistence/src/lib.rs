@@ -4,6 +4,7 @@ mod career;
 mod identity;
 mod news;
 mod ratings;
+mod relationships;
 
 use rusqlite::{Connection, OpenFlags, OptionalExtension, params};
 use std::fs;
@@ -337,6 +338,7 @@ fn validate_compatibility(connection: &Connection) -> Result<(), PersistenceErro
         1 => "0.1.0",
         2 | 3 => "0.2.0",
         4 => "0.3.0",
+        5 => "0.4.0",
         _ => CURRENT_ENGINE_VERSION,
     };
     if engine_version != expected_engine {

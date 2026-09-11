@@ -33,6 +33,8 @@ pub fn run() {
             game_commands::career_office,
             game_commands::roster_page,
             game_commands::worker_profile,
+            game_commands::relationship_targets,
+            game_commands::interact_with_worker,
             game_commands::show_card,
             game_commands::agent_advice,
             game_commands::save_segment,

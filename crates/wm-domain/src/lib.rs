@@ -10,10 +10,11 @@ pub mod game;
 pub mod identity;
 pub mod match_rules;
 pub mod ratings;
+pub mod relationships;
 pub mod traits;
 
-pub const CURRENT_ENGINE_VERSION: &str = "0.4.0";
-pub const CURRENT_SCHEMA_VERSION: u32 = 5;
+pub const CURRENT_ENGINE_VERSION: &str = "0.5.0";
+pub const CURRENT_SCHEMA_VERSION: u32 = 6;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SaveId(String);

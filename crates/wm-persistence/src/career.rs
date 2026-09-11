@@ -32,14 +32,16 @@ pub(super) fn initialise_gameplay(
     if version >= 2 {
         super::news::migrate(connection)?;
         super::ratings::migrate(connection, migration)?;
-        return super::identity::migrate(connection, migration);
+        super::identity::migrate(connection, migration)?;
+        return super::relationships::migrate(connection, migration);
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     if transaction.pragma_query_value::<u32, _>(None, "user_version", |r| r.get(0))? >= 2 {
         transaction.commit()?;
         super::news::migrate(connection)?;
         super::ratings::migrate(connection, migration)?;
-        return super::identity::migrate(connection, migration);
+        super::identity::migrate(connection, migration)?;
+        return super::relationships::migrate(connection, migration);
     }
     let seed = metadata_value(&transaction, "seed")?.ok_or(PersistenceError::InvalidDatabase)?;
     let seed = wm_domain::Seed::parse(&seed)?.get();
@@ -77,10 +79,11 @@ pub(super) fn initialise_gameplay(
     transaction.commit()?;
     super::news::migrate(connection)?;
     super::ratings::migrate(connection, migration)?;
-    super::identity::migrate(connection, migration)
+    super::identity::migrate(connection, migration)?;
+    super::relationships::migrate(connection, migration)
 }
 
-fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceError> {
+pub(super) fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceError> {
     w.identity
         .validate()
         .map_err(|_| PersistenceError::InvalidDatabase)?;
@@ -95,7 +98,7 @@ fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceEr
     Ok(())
 }
 
-fn worker(connection: &Connection, id: &str) -> Result<Worker, PersistenceError> {
+pub(super) fn worker(connection: &Connection, id: &str) -> Result<Worker, PersistenceError> {
     let row=connection.query_row("SELECT name,age,style,nationality,language,school,background,personality,ambition,weight_kg,appearance_fee,attributes,wrestling_style,condition,moves FROM workers WHERE id=?1",[id],|r|{
         Ok((r.get::<_,String>(0)?,r.get::<_,i32>(1)?,r.get::<_,String>(2)?,r.get::<_,String>(3)?,r.get::<_,String>(4)?,r.get::<_,String>(5)?,r.get::<_,String>(6)?,r.get::<_,String>(7)?,r.get::<_,String>(8)?,r.get::<_,i32>(9)?,r.get::<_,i32>(10)?,r.get::<_,String>(11)?,r.get::<_,String>(12)?,r.get::<_,String>(13)?,r.get::<_,String>(14)?))
     }).optional()?.ok_or_else(||rule("That wrestler is not in this career."))?;
@@ -361,6 +364,7 @@ impl SaveRepository {
             worker.condition.matches,
         );
         let exceptional_traits = super::identity::ledger(&connection, id)?.view(Some(&company));
+        let relationships = super::relationships::profile(&connection, id, &company)?;
         let wrestling = worker.wrestling_style.summary(&worker.attributes);
         Ok(WorkerProfile {
             worker,
@@ -369,6 +373,7 @@ impl SaveRepository {
             personality_description,
             biography,
             exceptional_traits,
+            relationships,
         })
     }
 
@@ -681,6 +686,7 @@ impl SaveRepository {
         let date = next_date(&current, 1)?;
         tx.execute("UPDATE promotions SET current_date=?1", [&date])?;
         super::identity::expire(&tx, &date)?;
+        super::relationships::decay(&tx, &date)?;
         let ids = tx
             .prepare("SELECT id FROM workers ORDER BY id")?
             .query_map([], |r| r.get::<_, String>(0))?
