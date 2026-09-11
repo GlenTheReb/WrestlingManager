@@ -1,36 +1,35 @@
-# Wrestling Manager checkpoint — 9 September 2026
+# Wrestling Manager checkpoint — 11 September 2026
 
-Current handoff: [WM-020 — Wrestler stat hierarchy](tickets/WM-020.md) is implemented and verified,
-committed as `2677ffd` and pushed on `feature/wm-020-wrestler-rating-system`. WM-001–042 have context packets linked by
+Current handoff: [WM-023 — Wrestler relationships and interactions](tickets/WM-023.md) is implemented
+locally on `feature/wm-023-relationships`; review and final validation are complete, while commit and
+push remain pending. WM-022 is merged at `7347b24`. WM-001–042 have context packets linked by
 [the capability index](tickets/INDEX.md). [Playable milestones](milestones.md) govern vertical slices;
 [the execution guide](tickets/EXECUTION-GUIDE.md), [template](tickets/TICKET-TEMPLATE.md) and
 [decision register](product-decisions.md) govern model-ready implementation handoffs.
 
-The documentation plan is committed as `67a0c0c` and pushed on the same branch. The earlier
-foundation record is retained below for context.
-
-WM-020 adds the canonical six-group/37-sub-stat 0–100 system, nine Discipline Fits, Approach,
-Specialisations, curated Archetypes, current-style Overall, deterministic content conversion,
-schema-4 migration including paused shows, explicit simulator adapters, generated contracts and
-rating inspection in roster/search/profile screens. Full roster filtering, full FM-style profiles,
-training operations and profession ratings remain in WM-021/024/032.
+WM-023 adds directional affinity/respect/trust/tension, dated memories, management rapport, four
+daily attention points, interaction prerequisites/cooldowns and short authored contextual replies.
+State and outcomes are persisted in schema 6 / engine 0.5.0. The worker profile exposes the system,
+and completed conversations create private People-inbox records. Personal state remains separate
+from match chemistry, company sentiment, contracts and kayfabe.
 
 ## Latest implementation
 
-- WM branding replaces UWF in the app identity; the promotion keeps its company identity.
-- Exit game closes the native application, waits for pending mutations and protects dirty
-  planner instructions with a Return/Discard choice. Navigation and Alt+F4 guards remain future.
-- News & inbox provides real results, business and medical articles, unread badge, categories,
-  saved read state and links to the exact show/profile. F6 opens it.
-- Save schema 3 adds news with verified v1/v2 backups and preserves paused matches. Old
-  completed shows are backfilled from real reports, without resimulation or duplicate articles.
-- Selected panels and controls are rounded; news uses an editorial layout. A clickable match
-  timeline locates the exact beat input. No new match families or 2.5D renderer in this increment.
+- Relationship generation is deterministic and directional without perturbing the existing world
+  random stream. Stable ID-based neutral baselines are lazy; only changed or remembered links are
+  stored, and at most two shared-school memories per worker give some starting links factual context.
+- Interactions are validated server-side, protected by request IDs and revisions, and resolved in
+  one SQLite transaction with exact relationship/morale/confidence deltas, history, domain-event and
+  inbox effects. Colleague search is server-paged and bounded.
+- Only tension decays automatically on the first and fifteenth; positive relationship dimensions
+  change only through causal events. The internal event boundary supports later gameplay producers.
+- The company/product/audience rules requested alongside this work are documented for future WM-011;
+  they are not incorrectly presented as implemented gameplay.
 
-Latest verification: 25 Rust tests and 10 frontend tests passed, plus type/lint/Clippy/contract
-checks and the native debug build. Native smoke passed news read/badges/report links, timeline
-focus, actual Exit and the original match/show workflow. Isolated save:
-`.artifacts/desktop-smoke-4rdKfO`. News (1920x1080) and booking (1280x720) screenshots inspected.
+Final verification: 78 Rust and 15 React tests pass, along with formatting, ESLint, strict
+TypeScript, production web build, generated-contract drift, warning-denying Clippy and native debug
+build. The isolated native smoke passed and its final 1920x1080 relationship screenshot was inspected.
+See the root SDD and [WM-023.1](tickets/WM-023.1.md) for the exact coverage and boundaries.
 
 The [future task/model/thinking table](model-task-plan.md) is a manual recommendation. This planning
 pass ran directly on GPT-5.6 Sol at High, without delegation. Sol High remains the normal complex
@@ -40,8 +39,9 @@ implementation ceiling; Astra requires a concrete unresolved blocker and owner a
 
 - WM-002–010 deepen team and multi-person matches, rules, road-agent logic, move/finish structure,
   crowd consequences, booking tools and personal movesets.
-- WM-020 now supplies exactly six visible 0–100 stat groups and the approved style model. WM-021–024
-  still own rich identity/relationships, TEW-scale discovery and the FM-style career/profile hub.
+- WM-020 supplies the six visible 0–100 stat groups; WM-022 supplies identity/personality; WM-023
+  supplies relationships/interactions. WM-021 and WM-024 still own TEW-scale discovery and the
+  complete FM-style career/profile hub.
 - WM-025–029 separate real life from kayfabe and add teams/stables, championships, storylines,
   pre-booking and a structured assisted/manual angle director.
 - WM-011–012 and WM-030–042 build company governance, auditable finance, contracts, training,
@@ -109,23 +109,25 @@ and roadmap documentation are committed and pushed; generated `output/` and `tmp
 Read the ignored root SDD.md first. Exact heading references for this checkpoint:
 
 - Current checkpoint and execution pointer: SDD.md:3
-- Confirmed direction: SDD.md:66; moveset requirements: SDD.md:114
-- Implemented player loop: SDD.md:123
-- Architecture and file ownership: SDD.md:166
-- Commands and data contracts: SDD.md:192
-- Content and world generation: SDD.md:206
-- Simulation contract: SDD.md:221
-- Persistence and upgrade safety: SDD.md:268
-- Desktop layout and editing safety: SDD.md:300
-- Verification at checkpoint: SDD.md:326
-- Known limitations: SDD.md:344
-- Resume order: SDD.md:358
-- Latest WM/news implementation and verification: SDD.md:411
-- Manual model selection plan: SDD.md:444
-- WM-001 match-rule core: SDD.md:453
-- Planned wrestler depth backlog: SDD.md:526
-- Complete planned product architecture: SDD.md:555
-- Model-ready planning contract: SDD.md:605
+- Confirmed direction: SDD.md:73; moveset requirements: SDD.md:118
+- Implemented player loop: SDD.md:130
+- Architecture and file ownership: SDD.md:176
+- Commands and data contracts: SDD.md:206
+- Content and world generation: SDD.md:221
+- Simulation contract: SDD.md:238
+- Persistence and upgrade safety: SDD.md:286
+- Desktop layout and editing safety: SDD.md:329
+- Verification at checkpoint: SDD.md:360
+- Known limitations: SDD.md:388
+- Resume order: SDD.md:403
+- Latest WM/news implementation and verification: SDD.md:453
+- Manual model selection plan: SDD.md:486
+- WM-001 match-rule core: SDD.md:495
+- Planned wrestler depth backlog: SDD.md:568
+- Complete planned product architecture: SDD.md:602
+- Model-ready planning contract: SDD.md:652
+- WM-022 combined implementation: SDD.md:702
+- WM-023 combined implementation: SDD.md:755
 
 These sections supersede the foundation-era implemented-status descriptions in older docs.
 The appended final-evidence section records the actual native result. Developer concepts,

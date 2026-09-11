@@ -769,6 +769,148 @@
   line-height: 1.7;
   color: #b3c2d2;
 }
+.relationshipLayout {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(420px, 1.25fr);
+  gap: 16px;
+}
+.relationshipSummary {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 4px;
+}
+.relationshipSummary span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.relationshipSignals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 14px;
+  margin: 0;
+  padding: 12px 16px;
+}
+.relationshipSignals div {
+  border-bottom: 1px solid #2b3a4b;
+  padding: 7px 0;
+}
+.relationshipSignals dt {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.relationshipSignals dd {
+  margin: 3px 0 0;
+  color: #d9e2ec;
+}
+.interactionList {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+.interactionCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 11px;
+  border: 1px solid #334256;
+  background: #182433;
+}
+.interactionCard p {
+  margin: 4px 0;
+  color: #aebed0;
+  font-size: 12px;
+}
+.interactionCard small {
+  color: #7f94aa;
+}
+.targetPicker {
+  grid-column: 1;
+}
+.interactionCard label {
+  font-size: 11px;
+  color: var(--muted);
+}
+.interactionCard select,
+.interactionCard input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+}
+.targetPager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+.targetPager button {
+  padding: 3px 8px;
+}
+.interactionCard .unavailable {
+  grid-column: 1/-1;
+  color: #d8a98b;
+}
+.dialogue {
+  margin: 10px;
+  padding: 14px;
+  border-left: 3px solid var(--gold);
+  background: #111b27;
+}
+.dialogue > span {
+  color: var(--gold);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.dialogue blockquote {
+  margin: 9px 0;
+  color: #ecf1f6;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.dialogue p,
+.dialogue details {
+  color: #aebed0;
+  font-size: 12px;
+}
+.relationshipSection {
+  grid-column: 1/-1;
+}
+.relationshipSection > h3 {
+  margin-bottom: 2px;
+}
+.relationshipCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.relationshipCard {
+  border: 1px solid #334256;
+  background: #172331;
+}
+.relationshipCard header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #334256;
+}
+.relationshipCard header span {
+  color: var(--gold);
+  font-size: 12px;
+}
+.relationshipMemory {
+  margin: 0;
+  padding: 9px 14px 12px;
+  color: #aebed0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.relationshipMemory time {
+  color: #7f94aa;
+}
 .bookingGrid {
   display: grid;
   grid-template-columns: minmax(275px, 0.72fr) minmax(520px, 1.6fr);
@@ -1475,6 +1617,10 @@
   }
   .profileGrid {
     gap: 12px;
+  }
+  .relationshipLayout,
+  .relationshipCards {
+    grid-template-columns: 1fr;
   }
 }
 @media (max-height: 700px) {

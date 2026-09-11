@@ -13,6 +13,7 @@ import { useNavigation } from '../navigation';
 import { ErrorNotice, Panel, Meter, Overlay, currency } from '../game-ui';
 import s from '../Game.module.css';
 import { PersonIdentityPanel } from './PersonIdentity';
+import { RelationshipsPanel } from './Relationships';
 
 const humanize = (value: string) =>
   value
@@ -220,9 +221,9 @@ export function ProfilePanel({
     queryKey: ['profile', saveId, workerId],
     queryFn: () => gameApi.profile(saveId, workerId),
   });
-  const [tab, setTab] = useState<'overview' | 'identity' | 'moves' | 'history'>(
-    'overview',
-  );
+  const [tab, setTab] = useState<
+    'overview' | 'identity' | 'relationships' | 'moves' | 'history'
+  >('overview');
   const w = profile.data?.worker;
   const wrestling = profile.data?.wrestling;
   return (
@@ -255,23 +256,31 @@ export function ProfilePanel({
             </div>
           </div>
           <nav className={s.tabs}>
-            {(['overview', 'identity', 'moves', 'history'] as const).map(
-              (value) => (
-                <button
-                  key={value}
-                  aria-pressed={tab === value}
-                  onClick={() => setTab(value)}
-                >
-                  {value === 'identity'
-                    ? 'Person & traits'
+            {(
+              [
+                'overview',
+                'identity',
+                'relationships',
+                'moves',
+                'history',
+              ] as const
+            ).map((value) => (
+              <button
+                key={value}
+                aria-pressed={tab === value}
+                onClick={() => setTab(value)}
+              >
+                {value === 'identity'
+                  ? 'Person & traits'
+                  : value === 'relationships'
+                    ? 'Relationships'
                     : value === 'moves'
                       ? 'Moveset'
                       : value === 'history'
                         ? 'Match history'
                         : 'Profile'}
-                </button>
-              ),
-            )}
+              </button>
+            ))}
           </nav>
           <div className={s.overlayBody}>
             {tab === 'identity' && profile.data ? (
@@ -280,6 +289,12 @@ export function ProfilePanel({
                 description={profile.data.personalityDescription}
                 biography={profile.data.biography}
                 traits={profile.data.exceptionalTraits}
+              />
+            ) : tab === 'relationships' && profile.data ? (
+              <RelationshipsPanel
+                saveId={saveId}
+                workerId={workerId}
+                relationships={profile.data.relationships}
               />
             ) : tab === 'overview' ? (
               <div className={s.profileGrid}>

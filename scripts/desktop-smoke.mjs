@@ -154,6 +154,22 @@ try {
     page.getByText('No exceptional-trait evidence recorded yet.'),
   ).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, 'worker-identity.png') });
+  await page
+    .getByRole('button', { name: 'Relationships', exact: true })
+    .click();
+  await expect(
+    page.getByRole('heading', { name: 'Speak with wrestler', exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole('button', { name: 'Introduce yourself', exact: true })
+    .click();
+  await expect(
+    page.getByText(/^(Warm|Open|Guarded|Defensive) response$/),
+  ).toBeVisible();
+  await expect(page.locator('blockquote')).toBeVisible();
+  await page.screenshot({
+    path: path.join(artifacts, 'worker-relationships.png'),
+  });
   await page.getByRole('button', { name: 'Moveset', exact: true }).click();
   await page.screenshot({ path: path.join(artifacts, 'worker-moves.png') });
   await page.getByRole('button', { name: 'Close panel' }).click();
@@ -252,7 +268,7 @@ try {
   await page.getByRole('button', { name: 'Exit game', exact: true }).click();
   await expect.poll(() => session.process.exitCode).toBe(0);
   console.log(
-    'PASS: WM identity, persisted news/read state, news report links, timeline navigation, native exit, and full booking/live/restart/report career workflow.',
+    'PASS: WM identity, relationship interaction, persisted news/read state, news report links, timeline navigation, native exit, and full booking/live/restart/report career workflow.',
   );
   console.log(`Screenshots and isolated test save: ${isolated}`);
 } finally {

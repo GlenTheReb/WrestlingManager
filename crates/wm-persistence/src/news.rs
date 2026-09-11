@@ -1,12 +1,39 @@
 use super::*;
 use rusqlite::TransactionBehavior;
-use wm_domain::game::{NewsItem, NewsPage, ShowReport, Worker};
+use wm_domain::{
+    game::{NewsItem, NewsPage, ShowReport, Worker},
+    relationships::InteractionOutcome,
+};
 
 // Articles are a projection of recorded career events. The source key makes projection idempotent.
 fn publish(db: &Connection, source: &str, item: NewsItem) -> Result<(), PersistenceError> {
     db.execute("INSERT INTO news_items(source_key,category,title,body,occurred_on,show_id,worker_id) VALUES(?1,?2,?3,?4,?5,?6,?7) ON CONFLICT(source_key) DO NOTHING",
         params![source,item.category,item.title,item.body,item.date,item.show_id,item.worker_id])?;
     Ok(())
+}
+
+pub(super) fn publish_interaction(
+    db: &Connection,
+    worker_name: &str,
+    outcome: &InteractionOutcome,
+) -> Result<(), PersistenceError> {
+    publish(
+        db,
+        &format!("interaction:{}", outcome.request_id),
+        article(
+            "People",
+            format!("Conversation with {worker_name}"),
+            format!(
+                "{}\n\n{}\n\nStaff note: {}",
+                outcome.label,
+                outcome.response,
+                outcome.effects.join(" ")
+            ),
+            &outcome.occurred_on,
+            None,
+            Some(outcome.worker_id.clone()),
+        ),
+    )
 }
 
 fn article(
@@ -187,7 +214,7 @@ impl SaveRepository {
         limit: u32,
     ) -> Result<NewsPage, PersistenceError> {
         let db = self.career_connection(save_id)?;
-        if !["", "Office", "Results", "Medical", "Business"].contains(&category) {
+        if !["", "Office", "People", "Results", "Medical", "Business"].contains(&category) {
             return Err(PersistenceError::GameRule(
                 "Choose a supported news category.".into(),
             ));

@@ -57,9 +57,11 @@ export function News({ saveId }: { saveId: string }) {
               }}
             >
               <option value="">All departments</option>
-              {['Office', 'Results', 'Medical', 'Business'].map((value) => (
-                <option key={value}>{value}</option>
-              ))}
+              {['Office', 'People', 'Results', 'Medical', 'Business'].map(
+                (value) => (
+                  <option key={value}>{value}</option>
+                ),
+              )}
             </select>
             <label>
               <input

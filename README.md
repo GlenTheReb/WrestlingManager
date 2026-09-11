@@ -40,6 +40,8 @@ The present development build includes:
 - Persistent personality, shared qualities, motivations, languages, hobbies and factual biographies
   in a Person & traits profile tab. Evidence-based exceptional-trait rules are implemented; their
   future media, wellness and sponsor systems do not yet produce events or apply effects.
+- Directional wrestler relationships, persistent memories and a Relationships profile tab with
+  deterministic player conversations, management rapport, explained effects and private People mail.
 - Show cards containing matches and angles, with ordering, editing and capacity rules.
 - Road-agent planning, manual spots, control periods and protected-wrestler instructions.
 - Deterministic, second-by-second show simulation with pause, playback speeds and live messages.
@@ -53,7 +55,7 @@ multi-person and elimination structures can now be represented by the rules mode
 runtime simulation and booking interface are upcoming work. The planned 2.5D presentation has
 not been added; the live match currently uses a simulation event view.
 
-See the [current ticket](docs/tickets/WM-022.md), [ticket index](docs/tickets/INDEX.md),
+See the [current ticket](docs/tickets/WM-023.md), [ticket index](docs/tickets/INDEX.md),
 [ordered roadmap](docs/model-task-plan.md) and [milestones](docs/milestones.md) for the exact
 development state.
 

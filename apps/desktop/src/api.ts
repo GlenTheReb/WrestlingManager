@@ -15,6 +15,9 @@ import type {
   LiveInstruction,
   ShowReport,
   NewsPage,
+  InteractionRequest,
+  InteractionOutcome,
+  InteractionTargetPage,
 } from '@wm/contracts';
 
 export const desktopAvailable = () => isTauri();
@@ -33,6 +36,22 @@ export const gameApi = {
     invoke<RosterPage>('roster_page', { saveId, search, offset, limit }),
   profile: (saveId: string, workerId: string) =>
     invoke<WorkerProfile>('worker_profile', { saveId, workerId }),
+  relationshipTargets: (
+    saveId: string,
+    workerId: string,
+    search = '',
+    offset = 0,
+    limit = 12,
+  ) =>
+    invoke<InteractionTargetPage>('relationship_targets', {
+      saveId,
+      workerId,
+      search,
+      offset,
+      limit,
+    }),
+  interact: (request: InteractionRequest) =>
+    invoke<InteractionOutcome>('interact_with_worker', { request }),
   card: (saveId: string, showId: number) =>
     invoke<ShowCard>('show_card', { saveId, showId }),
   agent: (saveId: string, plan: MatchPlan) =>

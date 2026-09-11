@@ -7,6 +7,7 @@ use wm_domain::game::*;
 use wm_domain::identity::*;
 use wm_domain::match_rules::*;
 use wm_domain::ratings::*;
+use wm_domain::relationships::*;
 use wm_domain::traits::*;
 use wm_domain::{CreateGameRequest, IpcError, PromotionOverview, SaveSummary};
 
@@ -59,6 +60,20 @@ fn generated_contracts() -> String {
         GroupScores::decl(&config),
         DisciplineFit::decl(&config),
         WrestlingSummary::decl(&config),
+        RelationshipMemoryKind::decl(&config),
+        InteractionKind::decl(&config),
+        InteractionTone::decl(&config),
+        RelationshipSignals::decl(&config),
+        RelationshipMemoryView::decl(&config),
+        PersonalRelationshipView::decl(&config),
+        ManagementRelationshipView::decl(&config),
+        RelationshipDelta::decl(&config),
+        InteractionTarget::decl(&config),
+        InteractionTargetPage::decl(&config),
+        InteractionOption::decl(&config),
+        InteractionOutcome::decl(&config),
+        RelationshipProfile::decl(&config),
+        InteractionRequest::decl(&config),
         Condition::decl(&config),
         Move::decl(&config),
         Worker::decl(&config),

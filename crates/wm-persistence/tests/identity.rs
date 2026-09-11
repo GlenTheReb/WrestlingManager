@@ -227,7 +227,7 @@ fn continue_day_expires_traits_and_preserves_identity() {
 }
 
 fn downgrade_v4(db: &Connection) {
-    db.execute_batch("DROP TABLE identity_traits; ALTER TABLE workers DROP COLUMN identity; UPDATE metadata SET value='4' WHERE key='schema_version'; UPDATE metadata SET value='0.3.0' WHERE key='engine_version'; PRAGMA user_version=4;").unwrap();
+    db.execute_batch("DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; DROP TABLE identity_traits; ALTER TABLE workers DROP COLUMN identity; UPDATE metadata SET value='4' WHERE key='schema_version'; UPDATE metadata SET value='0.3.0' WHERE key='engine_version'; PRAGMA user_version=4;").unwrap();
 }
 #[test]
 fn schema_four_upgrade_preserves_original_and_marks_unrecorded_facts_unknown() {
@@ -239,8 +239,8 @@ fn schema_four_upgrade_preserves_original_and_marks_unrecorded_facts_unknown() {
     downgrade_v4(&db);
     drop(db);
     let updated = repo.load_game("identity").unwrap();
-    assert_eq!(updated.schema_version, 5);
-    assert_eq!(updated.engine_version, "0.4.0");
+    assert_eq!(updated.schema_version, 6);
+    assert_eq!(updated.engine_version, "0.5.0");
     let after = repo.worker_profile("identity", "worker-001").unwrap();
     assert_eq!(after.worker.name, before.worker.name);
     assert_eq!(after.worker.attributes, before.worker.attributes);
@@ -267,6 +267,46 @@ fn schema_four_upgrade_preserves_original_and_marks_unrecorded_facts_unknown() {
     );
     assert_eq!(repo.load_game("identity").unwrap(), updated);
 }
+
+#[test]
+fn schema_five_checkpoint_remains_compatible_when_schema_six_is_interrupted() {
+    let dir = tempdir().unwrap();
+    let repo = create(dir.path());
+    let path = dir.path().join("identity.sqlite3");
+    let db = Connection::open(&path).unwrap();
+    downgrade_v4(&db);
+    db.execute_batch("CREATE TABLE personal_relationships(blocker INTEGER) STRICT;")
+        .unwrap();
+    drop(db);
+
+    assert!(repo.load_game("identity").is_err());
+    let db = Connection::open(&path).unwrap();
+    assert_eq!(
+        db.pragma_query_value::<u32, _>(None, "user_version", |row| row.get(0))
+            .unwrap(),
+        5
+    );
+    assert_eq!(
+        db.query_row::<String, _, _>(
+            "SELECT value FROM metadata WHERE key='engine_version'",
+            [],
+            |row| row.get(0),
+        )
+        .unwrap(),
+        "0.4.0"
+    );
+    drop(db);
+    assert_eq!(repo.list_saves().unwrap().len(), 1);
+
+    let db = Connection::open(&path).unwrap();
+    db.execute_batch("DROP TABLE personal_relationships;")
+        .unwrap();
+    drop(db);
+    let upgraded = repo.load_game("identity").unwrap();
+    assert_eq!(upgraded.schema_version, 6);
+    assert_eq!(upgraded.engine_version, "0.5.0");
+}
+
 #[test]
 fn invalid_paused_snapshot_rolls_back_schema_four_upgrade() {
     let dir = tempdir().unwrap();
