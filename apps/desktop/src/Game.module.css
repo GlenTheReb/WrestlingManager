@@ -370,6 +370,29 @@
 .good {
   color: var(--green);
 }
+.scoreWeak,
+.scoreDeveloping,
+.scoreCapable,
+.scoreStrong,
+.scoreElite {
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.scoreWeak {
+  color: #ef777e;
+}
+.scoreDeveloping {
+  color: #e8a660;
+}
+.scoreCapable {
+  color: #e5cf6c;
+}
+.scoreStrong {
+  color: #8fd29d;
+}
+.scoreElite {
+  color: #52d68d;
+}
 .danger {
   color: #f19497;
 }
@@ -1091,6 +1114,8 @@
   align-items: center;
   gap: 22px;
   padding: 22px;
+  background: linear-gradient(105deg, #111b28, #202b3a 62%, #29171d);
+  border-bottom: 1px solid #3f4855;
 }
 .monogram {
   width: 76px;
@@ -1107,6 +1132,20 @@
 .profileHead h3 {
   font-size: 18px;
   margin: 0 0 8px;
+}
+.profileHead h2 {
+  margin: 2px 0 7px;
+  color: var(--ink);
+  font-size: 27px;
+  letter-spacing: -0.02em;
+}
+.eyebrow {
+  display: block;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
 }
 .profileHead p {
   margin: 0 0 6px;
@@ -1130,6 +1169,13 @@
   padding: 12px 20px;
   font-size: 12px;
   color: #b3c0d2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.tabs button svg {
+  width: 16px;
+  height: 16px;
 }
 .gameShell .tabs button[aria-pressed='true'],
 .overlay .tabs button[aria-pressed='true'] {
@@ -1169,6 +1215,189 @@
   max-width: 58%;
   text-align: right;
   overflow-wrap: anywhere;
+}
+.statGroup {
+  border-radius: 4px;
+  border-top: 2px solid #465164;
+}
+.characterLayout {
+  display: grid;
+  gap: 16px;
+}
+.characterHero {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 17px;
+  border: 1px solid #465164;
+  border-left: 4px solid var(--red);
+  background: linear-gradient(110deg, #1c2735, #171d28);
+}
+.characterHero h3 {
+  margin: 3px 0 9px;
+  font-size: 24px;
+}
+.characterIcon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  background: #111923;
+  border: 1px solid #4a5667;
+}
+.characterIcon svg {
+  width: 31px;
+  height: 31px;
+}
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.statusChip,
+.tagChip {
+  padding: 4px 8px;
+  border: 1px solid #455267;
+  background: #202c3a;
+  color: #c9d4df;
+  font-size: 11px;
+  border-radius: 999px;
+}
+.alignmentFace {
+  border-color: #3d8370;
+  color: #90dec0;
+}
+.alignmentHeel {
+  border-color: #9a4650;
+  color: #f1a0a8;
+}
+.alignmentTweener {
+  border-color: #8b7140;
+  color: #e4c075;
+}
+.primaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: var(--red) !important;
+  border-color: #d3626d !important;
+  color: #fff !important;
+}
+.primaryAction svg {
+  width: 16px;
+  height: 16px;
+}
+.creativeForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  padding: 14px 16px;
+}
+.creativeForm label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.creativeForm input,
+.creativeForm select,
+.creativeForm textarea {
+  width: 100%;
+  padding: 9px;
+  color: var(--ink);
+  background: #101720;
+  border: 1px solid #3b4858;
+  border-radius: 3px;
+}
+.creativeForm textarea {
+  min-height: 82px;
+  resize: vertical;
+}
+.creativeForm .fullField {
+  grid-column: 1 / -1;
+}
+.creativeForm .checkField {
+  display: flex;
+  grid-column: span 1;
+  align-items: center;
+}
+.creativeForm .checkField input {
+  width: auto;
+}
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+.planReview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 14px 16px 4px;
+}
+.characterPlanSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px 2px;
+}
+.characterPlanSummary h4 {
+  margin: 4px 0 0;
+  font-size: 19px;
+}
+.planReview > div {
+  padding: 11px;
+  background: #111923;
+  border: 1px solid #334154;
+}
+.planReview strong {
+  display: block;
+  margin-top: 5px;
+  line-height: 1.45;
+}
+.characterCards {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 16px;
+}
+.identityHistory {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+}
+.identityHistory svg {
+  width: 20px;
+  color: var(--gold);
+}
+.identityHistory span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+@media (max-width: 850px) {
+  .characterHero {
+    grid-template-columns: 48px 1fr;
+  }
+  .characterHero > button {
+    grid-column: 1 / -1;
+  }
+  .creativeForm,
+  .characterCards,
+  .planReview {
+    grid-template-columns: 1fr;
+  }
+  .characterPlanSummary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 .biography {
   grid-column: 1/-1;

@@ -9,6 +9,38 @@ export type SaveSummary = { saveId: string, promotionName: string, currentDate: 
 
 export type IpcError = { code: string, message: string, };
 
+export type AlignmentIntent = "face" | "heel" | "tweener" | "unaligned";
+
+export type AudienceResponse = "cheered" | "booed" | "mixed" | "indifferent";
+
+export type PerceivedRole = "face" | "heel" | "mixed" | "unclear";
+
+export type ReactionIntensity = "mild" | "moderate" | "strong";
+
+export type CharacterAcceptance = "embraced" | "accepted" | "uncertain" | "rejected";
+
+export type IntentMatch = "matched" | "mismatched" | "ambiguous";
+
+export type IdentityKnowledge = "private" | "rumoured" | "public";
+
+export type CharacterStatus = "planned" | "active" | "retired";
+
+export type ChangeStatus = "proposed" | "negotiating" | "accepted" | "refused" | "ready" | "launched" | "cancelled";
+
+export type GimmickBrief = { name: string, description: string, coreFantasy: string, tags: Array<string>, tone: string, promoVoice: string, presentationIntensity: string, entranceAndMatchBehavior: string, attireAndMask: string, catchphrasesAndGestures: string, traitsToEmphasize: Array<string>, };
+
+export type CharacterIdentity = { id: string, revision: number, ringName: string, alignmentIntent: AlignmentIntent, status: CharacterStatus, masked: boolean, concealed: boolean, gimmick: GimmickBrief, companyId: string, brand: string | null, startedOn: string, endedOn: string | null, aliases: Array<string>, identityKnowledge: IdentityKnowledge, };
+
+export type AudienceResponseEvidence = { date: string, perceivedRole: PerceivedRole, response: AudienceResponse, intensity: ReactionIntensity, acceptance: CharacterAcceptance, intentMatch: IntentMatch, context: string, };
+
+export type CharacterChange = { id: bigint, requestId: string, proposedRingName: string, proposedAlignment: AlignmentIntent, proposedMasked: boolean, proposedConcealed: boolean, proposedGimmick: GimmickBrief, status: ChangeStatus, revision: number, proposedOn: string, intendedLaunchOn: string | null, launchedOn: string | null, workerResponse: string, readiness: string, risk: string, advice: Array<string>, };
+
+export type CharacterProfile = { legalName: string | null, active: CharacterIdentity, history: Array<CharacterIdentity>, audienceResponses: Array<AudienceResponseEvidence>, pendingChange: CharacterChange | null, };
+
+export type ProposeCharacterChangeRequest = { saveId: string, workerId: string, requestId: string, expectedRevision: number, ringName: string, alignmentIntent: AlignmentIntent, masked: boolean, concealed: boolean, intendedLaunchOn: string | null, gimmick: GimmickBrief, };
+
+export type CharacterActionRequest = { saveId: string, workerId: string, requestId: string, changeId: bigint | null, expectedRevision: number, };
+
 export type SortDirection = "ascending" | "descending";
 
 export type WorkerSortKey = "relevance" | "name" | "age" | "overall" | "movement" | "physicality" | "ringcraft" | "psychology" | "fundamentals" | "entertainment" | "fatigue" | "morale" | "momentum";
@@ -225,7 +257,7 @@ export type AgentAdvice = { plan: MatchPlan, notes: Array<string>, };
 
 export type CareerOffice = { promotion: PromotionOverview, show: ShowCard, agents: Array<RoadAgent>, rosterCount: number, media: Array<MediaPost>, recentShows: Array<ShowCard>, };
 
-export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, relationships: RelationshipProfile, };
+export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, relationships: RelationshipProfile, character: CharacterProfile, };
 
 export type NewsItem = { id: number, category: string, title: string, body: string, date: string, showId: number | null, workerId: string | null, read: boolean, };
 

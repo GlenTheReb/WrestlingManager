@@ -45,9 +45,11 @@ the player retains control.
 Creative work includes modular match finishes and stipulations, reusable angle actions,
 character goals, unresolved questions, audience knowledge and earned story beats. Medical
 restrictions and live instructions constrain performance without removing creative authority.
+Workers normally cooperate but may raise contextual safety, creative, trust or morale concerns;
+in-match direction reaches them through believable referee communication opportunities.
 
-People have coherent backgrounds and correlated 1–20 attributes across physical,
-in-ring, entertainment and professional groups. Condition is separate from ability.
+People have coherent backgrounds and six correlated 0–100 wrestler groups with detailed sub-stats,
+plus independent profession skills and experience. Condition is separate from ability.
 Scouting reduces uncertainty; it does not grant a universal performance bonus. Prospects
 develop through opportunity, coaching, environment and setbacks, not a visible fixed
 potential rating. Later portraits must use licensed offline compositing assets.

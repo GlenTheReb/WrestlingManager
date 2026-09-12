@@ -1,6 +1,6 @@
 # Wrestling Manager playable milestones
 
-The 42 WM capability briefs describe the destination. Delivery follows vertical milestones so the
+The 43 WM capability briefs describe the destination. Delivery follows vertical milestones so the
 game remains playable and testable instead of completing one enormous subsystem at a time. A
 milestone may take thin slices from several capabilities; those slices receive separate execution
 tickets before implementation.
@@ -63,6 +63,18 @@ and native custom scenarios can be validated and exchanged without requiring opt
 
 Capability slices: WM-015–019 and WM-041. Exit requires a clean-machine release rehearsal and
 honest documentation of implemented features, compatibility and limitations.
+
+## M7 — Optional retro broadcast expansion
+
+After the management game, renderer-neutral event contract and complete text/2.5D viewer are proven,
+test whether a lightweight original PlayCanvas Engine v2 presentation through `@playcanvas/react` can
+replay WM shows convincingly over a WebGL2 baseline. Begin
+with WM-043's bounded one-arena/two-wrestler/five-move spike and stop if contact quality, asset rights,
+performance or fallback behavior fails.
+
+Capability slices: WM-013–014 and conditional WM-043, later consuming WM-007/010, WM-029, WM-034,
+WM-041 and WM-018. Exit requires representative singles/tag playback across supported body types and
+missing assets without changing any canonical result. M7 is optional and cannot block M1–M6 or release.
 
 ## Milestone rule
 

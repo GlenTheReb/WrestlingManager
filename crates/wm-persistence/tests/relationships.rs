@@ -463,11 +463,11 @@ fn schema_five_upgrade_is_backed_up_and_invalid_state_is_rejected() {
     let repo = create(directory.path());
     let path = directory.path().join("relationships.sqlite3");
     let db = Connection::open(&path).unwrap();
-    db.execute_batch("DROP TABLE worker_blacklist; DROP TABLE worker_shortlist_members; DROP TABLE worker_shortlists; DROP TABLE worker_saved_views; DROP TABLE worker_discovery_index; DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; UPDATE metadata SET value='5' WHERE key='schema_version'; UPDATE metadata SET value='0.4.0' WHERE key='engine_version'; PRAGMA user_version=5;").unwrap();
+    db.execute_batch("DROP TABLE character_action_receipts; DROP TABLE character_changes; DROP TABLE audience_response_evidence; DROP TABLE character_aliases; DROP TABLE character_tenures; DROP TABLE characters; DROP TABLE persons; DROP TABLE worker_blacklist; DROP TABLE worker_shortlist_members; DROP TABLE worker_shortlists; DROP TABLE worker_saved_views; DROP TABLE worker_discovery_index; DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; UPDATE metadata SET value='5' WHERE key='schema_version'; UPDATE metadata SET value='0.4.0' WHERE key='engine_version'; PRAGMA user_version=5;").unwrap();
     drop(db);
     let upgraded = repo.load_game("relationships").unwrap();
-    assert_eq!(upgraded.schema_version, 7);
-    assert_eq!(upgraded.engine_version, "0.6.0");
+    assert_eq!(upgraded.schema_version, 8);
+    assert_eq!(upgraded.engine_version, "0.7.0");
     assert!(
         directory
             .path()

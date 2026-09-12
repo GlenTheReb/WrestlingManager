@@ -25,7 +25,8 @@ prospects. Implement a calendar, inbox and Continue command with atomic day adva
 Acceptance: the same seed and engine produce the same canonical world digest; different
 seeds vary coherent fictional people; invalid references/attributes are rejected; Continue
 commits one day and its events exactly once. Query and virtualise the roster with TanStack
-Table/Virtual. Profiles show 1–20 attributes, condition, morale, contracts and history.
+Table/Virtual. Profiles show six 0–100 wrestler groups with detailed sub-stats, condition, morale,
+contracts and history; profession skills remain separate.
 Scouting shows uncertain ranges and evidence about generated prospects.
 
 ## Milestone 2: book a complete card
@@ -40,8 +41,9 @@ enforcing an arbitrary style quota. Card changes survive save/reload.
 
 Implement deterministic performance events from the booked plan. Locked outcomes must
 hold over large property-test samples. Separate performance dimensions and emit causal
-evidence. Add a timeline and basic PixiJS 8 ring consuming those events; changing playback
-speed, skipping or hiding the renderer cannot change the result.
+evidence. Add a renderer-neutral timeline and basic event view; changing playback speed,
+skipping or hiding any current/future renderer cannot change the result. The complete text/2.5D
+viewer and conditional WM-043 retro 3D expansion remain later capabilities.
 
 Apply momentum, morale, fatigue, cohort popularity, money and storyline consequences
 once, transactionally. Generate a fictional social feed from committed events using
