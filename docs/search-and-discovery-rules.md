@@ -88,7 +88,7 @@ privacy rules, result card and specialist filters.
 Entity hubs use the same engine for scoped current and historical search. Booking later exposes one
 consistent contextual Reference Drawer for roster, teams, titles and storylines instead of scattering
 unrelated lookup buttons around the booking screen. The complete Entity Hub, Reference Drawer and
-navigation design belongs to PD-125 and the relevant profile/booking tickets; it must preserve this
+navigation design follows PD-134 rules D8 and E1–E7 and the relevant profile/booking tickets; it must preserve this
 search state contract.
 
 ## Rejected alternatives and implementation boundaries

@@ -13,12 +13,14 @@ match-rule foundation and a pinned compatibility baseline.
 
 ## M1 — A management week worth repeating
 
-The player understands wrestler strengths and identity, sees a coherent company and role, handles
+The player creates a personal career, enters through a coherent game front door, understands wrestler
+strengths and identity, sees a coherent company and role, handles
 one contract or relationship issue, books the existing match/angle card, sees an auditable financial
 effect and receives actionable follow-up in the office.
 
-Initial capability slices: WM-020–023, WM-025 before full WM-024, WM-011, WM-030–031, WM-035 and
-WM-042. Use the
+Initial capability slices: WM-012 fictional-world bootstrap, WM-017 front door/settings, WM-030
+player persona, WM-020–023, WM-025 before full WM-024, WM-021.2 company Roster, WM-011, WM-031,
+WM-035, WM-041 database selection, WM-042 and the early WM-039 search shell. Use the
 existing singles simulation rather than waiting for every match type. Exit only when the loop is
 interesting for several consecutive in-game weeks and every consequence explains its cause.
 
@@ -53,7 +55,7 @@ attendance/ratings and negotiations whose obligations affect later decisions.
 CPU companies operate under compatible rules, form relationships and groups, trade talent, compete,
 run inspectable shows and create searchable history, honours, alumni and legends.
 
-Capability slices: WM-012 and WM-037–040. Exit requires deterministic multi-year simulation with
+Capability slices: complete WM-012 and WM-037–040, including WM-039 CPU-show viewing. Exit requires deterministic multi-year simulation with
 bounded performance and causal drill-down from world news to canonical events.
 
 ## M6 — A product worth extending and shipping
@@ -64,7 +66,7 @@ and native custom scenarios can be validated and exchanged without requiring opt
 Capability slices: WM-015–019 and WM-041. Exit requires a clean-machine release rehearsal and
 honest documentation of implemented features, compatibility and limitations.
 
-## M7 — Optional retro broadcast expansion
+## M7 — Release-gated retro broadcast
 
 After the management game, renderer-neutral event contract and complete text/2.5D viewer are proven,
 test whether a lightweight original PlayCanvas Engine v2 presentation through `@playcanvas/react` can
@@ -72,9 +74,10 @@ replay WM shows convincingly over a WebGL2 baseline. Begin
 with WM-043's bounded one-arena/two-wrestler/five-move spike and stop if contact quality, asset rights,
 performance or fallback behavior fails.
 
-Capability slices: WM-013–014 and conditional WM-043, later consuming WM-007/010, WM-029, WM-034,
-WM-041 and WM-018. Exit requires representative singles/tag playback across supported body types and
-missing assets without changing any canonical result. M7 is optional and cannot block M1–M6 or release.
+Capability slices: WM-013–014 and WM-043, later consuming WM-007/010, WM-029, WM-034, WM-041 and
+WM-018. Exit requires representative singles/tag playback across supported body types and missing
+assets without changing any canonical result. M7 cannot block M1–M6, but PD-134 requires its proven
+exit before commercial release.
 
 ## Milestone rule
 

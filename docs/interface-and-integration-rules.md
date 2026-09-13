@@ -1,7 +1,8 @@
 # Wrestling Manager interface and integration rules
 
 Status: Owner-confirmed direction on 11 September 2026. These rules apply to every player-facing
-execution ticket; PD-125 will later settle the complete visual system and navigation catalogue.
+execution ticket; accepted PD-134 rules D1–D9 and E1–E7 settle the destination visual, navigation,
+search and contextual-reference direction.
 
 ## Research before design
 

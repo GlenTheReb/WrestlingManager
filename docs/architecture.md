@@ -67,7 +67,7 @@ goals, scored options and recorded reasons. Add each crate with a working featur
 than empty services. Shared UI packages likewise follow demonstrated reuse.
 
 The guaranteed text/2.5D viewer will consume timed performance events and interpolate visual states;
-conditional WM-043 may later consume the same contract through PlayCanvas Engine v2 and
+spike-gated WM-043 later consumes the same contract through PlayCanvas Engine v2 and
 `@playcanvas/react`. WebGL2 is its required baseline and WebGPU is optional. Neither viewer selects
 moves or winners. Playback speed and visibility cannot affect simulation.
 PD-112 live direction is also simulation-owned: Rust commits the performed prefix and may rebuild the

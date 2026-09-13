@@ -5,7 +5,7 @@
 
 **Build the company. Book the show. Live with the consequences.**
 
-A desktop management simulation about running a professional wrestling promotion.
+An offline-first professional-wrestling management simulation for Windows.
 
 ![Development status](https://img.shields.io/badge/status-pre--alpha-C9973E?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Windows-17283A?style=flat-square)
@@ -15,57 +15,85 @@ A desktop management simulation about running a professional wrestling promotion
 </div>
 
 > [!IMPORTANT]
-> Wrestling Manager is in active pre-alpha development. The repository contains a playable
-> foundation, not a finished game. Systems, save compatibility and presentation may change.
+> Wrestling Manager is an active pre-alpha. The repository contains a playable development
+> foundation, not a finished or publicly supported release. Features, interfaces and save formats
+> may change.
 
-## The game
+## What Wrestling Manager aims to be
 
-Wrestling Manager is an offline-first, single-player wrestling management game. You run the
-creative and business sides of a promotion: assemble a roster, plan cards with road agents,
-manage the audience across a live show and deal with the effects on talent, money and momentum.
+Wrestling Manager is a single-player game about running the creative and business sides of a
+wrestling promotion. The player chooses the intended result; the simulation determines how the
+workers deliver it and what follows from their preparation, abilities, relationships, health,
+audience and circumstances.
 
-The player books the intended result. The simulation decides how successfully the performers
-deliver it. Attributes, fatigue, chemistry, morale, move familiarity, road-agent skill and the
-state of the crowd all influence what happens between the bells. The long-term goal is a deep,
-believable management game with the usability of a modern desktop sports simulation.
+The design is built around four principles:
 
-## Current playable build
+- **Causal simulation:** reports and consequences should explain what produced them.
+- **Distinct people and characters:** real relationships, health and contracts stay separate from
+  ring names, gimmicks, alignments and storylines.
+- **Multiple valid styles:** there is no universally correct wrestler, product or booking formula.
+- **Fast, connected management:** profiles, search, booking, news and company systems should preserve
+  context and link to one another instead of behaving like isolated forms.
 
-The present development build includes:
+## What works today
 
-- A native, fullscreen Windows application with persistent management navigation and shortcuts.
-- A seeded fictional world with 40 wrestlers, individual attributes, condition and movesets.
-- Six visible 0–100 rating groups with 37 sub-stats, nine Discipline Fits, style-specific Overall,
-  Archetypes, Approach and Specialisations.
-- Persistent personality, shared qualities, motivations, languages, hobbies and factual biographies
-  in a Person & traits profile tab. Evidence-based exceptional-trait rules are implemented; their
-  future media, wellness and sponsor systems do not yet produce events or apply effects.
-- Directional wrestler relationships, persistent memories and a Relationships profile tab with
-  deterministic player conversations, management rapport, explained effects and private People mail.
-- A current-data Talent Search foundation with SQL-paged skill/identity/availability filters,
-  searchable include/exclude rules, stable sorting, configurable columns, four-person comparison,
-  durable saved views, named shortlists and a personal blacklist. It now leads with active ring names,
-  searches permitted former aliases and explains why an alias matched.
-- Separate Person and wrestling Character records with dated identities, masks, Face/Heel/Tweener
-  intent, a guided gimmick brief, worker response/readiness/risk, explicit launches and reversible
-  character retirement. Character changes never edit permanent wrestling ratings.
-- Show cards containing matches and angles, with ordering, editing and capacity rules.
-- Road-agent planning, manual spots, control periods and protected-wrestler instructions.
-- Deterministic, second-by-second show simulation with pause, playback speeds and live messages.
-- A crowd that carries energy, trust, fatigue and expectations from one segment to the next.
-- Match reports, worker development, injuries, chemistry, agent trust and show finances.
-- Persistent SQLite careers, process-safe resume, verified migrations and news derived from play.
-- A match-rule foundation for participant slots, opposing sides and unambiguous booked results.
+The current development build supports a complete prototype loop:
 
-Singles and no-disqualification singles are the currently playable match formats. Tag, trios,
-multi-person and elimination structures can now be represented by the rules model, but their
-runtime simulation and booking interface are upcoming work. The guaranteed text/2.5D presentation and
-conditional future retro 3D broadcast viewer have not been added; live matches currently use a
-simulation event view.
+1. Create or load a local career in the bundled fictional scenario.
+2. Explore Talent Search and detailed wrestler profiles.
+3. Build a show card containing singles matches and angles.
+4. Set the winner, finish, purpose, pacing and risk; ask a road agent for suggestions or edit the
+   sequence manually.
+5. Run the show through the simulation-event view, change playback speed and send limited delayed
+   instructions.
+6. Inspect reports, media, worker development, injuries, chemistry, finances and history.
+7. Advance the date and continue the career.
 
-See the [current capability](docs/tickets/WM-025.md), [ticket index](docs/tickets/INDEX.md),
-[ordered roadmap](docs/model-task-plan.md) and [milestones](docs/milestones.md) for the exact
-development state.
+Implemented foundations include:
+
+- A native Tauri desktop application with persistent local SQLite careers.
+- Deterministic second-by-second show simulation, pause/resume and process-safe recovery.
+- Six visible 0–100 wrestler rating groups, detailed sub-ratings, style fits, specialisations,
+  archetypes and style-specific Overall values.
+- Separate Person and Character records with dated ring identities, aliases, masks, gimmicks and
+  Face/Heel/Tweener intent.
+- Persistent personality, motivations, languages, hobbies, biographies, directional relationships,
+  memories and deterministic player conversations.
+- A multi-tab Person hub covering overview, ratings, character, career, matches, relationships,
+  contract, development and media. Sections without an owning system use honest empty states.
+- Server-paged Talent Search with combined filters, stable sorting, configurable columns, comparison,
+  saved views, shortlists, a blacklist and navigation restoration.
+- Match and angle running-order editing, bounded undo/redo, road-agent planning, manual spots, control
+  periods and protected-worker instructions.
+- Persistent crowd energy, trust, fatigue and expectations across a show.
+- Match history with outcomes, duration, performance dimensions and explanations; event-derived news
+  links back to relevant people and reports.
+- Versioned Rust-to-TypeScript contracts and tested career migrations.
+
+Singles and no-disqualification singles are the playable match formats. The domain model can
+represent broader participant structures, but tag, trios, multi-person and elimination runtime
+behavior is not implemented yet.
+
+## Important work not yet implemented
+
+The following are planned and ticketed, but should not be mistaken for current features:
+
+- A finished main menu, settings suite, player-person creation, role-aware onboarding and advanced
+  career/world setup.
+- A dedicated company Roster workspace. The current Roster entry still reuses Talent Search.
+- Multi-entity Global Search for companies, events, titles, teams, stories and news.
+- Full contracts, scouting, training, staff, facilities, company finance, broadcasting, sponsors,
+  venues, tours, house shows and rival-company simulation.
+- Championships, teams, stables, storylines, tournaments and the full assisted/manual angle director.
+- A complete text/2.5D show viewer. Live shows currently use a functional simulation-event view.
+- The release-gated PlayCanvas Engine v2 retro 3D viewer. It remains a documented feasibility project;
+  no production 3D match engine or approved asset library is present.
+- Native database editing, custom database/asset-pack import, installer packaging and public release
+  support.
+
+See the [capability index](docs/tickets/INDEX.md), [implementation plan](docs/model-task-plan.md),
+[playable milestones](docs/milestones.md) and [accepted product rules](docs/game-product-rules.md) for
+the planned destination and current ticket status.
 
 ## Run the development build
 
@@ -73,13 +101,13 @@ development state.
 
 - Windows 10 or 11
 - Node.js 24
-- pnpm 11.19.0
-- Rust 1.98 with `rustfmt` and `clippy`
-- Microsoft C++ Build Tools with the Windows SDK
+- pnpm 11
+- The stable Rust toolchain with `rustfmt` and `clippy`
+- Microsoft C++ Build Tools and Windows SDK
 - Microsoft Edge WebView2 Runtime
 
-[Tauri's Windows prerequisites](https://v2.tauri.app/start/prerequisites/) cover the native
-toolchain. The included PowerShell scripts locate a standard Visual Studio and Rust installation.
+[Tauri's Windows prerequisites](https://v2.tauri.app/start/prerequisites/) cover the native toolchain.
+The repository scripts locate standard Visual Studio and Rust installations.
 
 ```powershell
 npm.cmd install --global pnpm@11.19.0
@@ -87,76 +115,63 @@ pnpm.cmd install --frozen-lockfile
 pnpm.cmd dev
 ```
 
-The first command is a one-time setup. Reopen an existing terminal after installing pnpm. Use
-the `.cmd` suffix in PowerShell so Windows selects the executable launcher instead of a blocked
+The first command installs the pinned package-manager version and is normally needed only once. In
+PowerShell, the `.cmd` suffix selects the executable launcher when script execution policy blocks the
 PowerShell shim.
 
-Select **New career**, enter a lowercase save name and decimal world seed, then choose
-**Create career**. Career files are stored at:
+The native application stores careers under:
 
 ```text
 %APPDATA%\com.wrestlingmanager.game\saves
 ```
 
-Close the game before manually copying a career. A moved save must keep its original filename.
+Close the game before manually copying a career. Keep a copied career's original filename. The web-only
+command `pnpm.cmd dev:web` is useful for interface work, but native commands and career gameplay require
+`pnpm.cmd dev`.
 
-### Play the current loop
+### Current controls
 
-1. Open **Shows** and add a match or angle to the running order.
-2. Choose the participants, planned winner and finish; optionally ask the road agent to plan it.
-3. Save the instructions, complete the card and choose **Go on air**.
-4. Select a viewing mode, control playback and send limited instructions through the agent.
-5. Review the show report, worker changes, finances and news, then use **Continue**.
+| Input    | Action                              |
+| -------- | ----------------------------------- |
+| `F1–F6`  | Open implemented management screens |
+| `Ctrl+K` | Open and focus Talent Search        |
+| `F11`    | Toggle fullscreen                   |
+| `Escape` | Open or close the game menu         |
 
-Useful controls:
+The game menu includes **Exit game** and protects pending operations or unsaved match instructions.
 
-| Input    | Action                                  |
-| -------- | --------------------------------------- |
-| `F1–F6`  | Open the main management screens        |
-| `Ctrl+K` | Open and focus persistent Talent Search |
-| `F11`    | Toggle fullscreen                       |
-| `Escape` | Open or close the game menu             |
+## Architecture
 
-**Exit game** is available from the game menu. It waits for pending operations and warns before
-discarding unsaved match instructions. `pnpm.cmd dev:web` runs the interface alone for frontend
-work; careers and gameplay require the native desktop application.
+Simulation, persistence, interface and presentation are deliberately separated:
 
-## Technology
+| Area                  | Technology                   | Responsibility                                              |
+| --------------------- | ---------------------------- | ----------------------------------------------------------- |
+| Desktop shell         | Tauri 2                      | Native window, commands and lifecycle                       |
+| Interface             | React 19 + TypeScript + Vite | Management workflows and live controls                      |
+| Domain and simulation | Rust                         | Validation, match/show rules and deterministic consequences |
+| Careers               | SQLite                       | World state, events, reports and migrations                 |
+| Planned presentation  | Renderer-neutral events      | Complete text/2.5D fallback and spike-gated PlayCanvas 3D   |
 
-Wrestling Manager keeps the interface, simulation and save lifecycle separate so each can
-evolve without making the renderer responsible for game results.
-
-| Area              | Technology            | Responsibility                                       |
-| ----------------- | --------------------- | ---------------------------------------------------- |
-| Desktop shell     | Tauri 2               | Native window, commands and desktop lifecycle        |
-| Interface         | React 19 + TypeScript | Management screens and live-show controls            |
-| Simulation        | Rust                  | Match, show, audience and consequence rules          |
-| Careers           | SQLite                | Portable world state, events, reports and migrations |
-| Future match view | Web renderer          | Text/2.5D fallback; optional PlayCanvas v2 retro 3D  |
-
-The simulation is seeded and independent of React, Tauri, SQLite and any future renderer. A
-paused show stores its exact random-stream position and transient state, allowing deterministic
-resume after restarting the application.
-
-## Project structure
+Rust remains authoritative. React, Tauri, SQLite and any future renderer do not decide match results.
+A paused show stores its random-stream position and transient state so the same engine version can
+resume deterministically after restart.
 
 ```text
-apps/desktop/       React interface and Tauri command adapters
-content/base/       Bundled fictional world and move definitions
-crates/wm-domain/   Validated domain values and shared data contracts
-crates/wm-sim/      World generation and match/show simulation
-crates/wm-persistence/ SQLite career storage and migrations
-packages/contracts/ Generated TypeScript contracts
-docs/               Product, architecture, tickets and verification records
-scripts/            Windows toolchain helpers and native smoke test
+apps/desktop/             React interface and Tauri adapter
+content/base/             Bundled fictional content and move definitions
+crates/wm-domain/         Validated domain values and shared contracts
+crates/wm-sim/            World generation and match/show simulation
+crates/wm-persistence/    SQLite careers and migrations
+packages/contracts/       Generated TypeScript contracts
+docs/                     Product, architecture, tickets and verification
+scripts/                  Windows toolchain and native smoke automation
 ```
 
-Start with the [vision](docs/vision.md), [architecture](docs/architecture.md),
-[simulation design](docs/simulation.md), [domain model](docs/domain-model.md) and
-[verification guide](docs/verification.md). Files under `sources/` are synced reference material
-and must remain unchanged.
+Technical starting points: [architecture](docs/architecture.md), [simulation](docs/simulation.md),
+[domain model](docs/domain-model.md), [verification](docs/verification.md) and
+[ticket execution guide](docs/tickets/EXECUTION-GUIDE.md).
 
-## Quality checks
+## Validation
 
 ```powershell
 pnpm.cmd check
@@ -168,20 +183,17 @@ pnpm.cmd build:desktop:debug
 pnpm.cmd test:desktop
 ```
 
-The native smoke test launches the real application against isolated saves and exercises career
-creation, booking, live playback, restart/resume, reports and Continue. Disposable screenshots
-and saves remain under the ignored `.artifacts/` directory.
+`pnpm.cmd check` covers formatting, linting, TypeScript, frontend tests and the production web build.
+The native smoke test uses isolated disposable careers and exercises creation, booking, live playback,
+restart/resume, reports and date advancement. `pnpm.cmd build:desktop` creates an unsigned release
+executable without an installer; signing and distribution are later milestones.
 
-`pnpm.cmd build:desktop` produces a release executable without an installer. Signing, installer
-creation and public distribution are later milestones. Windows is the currently validated platform.
+## Project status and licensing
 
-## Development policy
+Work is tracked through `WM-###` capability and execution tickets. A feature is complete only when its
+domain, persistence, interface, compatibility and verification obligations are satisfied; roadmap text
+does not imply shipped behavior.
 
-Work is organised as numbered `WM-###` tickets with one reviewable feature branch per ticket.
-Each ticket records its scope, acceptance criteria, compatibility boundaries and verification.
-Generated contracts must come from the Rust domain types, and gameplay changes must preserve
-or explicitly version the save and deterministic simulation contracts.
-
-This project does not currently accept external contributions. No open-source licence has been
-granted; the code and original game content are all rights reserved. Third-party dependencies
-remain subject to their respective licences.
+The project does not currently accept external contributions. No open-source licence has been granted.
+The code and original game content are all rights reserved; third-party dependencies remain governed
+by their own licences.

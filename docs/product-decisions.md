@@ -21,8 +21,10 @@ record product rules; implementation evidence and architecture remain in the SDD
 | PD-102 | Search uses a dedicated persistent workspace and shared category framework; established workers' publicly demonstrated ability is exact in current-era saves.                          | WM-021 builds the framework and Worker Finder; private potential, medical, contract and creative information remains protected while later tickets register their entity-specific discovery data.              |
 | PD-106 | Person, Character and dated Character Tenure are separate; wrestling surfaces lead with the active ring identity while real identity remains appropriately scoped.                     | WM-025 must land before the final profile/Finder identity integration; names, aliases, gimmicks, alignments, masks and changes follow the accepted character-and-presentation rules.                           |
 | PD-112 | Match instructions use pre-match worker agreement and sequence-derived referee communication opportunities; accepted live changes rebuild only the unsimulated match future.           | WM-006–009 and WM-013–014 follow the live-direction rules; WM-023/031/034 consume relationship, morale and broadcast consequences, while renderers remain non-authoritative.                                   |
-| PD-132 | A future optional retro 3D broadcast viewer uses PlayCanvas Engine v2 through `@playcanvas/react`, driven only by canonical presentation events.                                       | WM-043 is conditional post-core work; WebGL2 is required, WebGPU is optional, text/2.5D remains complete and VPG stays reference/research only with no GPL code or unverified assets.                          |
+| PD-132 | A future retro 3D broadcast viewer uses PlayCanvas Engine v2 through `@playcanvas/react`, driven only by canonical presentation events.                                                | WM-043 remains spike-gated; WebGL2 is required, WebGPU is optional, text/2.5D remains complete and VPG stays reference/research only with no GPL code or unverified assets.                                    |
 | PD-133 | Every Person uses one persistent profile/career hub with a dense Overview, role-aware depth, contextual actions, attributed opinions and red-to-green rating readability.              | WM-024 follows `person-profile-hub-rules.md`; it includes underlying wrestling ability for non-wrestlers and composes moveset permissions, development and history from their owning systems.                  |
+| PD-134 | The complete 168-item game-product baseline is accepted, including its owner clarifications and removal of multiplayer.                                                                | `game-product-rules.md` is the destination contract for future tickets and resolves former PD-107–131 blockers without claiming those capabilities are implemented.                                            |
+| PD-135 | Social posts may appear as optional, skippable interstitials between show segments, using only timestamped canonical media events.                                                     | WM-036 generates and owns the posts; WM-013 carries interstitial events; WM-014 and WM-043 present them without changing simulation or forcing a reading pause.                                                |
 
 ### PD-007 interface research and integration doctrine — clarified 11 September 2026
 
@@ -100,8 +102,9 @@ information.
 WM-021 owns the reusable query framework and current-data Talent Search foundation. WM-025 registers
 active ring identities and aliases before the Worker Finder is complete. Later domain tickets register
 companies, shows/events, contracts, storylines, titles, teams, venues, media and history without
-duplicating search engines or exposing private CPU-company records. PD-125 later owns the full Entity
-Hub and contextual Booking Reference Drawer design while preserving this search-state contract.
+duplicating search engines or exposing private CPU-company records. Accepted PD-134 rules D8 and
+E1–E7 own the full Entity Hub and contextual Booking Reference Drawer design while preserving this
+search-state contract.
 
 ### PD-009 unified Person and profession rating — accepted 10 September 2026
 
@@ -184,7 +187,7 @@ not wrestling ability or a bonus to current-style Overall. The interface leads w
 relevant to the current decision and exposes the regional breakdown on demand. Momentum,
 marketability, reach and contextual drawing power remain separate.
 
-### PD-133 person profile and career hub — accepted 12 September 2026
+### PD-133 person profile and career hub — accepted 12 September 2026; execution defaults locked 13 September 2026
 
 The owner approved the complete [person profile and career hub rules](person-profile-hub-rules.md).
 WM-024 is one persistent, role-aware information hub for every Person: a dense overview leads with
@@ -201,7 +204,11 @@ separate safety/proficiency block. WM-010/023/031/032 own the causal move, relat
 and training data that WM-024 composes. Development allows only a small number of realistic focuses
 and gives ranged staff forecasts rather than guaranteed improvement.
 
-### PD-132 optional retro 3D broadcast direction — accepted 12 September 2026
+The final execution defaults keep current-style Overall contextual, use one combined WM-024.1
+delivery, and forbid player-facing “not implemented” placeholders. Unfinished domains stay hidden;
+implemented domains use honest in-world empty states.
+
+### PD-132 retro 3D broadcast direction — accepted 12 September 2026; release requirement amended 13 September 2026
 
 The owner approved the [retro broadcast engine rules](retro-broadcast-engine-rules.md): an original
 PlayCanvas Engine v2 low-poly viewer integrated through `@playcanvas/react` in WM's existing
@@ -213,10 +220,11 @@ reference/research only; its GPL code, unverified assets, proprietary No Mercy m
 likenesses/branding are excluded.
 
 WM-043 begins only after a bounded go/no-go spike can consume stable WM-013 facts. It is a broadcast
-viewer, not playable combat, and cannot delay the management game. The spike must prove sustained
-60 FPS on a documented ordinary-PC baseline in the real Tauri/WebView2 application. Exact purchased
-assets, licences and the post-spike production commitment remain evidence gates inside WM-043 rather
-than assumptions in current implementation.
+viewer, not playable combat. The management game and guaranteed text/2.5D viewer are built first, but
+a viable 3D viewer is now a commercial-release requirement: release waits for the capability rather
+than silently dropping it. The spike must prove sustained 60 FPS on a documented ordinary-PC baseline
+in the real Tauri/WebView2 application. Exact purchased assets, licences and the post-spike production
+commitment remain evidence gates inside WM-043 rather than assumptions in current implementation.
 
 ### PD-112 match planning and live direction — accepted 12 September 2026
 
@@ -235,15 +243,16 @@ winner, but essential physical participants must be informed and consequences re
 Quick Sim uses pre-booked contingencies; Extended Highlights can pause at management decisions; 2.5D
 and 3D Realtime expose continuous live direction while sharing the same canonical facts.
 
-### PD-119 social-feed direction — partially accepted 11 September 2026
+### PD-119 social-feed direction — accepted 13 September 2026
 
 WM-036 will provide bounded procedural social posts from persistent fan, journalist, worker, company,
 celebrity and outlet accounts. Authored compositional writing plus account voice, knowledge, bias,
 relationships, region and event facts must produce realistic variation without runtime AI. Workers and
 company accounts can be asked to promote, respond, tease, apologise or stay silent; personality,
 morale, relationship and media skill affect compliance and consequences. Independent posts, deletion
-memory, replies and uncertain rumours are supported. Exact outlet taxonomy, press rules, random-event
-catalogue and celebrity limits remain open under PD-119.
+memory, replies and uncertain rumours are supported. Rules S1–S7 in the complete product baseline
+govern outlets, press, rumours, random events and celebrities; exact content counts and balance remain
+execution-ticket calibration rather than open product design.
 
 Reporter-generation direction accepted 11 September 2026: custom-database reporters and outlets are
 retained when supplied; deterministic world generation fills only the missing media ecosystem for a
@@ -252,7 +261,7 @@ credibility/reach, wrestling preferences and a small curated set of visible quir
 a star scale, ten-point score, letter grade or prose-only review, backed by one normalized assessment
 for simulation effects. Individual taste and access can produce legitimate disagreement, but reviews
 cannot invent or overwrite official match facts. Exact generation counts, distributions and quirk
-catalogue remain part of the open PD-119 balance/content decision.
+catalogue are calibrated and tested by WM-036.
 
 Booking-reaction direction accepted 11 September 2026: reporters may publish articles, short social
 posts and replies about any completed public booking unit—matches, promos, angles, debuts, turns,
@@ -263,43 +272,69 @@ Posts must be grounded in observed public facts, respect each reporter's access 
 remain bounded and deduplicated. Private plans cannot leak as fact; uncertain information uses the
 separate rumour system.
 
-### PD-131 temporary alumni returns and event rumours — partially accepted 11 September 2026
+In-show social interstitials accepted 13 September 2026: after a segment commits, WM may surface a
+short feed rail between segments with relevant fan, journalist, worker or company posts. The posts
+must have an in-world timestamp and provenance, react only to public completed facts or labelled
+rumours, and use the same canonical media records in Quick Sim, 2.5D and 3D views. Show-level density,
+collapse and skip controls keep the feed useful without interrupting the player's running order.
+
+### PD-131 temporary alumni returns and event rumours — accepted 13 September 2026
 
 The owner approved the [alumni return and rumour rules](alumni-return-and-rumour-rules.md): persistent
 alumni/legend history, company-dependent date-bound return agreements, safe role-specific appearances,
 custom-database support and fictional pre-event reporting whose claim may later prove accurate,
 inaccurate or partial. WM-040 owns legacy status, WM-031 agreements, WM-033 events, WM-028/029
-creative use, WM-036 media and WM-042 finance. Exact eligibility weights, agreement catalogue,
-frequency and rumour-confidence presentation remain open.
+creative use, WM-036 media and WM-042 finance. Rules N1, S5 and U3–U4 lock the destination behavior;
+exact eligibility weights, agreement variants, frequency and confidence thresholds remain ticket-level
+balance constants.
 
-## Open decisions that block specific implementation
+### PD-134 complete game product baseline — accepted 13 September 2026
 
-| ID     | Required decision                                                                                                               | Blocks                                            |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| PD-107 | Financial difficulty layers, currency display, tax/debt detail and bankruptcy/recovery philosophy.                              | WM-042 balance and interface.                     |
-| PD-108 | Contract clause catalogue, negotiation cadence and acceptable sensitive wellness/drug-testing presentation.                     | WM-031.                                           |
-| PD-109 | First-release database editor scope and compatibility promise for third-party packs.                                            | WM-041 public format.                             |
-| PD-110 | First commercial/release milestone: required world size, content volume and supported career length.                            | Final scope for WM-018–019 and release claims.    |
-| PD-111 | Match-format rules: tag legality, fall/elimination/entry semantics, stipulation composition and quick/advanced booking control. | WM-002–005.                                       |
-| PD-113 | Draft autosave/recovery, undo checkpoint and reusable-template policy.                                                          | WM-009.                                           |
-| PD-114 | Move taxonomy, naming, repertoire sizes, visibility and learning/proficiency cadence.                                           | WM-010.                                           |
-| PD-115 | Playable company roles, governance permissions, owner-goal families and dismissal/resignation continuation.                     | WM-030.                                           |
-| PD-116 | Calendar granularity, event families, travel/weather depth, pricing and house-show automation.                                  | WM-033.                                           |
-| PD-117 | Broadcast/ratings abstraction, media territories, sponsor sensitivity, merchandise and production depth.                        | WM-034.                                           |
-| PD-118 | Office urgency, notification, snooze and assistant automation authority.                                                        | WM-035.                                           |
-| PD-119 | Remaining outlet taxonomy, press-response rules, rumour confidence, random-event catalogue and celebrity limits.                | WM-036 beyond the accepted social-feed direction. |
-| PD-120 | Agreement, talent-trade, corporate-control and competitive-tactic catalogue and risk model.                                     | WM-037.                                           |
-| PD-121 | CPU-company difficulty philosophy, decision horizon, simulation-detail tiers and lifecycle target rates.                        | WM-038.                                           |
-| PD-122 | Historical event/detail retention, search knowledge/ranking and presentation-stream compatibility.                              | WM-013 and WM-039.                                |
-| PD-123 | Title prestige, divisions, rankings, tournaments, awards, Top 100 and Hall of Fame criteria.                                    | WM-027 and WM-040.                                |
-| PD-124 | Storyline state/objectives, angle-beat catalogue, dialogue storage and assisted-versus-manual authority.                        | WM-028–029.                                       |
-| PD-125 | Viewer timing/density/effects, WM visual direction, navigation hierarchy, shortcuts and accessibility defaults.                 | WM-014 and WM-016–017.                            |
-| PD-126 | Save backup/recovery retention, supported upgrade horizon, repair limits and engine-version policy.                             | WM-015.                                           |
-| PD-127 | Supported hardware/world/career performance budgets and representative balance ranges.                                          | WM-018.                                           |
-| PD-128 | Release channel/version/signing and supported Windows/installer policy.                                                         | WM-019.                                           |
-| PD-129 | Permanent group types, overlapping membership, chemistry/loyalty dimensions and manager/authority permissions.                  | WM-026.                                           |
-| PD-130 | World market/era granularity, company-relationship dimensions and long-save event retention.                                    | WM-012.                                           |
-| PD-131 | Exact temporary-return agreement catalogue, eligibility weighting, rumour frequency/confidence and resolution effects.          | WM-031, WM-033, WM-036, WM-040 and WM-042.        |
+The owner accepted all 168 decisions in [the complete game product rules](game-product-rules.md):
+124 as proposed, 43 with recorded clarifications and multiplayer explicitly removed. The baseline
+covers product identity, onboarding, world generation, interface, search, names, company/audience
+behavior, booking, matches, moves, angles, groups, titles, contracts, staff, events, business,
+communications, media, governance, history, custom content, presentation, saves and release.
+
+Guidance is an assistance layer rather than a separate simulation mode. Fictional worlds generate
+without requiring a seed and include a profiled Realistic size. Player creation includes personality,
+qualifications, background and contextual perception. The interface uses coherent management hubs,
+global category search, a contextual booking drawer, formal email and informal phone conversations.
+Sensitive misconduct is restrained, fictional and evidence-based, never an explicit scene or
+entertainment mechanic. Careers are designed to continue indefinitely through scalable simulation
+and archival history. A viable WM-043 3D viewer is required before commercial release, while its
+spike and 60 FPS gate remain mandatory and the complete text/2.5D viewer remains independent.
+PD-135 additionally adds skippable between-segment social interstitials without changing the 168
+questionnaire count.
+
+## Resolved product-decision blockers
+
+PD-134 resolves former PD-107–131 at destination level. Implementation tickets still own numeric
+balance, catalogues, migration and evidence; they may not reopen the product direction casually.
+
+| Former IDs             | Locked rules                                                  | Primary capability owners              |
+| ---------------------- | ------------------------------------------------------------- | -------------------------------------- |
+| PD-107, PD-117         | Q1–Q9 finance, distribution, sponsors, production and failure | WM-034, WM-042                         |
+| PD-108                 | N1–N7 contracts, promises, morale and sensitive systems       | WM-031                                 |
+| PD-109                 | B1, C6 and V1–V5 databases, editor and safe packs             | WM-041                                 |
+| PD-110, PD-127, PD-128 | W4 and X1–X12 performance, platform and release               | WM-018, WM-019, WM-043                 |
+| PD-111                 | H4 and I1–I8 match formats, rules and authority               | WM-002–005                             |
+| PD-113                 | H10–H11 draft recovery, undo and templates                    | WM-009                                 |
+| PD-114                 | J1–J7 move taxonomy, repertoire and learning                  | WM-010                                 |
+| PD-115                 | B8 and T1 governance, roles and authority                     | WM-030                                 |
+| PD-116                 | P1–P7 calendar, events, venues and touring                    | WM-033                                 |
+| PD-118                 | R1–R6 office, communication and delegation                    | WM-035                                 |
+| PD-119                 | S1–S7 media, press, rumours, events and celebrities           | WM-036                                 |
+| PD-120                 | T3–T5 competition, agreements and corporate change            | WM-037                                 |
+| PD-121                 | C4 and T2/T6 scalable CPU simulation                          | WM-038                                 |
+| PD-122                 | U1–U2 and W1–W2 history and presentation retention            | WM-013, WM-039                         |
+| PD-123                 | M1–M6 and U3 awards, rankings and legacy                      | WM-027, WM-040                         |
+| PD-124                 | K1–K7 storylines, angles and pre-booking                      | WM-028, WM-029                         |
+| PD-125                 | D1–D9 and W1–W5 interface and presentation                    | WM-014, WM-016, WM-017                 |
+| PD-126                 | X1–X3 save recovery and long-career policy                    | WM-015                                 |
+| PD-129                 | L1–L5 group types and membership                              | WM-026                                 |
+| PD-130                 | C4–C5, G1–G7, T2/T6 and U1–U2 world detail and retention      | WM-011, WM-012, WM-038                 |
+| PD-131                 | N1, S5 and U3–U4 returns and rumours                          | WM-031, WM-033, WM-036, WM-040, WM-042 |
 
 ## Decision record format
 

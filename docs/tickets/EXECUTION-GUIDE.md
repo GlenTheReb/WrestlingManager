@@ -14,10 +14,12 @@ conflict changes behavior:
 1. The owner's latest explicit decision in the current conversation.
 2. Implemented behavior and invariants recorded in root `SDD.md`.
 3. Accepted entries in [`docs/product-decisions.md`](../product-decisions.md).
-4. The selected `WM-###.md` capability brief and its accepted dependency handoffs.
-5. [`ROADMAP.md`](ROADMAP.md) for broad scope and [`docs/model-task-plan.md`](../model-task-plan.md)
+4. Accepted rule IDs in [`docs/game-product-rules.md`](../game-product-rules.md) and the focused
+   design-rule documents they name.
+5. The selected `WM-###.md` capability brief and its accepted dependency handoffs.
+6. [`ROADMAP.md`](ROADMAP.md) for broad scope and [`docs/model-task-plan.md`](../model-task-plan.md)
    for sequencing, estimates and model recommendations.
-6. Competitive references as inspiration only. They never authorize copied names, screens,
+7. Competitive references as inspiration only. They never authorize copied names, screens,
    mechanics or assets.
 
 Proposed text is not implemented fact. A missing rule is an open decision, not permission to invent
@@ -29,7 +31,7 @@ The implementing model reads only:
 
 1. `SDD.md` Current checkpoint plus the exact headings named by the execution ticket.
 2. This guide and the selected capability brief.
-3. Accepted product decisions named by that brief.
+3. Accepted product decisions and exact `docs/game-product-rules.md` rule IDs named by that brief.
 4. Only the dependency handoff sections and code paths explicitly named by the execution ticket.
 5. Focused source symbols found by tracing the current execution path.
 
@@ -89,6 +91,9 @@ fourth or fifth, it is likely to create incoherent state. Stop and revise the ti
   proposal. Proposals cannot silently become mechanics.
 - Do not invent exact weights, thresholds, probability tables, tax/legal rules, medical outcomes,
   content taxonomies or AI behavior. Record an open decision or use a clearly approved fixture.
+- Former PD-107–131 destination questions are resolved by PD-134; this does not authorise an
+  implementation model to invent constants. A bounded execution ticket must still name approved
+  fixtures or ask the owner when a new behavior-changing choice is genuinely absent.
 - Do not display a control until its command, validation, persistence, consequence and failure state
   exist. Disabled previews must say they are planned.
 - Do not use presentation text to create canonical facts. News, commentary and reviews must cite

@@ -5,8 +5,9 @@ explicit owner permission before branch creation or implementation. They must be
 [the execution guide](EXECUTION-GUIDE.md); playable order is governed by
 [the milestone plan](../milestones.md), and every packet is linked from the
 [capability index](INDEX.md). Priority and estimates are maintained in
-[`docs/model-task-plan.md`](../model-task-plan.md), while unresolved behavior belongs in
-[`docs/product-decisions.md`](../product-decisions.md).
+[`docs/model-task-plan.md`](../model-task-plan.md), while accepted behavior belongs in
+[`docs/product-decisions.md`](../product-decisions.md) and the
+[`168-item game product baseline`](../game-product-rules.md).
 
 ## Definition of done for every capability slice
 
@@ -141,15 +142,16 @@ and biography are deterministic, persisted and causal only where an approved rul
 Detailed proposed ticket: [WM-023](WM-023.md). Directional personal relationships, memories and
 contextual player actions are recorded without conflating real friendship with kayfabe stories.
 
-### WM-021 — Roster discovery
+### WM-021 — Talent Search and company Roster discovery
 
-Detailed proposed ticket: [WM-021](WM-021.md). Paged search, composable include/exclude filters,
-sorting, comparisons and saved views cover stats, identity, relationships, availability and history.
+Detailed capability: [WM-021](WM-021.md). WM-021.1 supplies paged all-world Talent Search; the
+drafted [WM-021.2](WM-021.2.md) replaces the current alias with a distinct player-company Roster.
+Both reuse bounded query/sort foundations without conflating recruitment and roster operations.
 
 ### WM-024 — Person profile and career hub
 
-Reserved branch stem: `feature/wm-024-person-profile-hub`. PD-133 is accepted; delivery uses one
-execution ticket with internal phases and consumes canonical people/career sources as they exist.
+Current-data implementation is locally verified through the combined [WM-024.1](WM-024.1.md) ticket
+on `feature/wm-024-person-profile-hub`. Later owning systems enrich the same profile destinations.
 
 Outcome: an original FM-inspired Person information hub with portrait, six-group stats/sub-stats, biography, personality,
 languages, hobbies, condition, morale, contracts, promises, relationships, teams/stables, companies,
@@ -163,9 +165,8 @@ qualified; profile state survives navigation; no single universal overall rating
 
 ### WM-025 — Real-life and kayfabe separation
 
-Reserved branch stem: `feature/wm-025-kayfabe-model`. Depends on WM-022–023 and accepted PD-106;
-its core model is implemented and verified locally and precedes full WM-024 profile integration.
-Owner review and an explicitly authorised commit remain.
+The implementation was merged through PR #6 at `61d2ec1`. Depends on WM-022–023 and accepted PD-106;
+its core model precedes full WM-024 profile integration.
 
 Outcome: separate a person, their current/previous characters, gimmicks, names, alignment, masks,
 presentation and public claims from contracts, personal relationships and real health.
@@ -229,11 +230,12 @@ audience, culture, size/prestige/momentum, brands, divisions, geography and mark
 Exit: product preferences cause audience/worker/business tradeoffs; brands have scoped rosters,
 shows/titles/staff; growth thresholds explain benefits/costs; UWF becomes ordinary seeded content.
 
-### WM-030 — Ownership, goals and company hierarchy
+### WM-030 — Player career, ownership, goals and company hierarchy
 
 Reserved branch stem: `feature/wm-030-company-governance`. Depends on WM-011.
 
-Outcome: owners, boards, executives, general managers, bookers, booking teams, inner circles,
+Outcome: a player Person/career profile with background, qualifications, reputation and starting
+role, then owners, boards, executives, general managers, bookers, booking teams, inner circles,
 figureheads and culture-dependent authority with budgets, goals, trust and career-role resignation.
 
 Exit: permissions differ by company/role; owner goals are measurable; conflicts produce choices;
@@ -313,20 +315,23 @@ Reserved branch stem: `feature/wm-036-media-and-events`. Depends on WM-023, WM-0
 relevant WM-030–035 facts.
 
 Outcome: journalists/critics, show/match reviews, interviews, press conferences/media scrums,
-rumours, fan/critic social streams, public statements, controversies, random industry/backstage/
+rumours, fan/critic social streams, timestamped between-segment social interstitials, public statements, controversies, random industry/backstage/
 travel/business events and celebrities as restricted world characters.
 
 Exit: content derives from stored facts or seeded event rules; outlets and fan cohorts have distinct
 biases; player answers have visible consequences; random events have preconditions/cooldowns and
-never fabricate canonical results.
+never fabricate canonical results. Long-save inbox, feed and worker-profile reads use bounded SQL and
+a composite worker/date/id news index rather than scanning the global news chronology.
 
-### WM-012 — Company/world relationship foundation
+### WM-012 — Fictional world generation and world-state foundation
 
-Reserved branch stem: `feature/wm-012-world-foundation`. A schema/event slice follows WM-011 and
-WM-042; full completion consumes WM-031–034.
+Reserved branch stem: `feature/wm-012-world-foundation`. A deterministic fictional-world bootstrap
+supports career creation early; full company relationships/economy/history consume WM-011, WM-031–034
+and WM-042.
 
-Outcome: canonical companies, ownership edges, dated world events, markets, eras, popularity,
-company-to-company sentiment and common decision/report contracts for player and CPU companies.
+Outcome: generate a coherent configurable fictional industry across all supported regions, then
+maintain canonical companies, people, ownership edges, dated world events, markets, eras, popularity,
+company sentiment and common decision/report contracts for player and CPU companies.
 
 Exit: world state is deterministic, date-effective and queryable; all actors use compatible rules;
 history can explain current ownership, relationships, rankings and market position.
@@ -354,7 +359,8 @@ results/history/news; bounded simulation scales across years; deterministic seed
 
 ### WM-039 — Global search and CPU-show viewer
 
-Reserved branch stem: `feature/wm-039-world-search-and-viewer`. Depends on WM-034 and WM-036–038.
+Reserved branch stem: `feature/wm-039-world-search-and-viewer`. The search shell follows WM-017 and
+WM-021; complete CPU-show viewing depends on WM-013, WM-034 and WM-036–038.
 
 Outcome: intuitive global search for workers, companies, shows, titles, teams, stories and news;
 open any CPU card/result and watch quick recap, key highlights or available detailed event stream.
@@ -397,10 +403,11 @@ Exit: Quick Sim, Extended Highlights and Realtime agree across the guaranteed 2.
 available 3D viewer; show defaults and per-segment overrides work; accessibility offers reduced
 motion/audio; missing assets fall back cleanly.
 
-### WM-043 — Optional retro 3D broadcast engine
+### WM-043 — Release-gated retro 3D broadcast engine
 
-Reserved branch stem: `feature/wm-043-retro-broadcast`. Conditional on accepted PD-132, a successful
-go/no-go spike and stable representative WM-013 events; it never blocks WM-014 or the core game.
+Reserved branch stem: `feature/wm-043-retro-broadcast`. It follows accepted PD-132, a successful
+go/no-go spike and stable representative WM-013 events. It never blocks WM-014 or early management
+milestones, but PD-134 makes its proven exit a commercial-release gate.
 
 Outcome: an original PlayCanvas Engine v2 low-poly broadcast viewer integrated through
 `@playcanvas/react`, using a canonical WM skeleton, modular wrestlers, verified licensed/original
@@ -439,13 +446,15 @@ screens with wrestling character and clear hierarchy rather than copied TEW/FM l
 Exit: reusable tokens/layouts handle compact/normal widths; status/action hierarchy is consistent;
 screens pass screenshot review, contrast and typography checks.
 
-### WM-017 — Navigation and accessible management workflows
+### WM-017 — Game shell, settings and accessible management workflows
 
-Reserved branch stem: `feature/wm-017-management-navigation`. Built incrementally with proven screens;
-final completion follows WM-016.
+Reserved branch stem: `feature/wm-017-management-navigation`. The functional front door/settings
+slice can begin now; complete career setup and visual/navigation coverage consume WM-012, WM-016,
+WM-030 and WM-041.
 
-Outcome: Home/Booking/Talent/Company/World navigation, context menus, history/back behavior, command
-search, saved filters, keyboard shortcuts, focus management and cross-entity deep links.
+Outcome: a centred game front door with Continue/New/Load/Settings/Database/Exit, global and career
+settings, Quick/Guided/Advanced career setup, then Home/Booking/Roster/Talent/Company/World navigation,
+context menus, history/back behavior, shortcuts, focus management and cross-entity deep links.
 
 Exit: common tasks minimize repeated clicks; navigation preserves context/drafts; keyboard-only and
 screen-reader paths cover core loops; global search and inbox links resolve correctly.
@@ -453,7 +462,7 @@ screen-reader paths cover core loops; global search and inbox links resolve corr
 ### WM-018 — Regression, balance, performance and soak suite
 
 Reserved branch stem: `feature/wm-018-regression-suite`. Quality gates start early; final release
-coverage consumes WM-015–017 and PD-110.
+coverage consumes WM-015–017 and the accepted PD-134 quality rules.
 
 Outcome: deterministic/property/contract tests, representative season balance, CPU-world soak,
 database scale, migration matrix, accessibility audit, profiling and local native release smoke.
@@ -464,7 +473,8 @@ ignored; CI/local responsibilities are explicit; release-blocking regressions ha
 ### WM-041 — Native custom content and optional asset packs
 
 Reserved branch stem: `feature/wm-041-custom-content`. Stable IDs and validation constrain every
-ticket; public editor/import/export follows WM-015–018 and PD-109.
+ticket; safe database selection/import can support early career setup, while public editor/export
+and optional packs follow WM-015–018.
 
 Outcome: native database/scenario editor and import/export for workers, companies, titles, events,
 venues, moves, rules, stories, relationships and history. A versioned manifest supports optional
@@ -476,7 +486,8 @@ saves snapshot required data and declare package/version provenance.
 
 ### WM-019 — Release candidate and project cleanup
 
-Reserved branch stem: `feature/wm-019-project-cleanup`. Depends on WM-041 and accepted PD-110.
+Reserved branch stem: `feature/wm-019-project-cleanup`. Depends on WM-041 and the accepted PD-134
+release/quality rules.
 
 Outcome: Windows installer/uninstaller, application data/recovery documentation, licensing and
 third-party notices, contributor/mod-author guidance, final public feature claims and mechanical cleanup.
@@ -517,4 +528,5 @@ searchable company/worker history without privileged information or unbounded si
 ### Gate 6 — Product worth shipping and extending
 
 Compatibility, recovery, performance, accessibility, native custom content and clean installation
-meet published thresholds. Optional media packs cannot delay or destabilize the core release.
+meet published thresholds. WM-043 passes its ordinary-PC 60 FPS and deterministic-playback exit;
+optional media packs cannot delay or destabilize the core release.

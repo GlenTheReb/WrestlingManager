@@ -395,10 +395,65 @@ pub struct CareerOffice {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+pub struct ProfileCompany {
+    pub id: String,
+    pub name: String,
+    pub initials: String,
+    pub region: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct ProfileParticipant {
+    pub worker_id: String,
+    pub name: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub enum ProfileAppearanceKind {
+    Match,
+    Angle,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct ProfileAppearance {
+    pub show_id: i32,
+    pub show_name: String,
+    pub date: String,
+    pub segment_id: i32,
+    pub kind: ProfileAppearanceKind,
+    pub title: String,
+    pub participants: Vec<ProfileParticipant>,
+    pub winner_id: Option<String>,
+    pub result: String,
+    pub duration_seconds: u32,
+    pub performance: Performance,
+    pub reasons: Vec<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+pub struct ProfileBooking {
+    pub show_id: i32,
+    pub show_name: String,
+    pub date: String,
+    pub segment_id: i32,
+    pub kind: ProfileAppearanceKind,
+    pub title: String,
+    pub participants: Vec<ProfileParticipant>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
 pub struct WorkerProfile {
     pub worker: Worker,
     pub wrestling: WrestlingSummary,
-    pub history: Vec<SegmentReport>,
+    pub company: ProfileCompany,
+    pub history: Vec<ProfileAppearance>,
+    pub next_booking: Option<ProfileBooking>,
+    pub recent_news: Vec<NewsItem>,
     pub personality_description: crate::identity::PersonalityDescription,
     pub biography: String,
     pub exceptional_traits: crate::traits::TraitOverview,

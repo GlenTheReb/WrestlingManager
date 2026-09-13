@@ -1,7 +1,7 @@
 # PD-112 — Match planning and live direction rules
 
 Status: Accepted 12 September 2026. These rules govern future WM-006–009, WM-013–014, WM-031,
-WM-034 and conditional WM-043 work. They do not describe the current prototype's complete behavior.
+WM-034 and spike-gated WM-043 work. They do not describe the current prototype's complete behavior.
 
 ## Player promise
 
@@ -119,4 +119,4 @@ according to the situation instead of behaving as remote-controlled pieces.
 WM-006 owns agent interpretation, delivery and response rules; WM-007 owns sequence opportunities and
 unsimulated-suffix replanning; WM-009 owns briefing/draft workflow; WM-013 owns presentation events;
 WM-014 owns 2.5D controls; WM-031 owns persistent morale/promises; WM-034 owns broadcast constraints;
-conditional WM-043 owns only 3D playback of the resulting facts.
+WM-043 owns only 3D playback of the resulting facts.

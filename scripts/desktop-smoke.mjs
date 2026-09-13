@@ -152,7 +152,29 @@ try {
   await page.screenshot({ path: path.join(artifacts, 'worker-finder.png') });
   const first = page.locator('tbody button').first();
   await first.click();
-  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(page.getByText('QUICK PROFILE', { exact: true })).toBeVisible();
+  await page.screenshot({
+    path: path.join(artifacts, 'worker-profile-quick.png'),
+  });
+  await page
+    .getByRole('button', { name: 'Full profile', exact: true })
+    .first()
+    .click();
+  await expect(page.getByText('PERSON HUB', { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Attributes', exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: path.join(artifacts, 'worker-profile-overview.png'),
+  });
+  await page.setViewportSize({ width: 800, height: 800 });
+  await expect(
+    page.getByRole('button', { name: 'Matches & appearances', exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: path.join(artifacts, 'worker-profile-narrow.png'),
+  });
+  await page.setViewportSize({ width: 1920, height: 1080 });
   await page.getByRole('button', { name: 'Character', exact: true }).click();
   await expect(
     page.getByRole('button', { name: 'Plan a change', exact: true }),
@@ -166,9 +188,7 @@ try {
     path: path.join(artifacts, 'worker-character-planner.png'),
     fullPage: true,
   });
-  await page
-    .getByRole('button', { name: 'Person & traits', exact: true })
-    .click();
+  await page.getByRole('button', { name: 'Career', exact: true }).click();
   await expect(
     page.getByRole('heading', { name: 'Shared qualities', exact: true }),
   ).toBeVisible();
@@ -192,9 +212,12 @@ try {
   await page.screenshot({
     path: path.join(artifacts, 'worker-relationships.png'),
   });
-  await page.getByRole('button', { name: 'Moveset', exact: true }).click();
+  await page.getByRole('button', { name: 'Attributes', exact: true }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Working repertoire', exact: true }),
+  ).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, 'worker-moves.png') });
-  await page.getByRole('button', { name: 'Close panel' }).click();
+  await page.getByRole('button', { name: 'Close person profile' }).click();
   await page.keyboard.press('F3');
   await expect(page.getByLabel('Wrestler A', { exact: true })).toBeVisible();
   bookedWinner = await page.getByLabel(/^Booked winner/).inputValue();
