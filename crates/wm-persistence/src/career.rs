@@ -7,7 +7,7 @@ use wm_domain::game::*;
 use wm_sim::{consequences::media_for, content, planning, runtime::Session};
 
 const MIGRATION_V2: &str = include_str!("../migrations/002_gameplay.sql");
-fn rule(message: impl Into<String>) -> PersistenceError {
+pub(super) fn rule(message: impl Into<String>) -> PersistenceError {
     PersistenceError::GameRule(message.into())
 }
 fn encode<T: Serialize>(value: &T) -> Result<String, PersistenceError> {
@@ -34,7 +34,8 @@ pub(super) fn initialise_gameplay(
         super::ratings::migrate(connection, migration)?;
         super::identity::migrate(connection, migration)?;
         super::relationships::migrate(connection, migration)?;
-        return super::discovery::migrate(connection, migration);
+        super::discovery::migrate(connection, migration)?;
+        return super::characters::migrate(connection, migration);
     }
     let transaction = connection.transaction_with_behavior(TransactionBehavior::Immediate)?;
     if transaction.pragma_query_value::<u32, _>(None, "user_version", |r| r.get(0))? >= 2 {
@@ -43,7 +44,8 @@ pub(super) fn initialise_gameplay(
         super::ratings::migrate(connection, migration)?;
         super::identity::migrate(connection, migration)?;
         super::relationships::migrate(connection, migration)?;
-        return super::discovery::migrate(connection, migration);
+        super::discovery::migrate(connection, migration)?;
+        return super::characters::migrate(connection, migration);
     }
     let seed = metadata_value(&transaction, "seed")?.ok_or(PersistenceError::InvalidDatabase)?;
     let seed = wm_domain::Seed::parse(&seed)?.get();
@@ -83,7 +85,8 @@ pub(super) fn initialise_gameplay(
     super::ratings::migrate(connection, migration)?;
     super::identity::migrate(connection, migration)?;
     super::relationships::migrate(connection, migration)?;
-    super::discovery::migrate(connection, migration)
+    super::discovery::migrate(connection, migration)?;
+    super::characters::migrate(connection, migration)
 }
 
 pub(super) fn write_worker(connection: &Connection, w: &Worker) -> Result<(), PersistenceError> {
@@ -116,7 +119,7 @@ pub(super) fn worker(connection: &Connection, id: &str) -> Result<Worker, Persis
         .map_err(|_| PersistenceError::InvalidDatabase)?;
     let worker = Worker {
         id: id.into(),
-        name: row.0,
+        name: super::characters::active_ring_name(connection, id)?.unwrap_or(row.0),
         age: row.1,
         style: row.2,
         nationality: row.3,
@@ -369,6 +372,7 @@ impl SaveRepository {
         );
         let exceptional_traits = super::identity::ledger(&connection, id)?.view(Some(&company));
         let relationships = super::relationships::profile(&connection, id, &company)?;
+        let character = super::characters::profile(&connection, id)?;
         let wrestling = worker.wrestling_style.summary(&worker.attributes);
         Ok(WorkerProfile {
             worker,
@@ -378,6 +382,7 @@ impl SaveRepository {
             biography,
             exceptional_traits,
             relationships,
+            character,
         })
     }
 

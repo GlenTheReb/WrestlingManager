@@ -403,6 +403,7 @@ pub struct WorkerProfile {
     pub biography: String,
     pub exceptional_traits: crate::traits::TraitOverview,
     pub relationships: crate::relationships::RelationshipProfile,
+    pub character: crate::characters::CharacterProfile,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, TS)]

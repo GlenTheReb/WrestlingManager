@@ -2,6 +2,7 @@ use crate::commands::run_storage;
 use tauri::State;
 use wm_domain::{
     IpcError,
+    characters::{CharacterActionRequest, CharacterProfile, ProposeCharacterChangeRequest},
     discovery::{WorkerDiscoveryLists, WorkerFilterOptions, WorkerSearchPage, WorkerSearchRequest},
     game::*,
     relationships::{InteractionOutcome, InteractionRequest, InteractionTargetPage},
@@ -153,6 +154,40 @@ pub async fn worker_profile(
 ) -> Result<WorkerProfile, IpcError> {
     run_storage(repository.inner().clone(), move |r| {
         r.worker_profile(&save_id, &worker_id)
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn propose_character_change(
+    repository: State<'_, SaveRepository>,
+    request: ProposeCharacterChangeRequest,
+) -> Result<CharacterProfile, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.propose_character_change(request)
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn launch_character_change(
+    repository: State<'_, SaveRepository>,
+    request: CharacterActionRequest,
+) -> Result<CharacterProfile, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.launch_character_change(request)
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn set_character_retired(
+    repository: State<'_, SaveRepository>,
+    request: CharacterActionRequest,
+    retired: bool,
+) -> Result<CharacterProfile, IpcError> {
+    run_storage(repository.inner().clone(), move |r| {
+        r.set_character_retired(request, retired)
     })
     .await
 }

@@ -115,33 +115,54 @@ fn refresh_worker(connection: &Connection, worker: &Worker) -> Result<(), Persis
         .collect::<BTreeSet<_>>()
         .into_iter()
         .collect::<Vec<_>>();
-    connection.execute(
-        "INSERT INTO worker_discovery_index(worker_id,name,age,nationality,school,languages,biography,archetype,primary_discipline,overall,movement,physicality,ringcraft,psychology,fundamentals,entertainment,fatigue,morale,momentum,injury_days)
-         VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18,?19,?20)
-         ON CONFLICT(worker_id) DO UPDATE SET name=excluded.name,age=excluded.age,nationality=excluded.nationality,school=excluded.school,languages=excluded.languages,biography=excluded.biography,archetype=excluded.archetype,primary_discipline=excluded.primary_discipline,overall=excluded.overall,movement=excluded.movement,physicality=excluded.physicality,ringcraft=excluded.ringcraft,psychology=excluded.psychology,fundamentals=excluded.fundamentals,entertainment=excluded.entertainment,fatigue=excluded.fatigue,morale=excluded.morale,momentum=excluded.momentum,injury_days=excluded.injury_days",
-        params![
-            worker.id,
-            worker.name,
-            worker.age,
-            worker.nationality,
-            worker.school,
+    let has_aliases = connection
+        .query_row(
+            "SELECT 1 FROM pragma_table_info('worker_discovery_index') WHERE name='aliases'",
+            [],
+            |_| Ok(()),
+        )
+        .optional()?
+        .is_some();
+    let aliases = if has_aliases {
+        connection.prepare("SELECT a.alias FROM character_aliases a JOIN characters c ON c.id=a.character_id WHERE c.worker_id=?1 AND a.knowledge!='private' ORDER BY a.started_on DESC")?.query_map([&worker.id],|r|r.get::<_,String>(0))?.collect::<rusqlite::Result<Vec<_>>>()?
+    } else {
+        Vec::new()
+    };
+    let sql = if has_aliases {
+        "INSERT INTO worker_discovery_index(worker_id,name,age,nationality,school,languages,biography,archetype,primary_discipline,overall,movement,physicality,ringcraft,psychology,fundamentals,entertainment,fatigue,morale,momentum,injury_days,aliases) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18,?19,?20,?21) ON CONFLICT(worker_id) DO UPDATE SET name=excluded.name,age=excluded.age,nationality=excluded.nationality,school=excluded.school,languages=excluded.languages,biography=excluded.biography,archetype=excluded.archetype,primary_discipline=excluded.primary_discipline,overall=excluded.overall,movement=excluded.movement,physicality=excluded.physicality,ringcraft=excluded.ringcraft,psychology=excluded.psychology,fundamentals=excluded.fundamentals,entertainment=excluded.entertainment,fatigue=excluded.fatigue,morale=excluded.morale,momentum=excluded.momentum,injury_days=excluded.injury_days,aliases=excluded.aliases"
+    } else {
+        "INSERT INTO worker_discovery_index(worker_id,name,age,nationality,school,languages,biography,archetype,primary_discipline,overall,movement,physicality,ringcraft,psychology,fundamentals,entertainment,fatigue,morale,momentum,injury_days) VALUES(?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18,?19,?20) ON CONFLICT(worker_id) DO UPDATE SET name=excluded.name,age=excluded.age,nationality=excluded.nationality,school=excluded.school,languages=excluded.languages,biography=excluded.biography,archetype=excluded.archetype,primary_discipline=excluded.primary_discipline,overall=excluded.overall,movement=excluded.movement,physicality=excluded.physicality,ringcraft=excluded.ringcraft,psychology=excluded.psychology,fundamentals=excluded.fundamentals,entertainment=excluded.entertainment,fatigue=excluded.fatigue,morale=excluded.morale,momentum=excluded.momentum,injury_days=excluded.injury_days"
+    };
+    let mut values = vec![
+        Value::Text(worker.id.clone()),
+        Value::Text(worker.name.clone()),
+        Value::Integer(i64::from(worker.age)),
+        Value::Text(worker.nationality.clone()),
+        Value::Text(worker.school.clone()),
+        Value::Text(
             serde_json::to_string(&languages).map_err(|_| PersistenceError::InvalidDatabase)?,
-            worker.background,
-            summary.archetype,
-            summary.primary.label(),
-            summary.overall.get(),
-            summary.groups.movement.get(),
-            summary.groups.physicality.get(),
-            summary.groups.ringcraft.get(),
-            summary.groups.psychology.get(),
-            summary.groups.fundamentals.get(),
-            summary.groups.entertainment.get(),
-            worker.condition.fatigue,
-            worker.condition.morale,
-            worker.condition.momentum,
-            worker.condition.injury_days,
-        ],
-    )?;
+        ),
+        Value::Text(worker.background.clone()),
+        Value::Text(summary.archetype),
+        Value::Text(summary.primary.label().into()),
+        Value::Integer(i64::from(summary.overall.get())),
+        Value::Integer(i64::from(summary.groups.movement.get())),
+        Value::Integer(i64::from(summary.groups.physicality.get())),
+        Value::Integer(i64::from(summary.groups.ringcraft.get())),
+        Value::Integer(i64::from(summary.groups.psychology.get())),
+        Value::Integer(i64::from(summary.groups.fundamentals.get())),
+        Value::Integer(i64::from(summary.groups.entertainment.get())),
+        Value::Integer(i64::from(worker.condition.fatigue)),
+        Value::Integer(i64::from(worker.condition.morale)),
+        Value::Integer(i64::from(worker.condition.momentum)),
+        Value::Integer(i64::from(worker.condition.injury_days)),
+    ];
+    if has_aliases {
+        values.push(Value::Text(
+            serde_json::to_string(&aliases).map_err(|_| PersistenceError::InvalidDatabase)?,
+        ));
+    }
+    connection.execute(sql, params_from_iter(values))?;
     Ok(())
 }
 
@@ -151,12 +172,20 @@ fn worker_match_score(
     school: &str,
     languages: &str,
     biography: &str,
+    aliases: &str,
     query: &str,
 ) -> i64 {
     if query.is_empty() {
         return 0;
     }
     let query = query.to_lowercase();
+    if serde_json::from_str::<Vec<String>>(aliases)
+        .unwrap_or_default()
+        .iter()
+        .any(|alias| alias.to_lowercase().contains(&query))
+    {
+        return 95;
+    }
     for (score, value) in [(100, name), (80, nationality), (70, school)] {
         if value.to_lowercase().contains(&query) {
             return score;
@@ -201,7 +230,7 @@ fn levenshtein(left: &str, right: &str) -> usize {
 fn register_search_function(connection: &Connection) -> Result<(), PersistenceError> {
     connection.create_scalar_function(
         "wm_worker_match_score",
-        6,
+        7,
         FunctionFlags::SQLITE_DETERMINISTIC | FunctionFlags::SQLITE_UTF8,
         |context| {
             Ok(worker_match_score(
@@ -210,7 +239,8 @@ fn register_search_function(connection: &Connection) -> Result<(), PersistenceEr
                 context.get::<String>(2)?.as_str(),
                 context.get::<String>(3)?.as_str(),
                 context.get::<String>(4)?.as_str(),
-                context.get::<String>(5)?.trim(),
+                context.get::<String>(5)?.as_str(),
+                context.get::<String>(6)?.trim(),
             ))
         },
     )?;
@@ -288,7 +318,7 @@ fn search_query(request: &WorkerSearchRequest, count_only: bool) -> (String, Vec
         "SELECT d.*, 0 AS relevance_score FROM worker_discovery_index d".to_owned()
     } else {
         parameters.push(Value::Text(query.to_owned()));
-        "SELECT d.*, wm_worker_match_score(d.name,d.nationality,d.school,d.languages,d.biography,?) AS relevance_score FROM worker_discovery_index d".to_owned()
+        "SELECT d.*, wm_worker_match_score(d.name,d.nationality,d.school,d.languages,d.biography,d.aliases,?) AS relevance_score FROM worker_discovery_index d".to_owned()
     };
     let filters = &request.filters;
     let mut clauses = Vec::<String>::new();
@@ -405,7 +435,7 @@ fn search_query(request: &WorkerSearchRequest, count_only: bool) -> (String, Vec
         format!(
             "WITH candidates AS ({candidates})
              SELECT d.worker_id,
-                    CASE d.relevance_score WHEN 100 THEN 'Matched name' WHEN 80 THEN 'Matched nationality' WHEN 70 THEN 'Matched training background' WHEN 60 THEN 'Matched language' WHEN 50 THEN 'Close name match' WHEN 45 THEN 'Matched biography' END,
+                    CASE d.relevance_score WHEN 100 THEN 'Matched active ring name' WHEN 95 THEN 'Matched former ring name' WHEN 80 THEN 'Matched nationality' WHEN 70 THEN 'Matched training background' WHEN 60 THEN 'Matched language' WHEN 50 THEN 'Close ring-name match' WHEN 45 THEN 'Matched biography' END,
                     COALESCE((SELECT json_group_array(member.shortlist_id) FROM worker_shortlist_members member WHERE member.worker_id=d.worker_id),'[]'),
                     EXISTS (SELECT 1 FROM worker_blacklist blocked WHERE blocked.worker_id=d.worker_id)
              FROM candidates d{where_clause}

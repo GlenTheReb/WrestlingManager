@@ -76,18 +76,20 @@ reporting; combinations validate; unsupported combinations fail clearly.
 Reserved branch stem: `feature/wm-006-road-agent-rules`. Depends on WM-005.
 
 Outcome: make agents plan match structure, team roles, legal saves/interference, risk and crowd
-management for the chosen rules, then interpret delayed live instructions without changing the
-locked winner.
+management for the chosen rules, consult affected workers, then translate player-authorised live
+changes into legal future beats. A finish or winner changes only through explicit player authority.
 
-Exit: suggestions are reviewable before application; worker/agent knowledge matters; automatic
-beats preserve manual intent; deterministic instruction timing and refusal behavior are tested.
+Exit: suggestions and worker responses are reviewable; sequence-derived referee opportunities govern
+delivery; automatic beats preserve manual intent; immutable history, future replanning, overload,
+imperfect compliance and refusal behavior are deterministic and tested.
 
 ### WM-007 — Move chains and finish execution
 
 Reserved branch stem: `feature/wm-007-match-sequences`. Depends on WM-006.
 
 Outcome: model openings, transitions, counters, reversals, limb work, callbacks, escalation,
-signature setups and an explicit legal closing sequence.
+signature setups, referee communication opportunities and an explicit legal closing sequence that
+can be amended without rewriting performed history.
 
 Exit: the final move comes from the winner's legal repertoire; counters/failed moves have causal
 recovery; body damage matters; no generic finish bypasses the planned result.
@@ -144,24 +146,26 @@ contextual player actions are recorded without conflating real friendship with k
 Detailed proposed ticket: [WM-021](WM-021.md). Paged search, composable include/exclude filters,
 sorting, comparisons and saved views cover stats, identity, relationships, availability and history.
 
-### WM-024 — Wrestler profile and career hub
+### WM-024 — Person profile and career hub
 
-Reserved branch stem: `feature/wm-024-wrestler-profile`. Thin slices follow their owning people systems;
-full completion consumes WM-020–023 and later career-history sources.
+Reserved branch stem: `feature/wm-024-person-profile-hub`. PD-133 is accepted; delivery uses one
+execution ticket with internal phases and consumes canonical people/career sources as they exist.
 
-Outcome: an FM-style profile with portrait, six-group stats/sub-stats, biography, personality,
+Outcome: an original FM-inspired Person information hub with portrait, six-group stats/sub-stats, biography, personality,
 languages, hobbies, condition, morale, contracts, promises, relationships, teams/stables, companies,
 titles, awards, moveset, injuries, old matches, recent news and contextual interactions.
 
-Exit: every section deep-links to its source history/action; long lists page; unknown/private fields
-are represented honestly; profile state survives navigation; no single universal overall rating.
+Exit: the Overview combines ratings/current state with a bounded recent-media rail; every section
+deep-links to its source history/action; long lists page; only genuinely unknown/private fields are
+qualified; profile state survives navigation; no single universal overall rating.
 
 ## Phase C — Kayfabe and creative production
 
 ### WM-025 — Real-life and kayfabe separation
 
 Reserved branch stem: `feature/wm-025-kayfabe-model`. Depends on WM-022–023 and accepted PD-106;
-its core model precedes full WM-024 profile integration.
+its core model is implemented and verified locally and precedes full WM-024 profile integration.
+Owner review and an explicitly authorised commit remain.
 
 Outcome: separate a person, their current/previous characters, gimmicks, names, alignment, masks,
 presentation and public claims from contracts, personal relationships and real health.
@@ -376,7 +380,8 @@ Reserved branch stem: `feature/wm-013-presentation-contract`. A match slice foll
 completion integrates WM-029, WM-034, WM-036 and WM-038.
 
 Outcome: a renderer-neutral stream of match, angle, entrance, interference, dialogue, crowd,
-commentary, lighting and production cues for player and CPU shows.
+commentary, lighting and production cues for player and CPU shows, including the original brief,
+referee communication opportunity, instruction response and accepted future-plan amendment.
 
 Exit: presentation cannot decide results; summaries and detailed playback use the same facts;
 versioned cues degrade gracefully; simulation tests do not require a renderer.
@@ -388,8 +393,29 @@ Reserved branch stem: `feature/wm-014-arena-presentation`. Depends incrementally
 Outcome: smart arena lighting/effects, location/stage cards, typography, portraits where available,
 crowd state, commentary and timed text that make matches and angles watchable without full animation.
 
-Exit: full/quick/highlight/instant modes agree; accessibility offers reduced motion/audio; missing
-assets fall back cleanly; no theme-song, titantron or wrestler-animation requirement.
+Exit: Quick Sim, Extended Highlights and Realtime agree across the guaranteed 2.5D viewer and any
+available 3D viewer; show defaults and per-segment overrides work; accessibility offers reduced
+motion/audio; missing assets fall back cleanly.
+
+### WM-043 — Optional retro 3D broadcast engine
+
+Reserved branch stem: `feature/wm-043-retro-broadcast`. Conditional on accepted PD-132, a successful
+go/no-go spike and stable representative WM-013 events; it never blocks WM-014 or the core game.
+
+Outcome: an original PlayCanvas Engine v2 low-poly broadcast viewer integrated through
+`@playcanvas/react`, using a canonical WM skeleton, modular wrestlers, verified licensed/original
+paired attacker/receiver animations, WM-owned move recipes and automated Blender/GLB processing.
+WebGL2 is required; WebGPU is optional. Arenas, crowds, lighting, effects and cameras replay canonical
+entrances, matches and later structured scenes.
+
+Live instructions rebuild only buffered future animation choices after Rust accepts an amendment.
+Quick Sim hands off to contingencies; 3D Extended Highlights and 3D Realtime expose the same decisions
+as 2.5D without letting animation callbacks communicate with workers or mutate simulation.
+
+Exit: representative singles/tag shows replay the same facts as reports and text playback across body
+types, speeds, missing assets and target hardware; the documented ordinary-PC preset sustains 60 FPS.
+The viewer cannot decide results, and VPG remains reference/research only: no proprietary No Mercy/VPG
+code, unverified asset, unlicensed likeness or required optional pack enters WM.
 
 ### WM-015 — Save and compatibility hardening
 

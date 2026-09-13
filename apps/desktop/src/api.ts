@@ -23,6 +23,9 @@ import type {
   WorkerFilterOptions,
   WorkerDiscoveryLists,
   RosterRow,
+  ProposeCharacterChangeRequest,
+  CharacterActionRequest,
+  CharacterProfile,
 } from '@wm/contracts';
 
 export const desktopAvailable = () => isTauri();
@@ -91,6 +94,12 @@ export const gameApi = {
     invoke<RosterRow[]>('compare_workers', { saveId, ids }),
   profile: (saveId: string, workerId: string) =>
     invoke<WorkerProfile>('worker_profile', { saveId, workerId }),
+  proposeCharacterChange: (request: ProposeCharacterChangeRequest) =>
+    invoke<CharacterProfile>('propose_character_change', { request }),
+  launchCharacterChange: (request: CharacterActionRequest) =>
+    invoke<CharacterProfile>('launch_character_change', { request }),
+  setCharacterRetired: (request: CharacterActionRequest, retired: boolean) =>
+    invoke<CharacterProfile>('set_character_retired', { request, retired }),
   relationshipTargets: (
     saveId: string,
     workerId: string,

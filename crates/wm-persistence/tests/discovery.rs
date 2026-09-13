@@ -119,7 +119,7 @@ fn close_name_matching_explains_why_a_worker_was_returned() {
         .iter()
         .find(|hit| hit.worker.id == worker.id)
         .unwrap();
-    assert_eq!(hit.match_reason.as_deref(), Some("Close name match"));
+    assert_eq!(hit.match_reason.as_deref(), Some("Close ring-name match"));
 }
 
 #[test]

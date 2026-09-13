@@ -3,6 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use ts_rs::{Config, TS};
+use wm_domain::characters::*;
 use wm_domain::discovery::*;
 use wm_domain::game::*;
 use wm_domain::identity::*;
@@ -19,6 +20,22 @@ fn generated_contracts() -> String {
         PromotionOverview::decl(&config),
         SaveSummary::decl(&config),
         IpcError::decl(&config),
+        AlignmentIntent::decl(&config),
+        AudienceResponse::decl(&config),
+        PerceivedRole::decl(&config),
+        ReactionIntensity::decl(&config),
+        CharacterAcceptance::decl(&config),
+        IntentMatch::decl(&config),
+        IdentityKnowledge::decl(&config),
+        CharacterStatus::decl(&config),
+        ChangeStatus::decl(&config),
+        GimmickBrief::decl(&config),
+        CharacterIdentity::decl(&config),
+        AudienceResponseEvidence::decl(&config),
+        CharacterChange::decl(&config),
+        CharacterProfile::decl(&config),
+        ProposeCharacterChangeRequest::decl(&config),
+        CharacterActionRequest::decl(&config),
         SortDirection::decl(&config),
         WorkerSortKey::decl(&config),
         WorkerSort::decl(&config),

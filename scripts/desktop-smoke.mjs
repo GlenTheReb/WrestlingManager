@@ -153,6 +153,19 @@ try {
   const first = page.locator('tbody button').first();
   await first.click();
   await expect(page.getByRole('dialog')).toBeVisible();
+  await page.getByRole('button', { name: 'Character', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: 'Plan a change', exact: true }),
+  ).toBeVisible();
+  await page.screenshot({ path: path.join(artifacts, 'worker-character.png') });
+  await page
+    .getByRole('button', { name: 'Plan a change', exact: true })
+    .click();
+  await expect(page.getByLabel('Ring name', { exact: true })).toBeVisible();
+  await page.screenshot({
+    path: path.join(artifacts, 'worker-character-planner.png'),
+    fullPage: true,
+  });
   await page
     .getByRole('button', { name: 'Person & traits', exact: true })
     .click();
@@ -277,7 +290,7 @@ try {
   await page.getByRole('button', { name: 'Exit game', exact: true }).click();
   await expect.poll(() => session.process.exitCode).toBe(0);
   console.log(
-    'PASS: WM identity, relationship interaction, persisted news/read state, news report links, timeline navigation, native exit, and full booking/live/restart/report career workflow.',
+    'PASS: WM character/profile UI, identity, relationship interaction, persisted news/read state, news report links, timeline navigation, native exit, and full booking/live/restart/report career workflow.',
   );
   console.log(`Screenshots and isolated test save: ${isolated}`);
 } finally {

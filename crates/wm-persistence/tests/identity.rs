@@ -227,7 +227,7 @@ fn continue_day_expires_traits_and_preserves_identity() {
 }
 
 fn downgrade_v4(db: &Connection) {
-    db.execute_batch("DROP TABLE worker_blacklist; DROP TABLE worker_shortlist_members; DROP TABLE worker_shortlists; DROP TABLE worker_saved_views; DROP TABLE worker_discovery_index; DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; DROP TABLE identity_traits; ALTER TABLE workers DROP COLUMN identity; UPDATE metadata SET value='4' WHERE key='schema_version'; UPDATE metadata SET value='0.3.0' WHERE key='engine_version'; PRAGMA user_version=4;").unwrap();
+    db.execute_batch("DROP TABLE character_action_receipts; DROP TABLE character_changes; DROP TABLE audience_response_evidence; DROP TABLE character_aliases; DROP TABLE character_tenures; DROP TABLE characters; DROP TABLE persons; DROP TABLE worker_blacklist; DROP TABLE worker_shortlist_members; DROP TABLE worker_shortlists; DROP TABLE worker_saved_views; DROP TABLE worker_discovery_index; DROP TABLE player_interactions; DROP TABLE management_relationships; DROP TABLE relationship_memories; DROP TABLE personal_relationships; DROP TABLE identity_traits; ALTER TABLE workers DROP COLUMN identity; UPDATE metadata SET value='4' WHERE key='schema_version'; UPDATE metadata SET value='0.3.0' WHERE key='engine_version'; PRAGMA user_version=4;").unwrap();
 }
 #[test]
 fn schema_four_upgrade_preserves_original_and_marks_unrecorded_facts_unknown() {
@@ -239,8 +239,8 @@ fn schema_four_upgrade_preserves_original_and_marks_unrecorded_facts_unknown() {
     downgrade_v4(&db);
     drop(db);
     let updated = repo.load_game("identity").unwrap();
-    assert_eq!(updated.schema_version, 7);
-    assert_eq!(updated.engine_version, "0.6.0");
+    assert_eq!(updated.schema_version, 8);
+    assert_eq!(updated.engine_version, "0.7.0");
     let after = repo.worker_profile("identity", "worker-001").unwrap();
     assert_eq!(after.worker.name, before.worker.name);
     assert_eq!(after.worker.attributes, before.worker.attributes);
@@ -303,8 +303,8 @@ fn schema_five_checkpoint_remains_compatible_when_schema_six_is_interrupted() {
         .unwrap();
     drop(db);
     let upgraded = repo.load_game("identity").unwrap();
-    assert_eq!(upgraded.schema_version, 7);
-    assert_eq!(upgraded.engine_version, "0.6.0");
+    assert_eq!(upgraded.schema_version, 8);
+    assert_eq!(upgraded.engine_version, "0.7.0");
 }
 
 #[test]

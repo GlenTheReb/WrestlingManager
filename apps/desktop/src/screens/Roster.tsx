@@ -5,13 +5,24 @@ import { ErrorNotice, Panel, Meter, Overlay, currency } from '../game-ui';
 import s from '../Game.module.css';
 import { PersonIdentityPanel } from './PersonIdentity';
 import { RelationshipsPanel } from './Relationships';
+import { CharacterPresentation } from './CharacterPresentation';
+import { Icon, type IconName } from '../icons';
 
 const humanize = (value: string) =>
   value
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/^./, (letter) => letter.toUpperCase());
 
-const scoreClass = (value: number) => (value >= 85 ? s.good : '');
+const scoreClass = (value: number) =>
+  value >= 90
+    ? s.scoreElite
+    : value >= 75
+      ? s.scoreStrong
+      : value >= 60
+        ? s.scoreCapable
+        : value >= 40
+          ? s.scoreDeveloping
+          : s.scoreWeak;
 export { WorkerFinder as Roster } from './WorkerFinder';
 
 export function ProfilePanel({
@@ -28,7 +39,12 @@ export function ProfilePanel({
     queryFn: () => gameApi.profile(saveId, workerId),
   });
   const [tab, setTab] = useState<
-    'overview' | 'identity' | 'relationships' | 'moves' | 'history'
+    | 'overview'
+    | 'character'
+    | 'identity'
+    | 'relationships'
+    | 'moves'
+    | 'history'
   >('overview');
   const w = profile.data?.worker;
   const wrestling = profile.data?.wrestling;
@@ -49,6 +65,8 @@ export function ProfilePanel({
                 .join('')}
             </div>
             <div>
+              <span className={s.eyebrow}>Active ring identity</span>
+              <h2>{w.name}</h2>
               <h3>
                 {wrestling?.archetype ?? w.style} · {w.age} years old
               </h3>
@@ -65,6 +83,7 @@ export function ProfilePanel({
             {(
               [
                 'overview',
+                'character',
                 'identity',
                 'relationships',
                 'moves',
@@ -76,26 +95,68 @@ export function ProfilePanel({
                 aria-pressed={tab === value}
                 onClick={() => setTab(value)}
               >
-                {value === 'identity'
-                  ? 'Person & traits'
-                  : value === 'relationships'
-                    ? 'Relationships'
-                    : value === 'moves'
-                      ? 'Moveset'
-                      : value === 'history'
-                        ? 'Match history'
-                        : 'Profile'}
+                <Icon
+                  name={
+                    (
+                      {
+                        overview: 'profile',
+                        character: 'mask',
+                        identity: 'spark',
+                        relationships: 'people',
+                        moves: 'moves',
+                        history: 'history',
+                      } satisfies Record<typeof value, IconName>
+                    )[value]
+                  }
+                />
+                {value === 'character'
+                  ? 'Character'
+                  : value === 'identity'
+                    ? 'Person & traits'
+                    : value === 'relationships'
+                      ? 'Relationships'
+                      : value === 'moves'
+                        ? 'Moveset'
+                        : value === 'history'
+                          ? 'Match history'
+                          : 'Profile'}
               </button>
             ))}
           </nav>
           <div className={s.overlayBody}>
-            {tab === 'identity' && profile.data ? (
-              <PersonIdentityPanel
-                identity={w.identity}
-                description={profile.data.personalityDescription}
-                biography={profile.data.biography}
-                traits={profile.data.exceptionalTraits}
+            {tab === 'character' && profile.data ? (
+              <CharacterPresentation
+                saveId={saveId}
+                workerId={workerId}
+                character={profile.data.character}
               />
+            ) : tab === 'identity' && profile.data ? (
+              <>
+                <Panel title="Personal record">
+                  <dl className={s.attributes}>
+                    <div>
+                      <dt>Legal name</dt>
+                      <dd>
+                        {profile.data.character.legalName ?? 'Not recorded'}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Presented publicly as</dt>
+                      <dd>{profile.data.character.active.ringName}</dd>
+                    </div>
+                  </dl>
+                  <p className={s.help}>
+                    Personal information is restricted to the detailed profile
+                    and is never used as a public booking label.
+                  </p>
+                </Panel>
+                <PersonIdentityPanel
+                  identity={w.identity}
+                  description={profile.data.personalityDescription}
+                  biography={profile.data.biography}
+                  traits={profile.data.exceptionalTraits}
+                />
+              </>
             ) : tab === 'relationships' && profile.data ? (
               <RelationshipsPanel
                 saveId={saveId}
@@ -148,16 +209,18 @@ export function ProfilePanel({
                   </dl>
                 </Panel>
                 {Object.entries(w.attributes).map(([group, values]) => (
-                  <Panel key={group} title={`${humanize(group)} sub-stats`}>
-                    <dl className={s.attributes}>
-                      {Object.entries(values).map(([key, value]) => (
-                        <div key={key}>
-                          <dt>{humanize(key)}</dt>
-                          <dd className={scoreClass(value)}>{value}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </Panel>
+                  <div className={s.statGroup} key={group}>
+                    <Panel title={`${humanize(group)} sub-stats`}>
+                      <dl className={s.attributes}>
+                        {Object.entries(values).map(([key, value]) => (
+                          <div key={key}>
+                            <dt>{humanize(key)}</dt>
+                            <dd className={scoreClass(value)}>{value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </Panel>
+                  </div>
                 ))}
                 <Panel title="Discipline Fits">
                   <dl className={s.attributes}>
@@ -171,6 +234,7 @@ export function ProfilePanel({
                 </Panel>
                 <Panel title="Condition">
                   <div className={s.meters}>
+                    <Meter label="Popularity" value={w.condition.popularity} />
                     <Meter label="Fatigue" value={w.condition.fatigue} />
                     <Meter label="Confidence" value={w.condition.confidence} />
                     <Meter label="Morale" value={w.condition.morale} />

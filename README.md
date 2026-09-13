@@ -44,7 +44,11 @@ The present development build includes:
   deterministic player conversations, management rapport, explained effects and private People mail.
 - A current-data Talent Search foundation with SQL-paged skill/identity/availability filters,
   searchable include/exclude rules, stable sorting, configurable columns, four-person comparison,
-  durable saved views, named shortlists and a personal blacklist. Ring identities/aliases are next.
+  durable saved views, named shortlists and a personal blacklist. It now leads with active ring names,
+  searches permitted former aliases and explains why an alias matched.
+- Separate Person and wrestling Character records with dated identities, masks, Face/Heel/Tweener
+  intent, a guided gimmick brief, worker response/readiness/risk, explicit launches and reversible
+  character retirement. Character changes never edit permanent wrestling ratings.
 - Show cards containing matches and angles, with ordering, editing and capacity rules.
 - Road-agent planning, manual spots, control periods and protected-wrestler instructions.
 - Deterministic, second-by-second show simulation with pause, playback speeds and live messages.
@@ -55,10 +59,11 @@ The present development build includes:
 
 Singles and no-disqualification singles are the currently playable match formats. Tag, trios,
 multi-person and elimination structures can now be represented by the rules model, but their
-runtime simulation and booking interface are upcoming work. The planned 2.5D presentation has
-not been added; the live match currently uses a simulation event view.
+runtime simulation and booking interface are upcoming work. The guaranteed text/2.5D presentation and
+conditional future retro 3D broadcast viewer have not been added; live matches currently use a
+simulation event view.
 
-See the [current ticket](docs/tickets/WM-021.1.md), [ticket index](docs/tickets/INDEX.md),
+See the [current capability](docs/tickets/WM-025.md), [ticket index](docs/tickets/INDEX.md),
 [ordered roadmap](docs/model-task-plan.md) and [milestones](docs/milestones.md) for the exact
 development state.
 
@@ -127,7 +132,7 @@ evolve without making the renderer responsible for game results.
 | Interface         | React 19 + TypeScript | Management screens and live-show controls            |
 | Simulation        | Rust                  | Match, show, audience and consequence rules          |
 | Careers           | SQLite                | Portable world state, events, reports and migrations |
-| Future match view | PixiJS 8              | 2D/2.5D rendering of simulation events               |
+| Future match view | Web renderer          | Text/2.5D fallback; optional PlayCanvas v2 retro 3D  |
 
 The simulation is seeded and independent of React, Tauri, SQLite and any future renderer. A
 paused show stores its exact random-stream position and transient state, allowing deterministic
