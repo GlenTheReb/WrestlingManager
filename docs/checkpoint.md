@@ -1,10 +1,11 @@
-# Wrestling Manager checkpoint — 12 September 2026
+# Wrestling Manager checkpoint — 13 September 2026
 
 Current handoff: [WM-021.1 — Current-data Talent Search foundation](tickets/WM-021.1.md) is
 merged through PR #5 at `28f6a26`. [WM-025 — Real-life and kayfabe separation](tickets/WM-025.md)
-is implemented, review-fixed and verified locally but uncommitted on
-`feature/wm-025-kayfabe-model`; an owner-authorised commit is next. Decision-complete WM-024 follows
-after WM-025 lands. WM-001–043 have context packets linked by
+is implemented, review-fixed and merged through PR #6 at `61d2ec1`. Owner-authorised
+[WM-024.1 — Person profile and career hub](tickets/WM-024.1.md) is implemented, review-fixed and
+verified locally on `feature/wm-024-person-profile-hub`; an explicit commit remains.
+WM-001–043 have context packets linked by
 [the capability index](tickets/INDEX.md). [Playable milestones](milestones.md) govern vertical slices;
 [the execution guide](tickets/EXECUTION-GUIDE.md), [template](tickets/TICKET-TEMPLATE.md) and
 [decision register](product-decisions.md) govern model-ready implementation handoffs.
@@ -16,6 +17,17 @@ and completed conversations create private People-inbox records. Personal state 
 from match chemistry, company sentiment, contracts and kayfabe.
 
 ## Latest implementation
+
+- A compact quick profile now expands into one full Person hub without unmounting Talent Search,
+  News or the originating workspace. Overview, Attributes, Character, Career, Matches & Appearances,
+  Relationships, Contract, Development and Media compose only existing canonical facts.
+- WorkerProfile now returns current company context, show-aware bounded appearance rows, one next
+  booking and up to eight worker-linked news items. It does not add save state or duplicate history.
+- Match history exposes show/date, recorded participant names, outcome, duration, six objective
+  performance dimensions and reasons. Current-style Overall stays contextual and separate from
+  popularity; future domains remain hidden instead of appearing as fake working controls.
+- Local SVG icons, compact/full layouts, accessible value labels and responsive scrolling give the
+  profile a clearer sports-management information hierarchy without an icon or network dependency.
 
 - Schema 8 adds canonical Person, Character, dated company/brand Tenure, public alias, gimmick,
   alignment intent, identity-knowledge, complete audience-response evidence and revisioned change-plan
@@ -54,6 +66,11 @@ from match chemistry, company sentiment, contracts and kayfabe.
 - The company/product/audience rules requested alongside this work are documented for future WM-011;
   they are not incorrectly presented as implemented gameplay.
 
+WM-024.1 local verification: 90 Rust and 21 React tests pass, with warning-denying Clippy,
+generated-contract regeneration, formatting, ESLint, strict TypeScript, production web build, native
+debug build and isolated desktop smoke. The 1920×1080 quick, Overview, Character and Attributes
+screenshots were inspected; navigation, scrolling and primary actions remain usable.
+
 Final WM-025.1 review verification: 90 Rust and 17 React tests pass, with warning-denying Clippy,
 generated-contract drift, formatting, ESLint, strict TypeScript, production web build, native debug
 build and isolated desktop smoke. Review fixes enforce company-context identity selection, one active
@@ -78,18 +95,24 @@ accepted in the [person, character and presentation rules](character-and-present
 foundation, saved views/lists, comparison and restoration. PD-106 is now decision-complete, including
 rename timing, contextual gimmick effects, multiple/secret identities, character retirement and
 separate alignment intent/audience perception. The combined [WM-025.1 execution ticket](tickets/WM-025.1.md)
-is now the review-fixed local implementation record; an authorised commit remains. PD-133 is accepted
-in the [Person profile and career hub rules](person-profile-hub-rules.md), making WM-024
-decision-complete. Later domains register their own searchable facts; PD-125
-owns the complete Entity Hub and contextual Booking Reference Drawer design.
+is now the merged implementation record from PR #6 at `61d2ec1`. PD-133 is accepted and its final
+defaults are locked in the [Person profile and career hub rules](person-profile-hub-rules.md).
+[WM-024.1](tickets/WM-024.1.md) is the verified local current-data hub. Later domains register their
+own searchable/profile facts; accepted PD-134 rules D8 and E1–E7 own the complete Entity Hub and
+contextual Booking Reference Drawer design.
 
-PD-132 accepts an optional post-core [retro 3D broadcast direction](retro-broadcast-engine-rules.md)
+PD-132 accepts a spike-gated [retro 3D broadcast direction](retro-broadcast-engine-rules.md)
 and [WM-043 capability](tickets/WM-043.md): an original PlayCanvas Engine v2 low-poly viewer through
 `@playcanvas/react`, with WebGL2 required and WebGPU optional. A canonical WM skeleton, verified
 licensed/original modular assets, paired attacker/receiver animations and WM-owned move recipes are
 driven only by WM-013 events. The text/2.5D viewer remains complete. A one-arena/two-wrestler/five-move
-feasibility spike must prove 60 FPS on documented ordinary-PC hardware before longer work; WM-043 does
-not change the current next ticket or block the management game.
+feasibility spike must prove 60 FPS on documented ordinary-PC hardware before longer work. PD-134
+makes the proven WM-043 exit a commercial-release requirement, but it does not change the current
+next ticket or block earlier management milestones.
+
+PD-134 accepts the complete [game product baseline](game-product-rules.md): all 168 questionnaire
+decisions are durable destination rules, former PD-107–131 blockers are resolved, multiplayer is out
+of scope and exact balance/content constants remain with their execution tickets.
 
 PD-112 accepts [pre-match and live match direction](live-match-direction-rules.md): most workers
 cooperate, while contextual safety, creative, trust, morale, status, relationship or personality
@@ -122,7 +145,7 @@ automatic leak or forced surprise.
   shows, corporate networks and historical honours.
 - WM-013–019 and WM-041 deliver a renderer-neutral text/2.5D show viewer, desktop coherence,
   compatibility/performance evidence, native database/scenario tools and final release packaging.
-  Conditional WM-043 may later add the original retro 3D broadcast viewer after its go/no-go spike.
+  Spike-gated WM-043 later adds the original retro 3D broadcast viewer after its go/no-go spike.
 
 The numbered roadmap entries are capability briefs, not multi-week implementation branches. Each
 must be decomposed into a two-to-five-day execution ticket with exact inspected code ownership,
@@ -132,9 +155,9 @@ alongside the existing singles loop; match/team and presentation depth then adva
 
 Theme songs and titantrons remain outside the direction. Smart lighting/effects, text, scene cards,
 portraits, commentary and crowd state carry the guaranteed presentation. Full wrestler animation is
-not a core/release dependency; only the conditional low-poly WM-043 viewer may add it later. Portrait
-packs are optional; sound/video and eventual 3D packs remain optional. Product catalogues such as
-future match formats, contracts and media rules still require owner approval inside their ticket.
+not an early management-milestone dependency, but the low-poly WM-043 viewer is a commercial-release
+gate. Portrait packs are optional; sound/video and eventual 3D content packs remain optional. PD-134
+locks the destination product catalogues; execution tickets still calibrate exact constants and content.
 
 ## Earlier foundation inventory (historical)
 
@@ -184,29 +207,32 @@ roadmap documentation are merged; generated `output/` and `tmp/` artifacts remai
 Read the ignored root SDD.md first. Exact heading references for this checkpoint:
 
 - Current checkpoint and execution pointer: SDD.md:3
-- Confirmed direction: SDD.md:87; moveset requirements: SDD.md:136
-- Implemented player loop: SDD.md:145
-- Architecture and file ownership: SDD.md:191
-- Commands and data contracts: SDD.md:228
-- Content and world generation: SDD.md:250
-- Simulation contract: SDD.md:267
-- Persistence and upgrade safety: SDD.md:314
-- Desktop layout and editing safety: SDD.md:366
-- Verification at checkpoint: SDD.md:403
-- Known limitations: SDD.md:447
-- Resume order: SDD.md:466
-- Latest WM/news implementation and verification: SDD.md:524
-- Manual model selection plan: SDD.md:557
-- WM-001 match-rule core: SDD.md:566
-- Planned wrestler depth backlog: SDD.md:639
-- PD-102 search/discovery design: SDD.md:677
-- PD-106 Person/Character design: SDD.md:700
-- PD-132 optional retro 3D broadcast design: SDD.md:727
-- Complete planned product architecture: SDD.md:748
-- Model-ready planning contract: SDD.md:811
-- WM-022 combined implementation: SDD.md:861
-- WM-023 combined implementation: SDD.md:909
-- PD-112 match planning and live direction: SDD.md:953
+- Confirmed direction: SDD.md:103; moveset requirements are within that section
+- Implemented player loop: SDD.md:161
+- Architecture and file ownership: SDD.md:207
+- Commands and data contracts: SDD.md:244
+- Content and world generation: SDD.md:268
+- Simulation contract: SDD.md:285
+- Persistence and upgrade safety: SDD.md:332
+- Desktop layout and editing safety: SDD.md:384
+- Verification at checkpoint: SDD.md:433
+- Known limitations: SDD.md:488
+- Resume order: SDD.md:516
+- WM identity and news increment: SDD.md:576
+- Manual model selection plan: SDD.md:609
+- WM-001 match-rule core: SDD.md:618
+- Planned wrestler depth backlog: SDD.md:691
+- PD-102 search/discovery design: SDD.md:739
+- PD-106 Person/Character design: SDD.md:762
+- PD-133 Person profile design: SDD.md:789
+- PD-132 release-gated retro 3D design: SDD.md:789
+- PD-134 complete game product baseline: SDD.md:833
+- PD-135 between-segment social interstitials: SDD.md:850
+- Complete planned product architecture: SDD.md:850
+- Model-ready planning contract: SDD.md:926
+- WM-022 combined implementation: SDD.md:980
+- WM-023 combined implementation: SDD.md:1028
+- PD-112 match planning and live direction: SDD.md:1072
 
 These sections supersede the foundation-era implemented-status descriptions in older docs.
 The appended final-evidence section records the actual native result. Developer concepts,

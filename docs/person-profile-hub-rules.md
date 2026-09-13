@@ -1,7 +1,7 @@
 # Person profile and career hub rules
 
-Status: PD-133 accepted by the owner on 12 September 2026. These rules make WM-024
-decision-complete; they do not authorise implementation.
+Status: PD-133 accepted by the owner on 12 September 2026 and final execution defaults locked on
+13 September 2026. The owner authorised the combined WM-024.1 implementation.
 
 ## Player promise
 
@@ -122,6 +122,11 @@ control; WM-032 owns training.
 - WM-024 is delivered as one execution ticket/branch/review cycle with internal phases. It composes
   existing canonical data and typed extension points; it does not invent fake functioning contract,
   title, training, social or move systems before their owning capabilities exist.
+- Unfinished systems are hidden during development. Once a domain exists, an empty profile state uses
+  in-world language such as **No contract** or **No stable membership**, never developer-facing
+  “not implemented” copy.
+- Current-style Overall remains a style-context wrestling measure, never a universal measure of a
+  person's total value or suitability for a non-wrestling role.
 
 ## Research basis
 

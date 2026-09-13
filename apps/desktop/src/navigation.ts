@@ -33,11 +33,24 @@ export const defaultWorkerSearch = (): WorkerSearchRequest => ({
 
 export type GameScreen =
   'saves' | 'overview' | 'talent' | 'booking' | 'live' | 'reports' | 'news';
+export type ProfileMode = 'quick' | 'full';
+export type ProfileTab =
+  | 'overview'
+  | 'attributes'
+  | 'character'
+  | 'career'
+  | 'appearances'
+  | 'relationships'
+  | 'contract'
+  | 'development'
+  | 'media';
 type Navigation = {
   screen: GameScreen;
   activeSaveId: string | null;
   liveShowId: number | null;
   profileId: string | null;
+  profileMode: ProfileMode;
+  profileTab: ProfileTab;
   reportShowId: number | null;
   plannerDirty: boolean;
   workerSearch: WorkerSearchRequest;
@@ -54,7 +67,9 @@ type Navigation = {
   openReport: (showId: number) => void;
   navigate: (screen: GameScreen) => void;
   openLive: (showId: number) => void;
-  inspectWorker: (workerId: string | null) => void;
+  inspectWorker: (workerId: string | null, mode?: ProfileMode) => void;
+  setProfileMode: (mode: ProfileMode) => void;
+  setProfileTab: (tab: ProfileTab) => void;
   openSave: (saveId: string) => void;
   showLibrary: () => void;
 };
@@ -65,6 +80,8 @@ export const useNavigation = create<Navigation>((set) => ({
   activeSaveId: null,
   liveShowId: null,
   profileId: null,
+  profileMode: 'quick',
+  profileTab: 'overview',
   reportShowId: null,
   plannerDirty: false,
   workerSearch: defaultWorkerSearch(),
@@ -97,13 +114,25 @@ export const useNavigation = create<Navigation>((set) => ({
   openReport: (reportShowId) => set({ reportShowId, screen: 'reports' }),
   navigate: (screen) => set({ screen }),
   openLive: (liveShowId) => set({ liveShowId, screen: 'live' }),
-  inspectWorker: (profileId) => set({ profileId }),
+  inspectWorker: (profileId, profileMode = 'quick') =>
+    set((state) => ({
+      profileId,
+      profileMode: profileId ? profileMode : state.profileMode,
+      profileTab:
+        profileId && profileId !== state.profileId
+          ? 'overview'
+          : state.profileTab,
+    })),
+  setProfileMode: (profileMode) => set({ profileMode }),
+  setProfileTab: (profileTab) => set({ profileTab }),
   openSave: (saveId) =>
     set({
       activeSaveId: saveId,
       screen: 'overview',
       liveShowId: null,
       profileId: null,
+      profileMode: 'quick',
+      profileTab: 'overview',
       reportShowId: null,
       plannerDirty: false,
       workerSearch: defaultWorkerSearch(),

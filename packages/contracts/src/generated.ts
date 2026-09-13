@@ -257,7 +257,17 @@ export type AgentAdvice = { plan: MatchPlan, notes: Array<string>, };
 
 export type CareerOffice = { promotion: PromotionOverview, show: ShowCard, agents: Array<RoadAgent>, rosterCount: number, media: Array<MediaPost>, recentShows: Array<ShowCard>, };
 
-export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, history: Array<SegmentReport>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, relationships: RelationshipProfile, character: CharacterProfile, };
+export type ProfileCompany = { id: string, name: string, initials: string, region: string, };
+
+export type ProfileParticipant = { workerId: string, name: string, };
+
+export type ProfileAppearanceKind = "match" | "angle";
+
+export type ProfileAppearance = { showId: number, showName: string, date: string, segmentId: number, kind: ProfileAppearanceKind, title: string, participants: Array<ProfileParticipant>, winnerId: string | null, result: string, durationSeconds: number, performance: Performance, reasons: Array<string>, };
+
+export type ProfileBooking = { showId: number, showName: string, date: string, segmentId: number, kind: ProfileAppearanceKind, title: string, participants: Array<ProfileParticipant>, };
+
+export type WorkerProfile = { worker: Worker, wrestling: WrestlingSummary, company: ProfileCompany, history: Array<ProfileAppearance>, nextBooking: ProfileBooking | null, recentNews: Array<NewsItem>, personalityDescription: PersonalityDescription, biography: string, exceptionalTraits: TraitOverview, relationships: RelationshipProfile, character: CharacterProfile, };
 
 export type NewsItem = { id: number, category: string, title: string, body: string, date: string, showId: number | null, workerId: string | null, read: boolean, };
 

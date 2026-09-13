@@ -99,6 +99,7 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
     assert_eq!(roster.total, 40);
     let a = &roster.rows[0];
     let b = &roster.rows[1];
+    let c = &roster.rows[2];
     let plan = MatchPlan {
         match_type: "Singles".into(),
         worker_a: a.id.clone(),
@@ -148,6 +149,28 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
             content: SegmentPlan::Match(plan),
         })
         .unwrap();
+    let card = repo
+        .save_segment(SaveSegmentRequest {
+            save_id: "loop".into(),
+            show_id: card.id,
+            revision: card.revision,
+            segment_id: None,
+            content: SegmentPlan::Angle(AnglePlan {
+                participants: vec![b.id.clone(), c.id.clone()],
+                purpose: "Interview".into(),
+                duration_seconds: 300,
+            }),
+        })
+        .unwrap();
+    let planned_profile = repo.worker_profile("loop", &a.id).unwrap();
+    let next_booking = planned_profile.next_booking.as_ref().unwrap();
+    assert_eq!(next_booking.show_id, card.id);
+    assert_eq!(next_booking.kind, ProfileAppearanceKind::Match);
+    assert_eq!(next_booking.participants.len(), 2);
+    assert_eq!(
+        planned_profile.company.name,
+        "Ultimate Wrestling Federation"
+    );
     assert!(repo.continue_day("loop").is_err());
     let started = repo.start_show("loop", card.id).unwrap();
     let request = AdvanceRequest {
@@ -166,11 +189,22 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
     let repo = SaveRepository::new(directory.path());
     assert_eq!(repo.live_show("loop", card.id).unwrap(), partial);
     assert!(directory.path().join("loop.sqlite3.v2.bak").exists());
-    let completed = repo
+    let between_segments = repo
         .advance_show(AdvanceRequest {
             save_id: "loop".into(),
             show_id: card.id,
             expected_tick: partial.tick,
+            seconds: 477,
+        })
+        .unwrap();
+    let live_profile = repo.worker_profile("loop", &a.id).unwrap();
+    assert_eq!(live_profile.history.len(), 1);
+    assert!(live_profile.next_booking.is_none());
+    let completed = repo
+        .advance_show(AdvanceRequest {
+            save_id: "loop".into(),
+            show_id: card.id,
+            expected_tick: between_segments.tick,
             seconds: 3600,
         })
         .unwrap();
@@ -215,6 +249,12 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
     );
     let profile = repo.worker_profile("loop", &a.id).unwrap();
     assert_eq!(profile.history.len(), 1);
+    assert_eq!(profile.history[0].show_id, card.id);
+    assert_eq!(profile.history[0].show_name, card.name);
+    assert_eq!(profile.history[0].kind, ProfileAppearanceKind::Match);
+    assert_eq!(profile.history[0].participants.len(), 2);
+    assert_eq!(profile.history[0].duration_seconds, 600);
+    assert!(profile.next_booking.is_none());
     assert_eq!(profile.worker.condition.matches, 1);
     assert!(!after.media.is_empty());
     assert_eq!(after.show.date, "2026-01-08");
@@ -250,6 +290,13 @@ fn booking_restart_stale_requests_and_completion_are_transactional() {
             .items
             .iter()
             .any(|item| item.worker_id.as_ref() == Some(&a.id) && item.title.contains("cleared"))
+    );
+    assert!(
+        repo.worker_profile("loop", &a.id)
+            .unwrap()
+            .recent_news
+            .iter()
+            .any(|item| item.category == "Medical")
     );
     drop(repo);
     let repo = SaveRepository::new(directory.path());

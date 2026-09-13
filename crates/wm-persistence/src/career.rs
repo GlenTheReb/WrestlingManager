@@ -188,6 +188,170 @@ fn card(connection: &Connection, id: i32) -> Result<ShowCard, PersistenceError> 
         .collect::<Result<_, PersistenceError>>()?;
     Ok(show)
 }
+
+fn profile_participants(
+    connection: &Connection,
+    plan: &SegmentPlan,
+    report: Option<&SegmentReport>,
+) -> Result<Vec<ProfileParticipant>, PersistenceError> {
+    let ids = match plan {
+        SegmentPlan::Match(plan) => vec![plan.worker_a.as_str(), plan.worker_b.as_str()],
+        SegmentPlan::Angle(plan) => plan.participants.iter().map(String::as_str).collect(),
+    };
+    ids.into_iter()
+        .map(|worker_id| {
+            let recorded_name = report.and_then(|report| {
+                report
+                    .changes
+                    .iter()
+                    .find(|change| change.worker_id == worker_id)
+                    .map(|change| change.name.clone())
+            });
+            let name = match recorded_name {
+                Some(name) => name,
+                None => worker(connection, worker_id)?.name,
+            };
+            Ok(ProfileParticipant {
+                worker_id: worker_id.to_owned(),
+                name,
+            })
+        })
+        .collect()
+}
+
+fn profile_history(
+    connection: &Connection,
+    worker_id: &str,
+) -> Result<Vec<ProfileAppearance>, PersistenceError> {
+    let rows = connection
+        .prepare(
+            "SELECT h.show_id,sh.name,sh.show_date,h.segment_id,seg.plan,h.report
+             FROM worker_history h
+             JOIN shows sh ON sh.id=h.show_id
+             JOIN segments seg ON seg.id=h.segment_id
+             WHERE h.worker_id=?1
+             ORDER BY h.id DESC
+             LIMIT 30",
+        )?
+        .query_map([worker_id], |row| {
+            Ok((
+                row.get::<_, i32>(0)?,
+                row.get::<_, String>(1)?,
+                row.get::<_, String>(2)?,
+                row.get::<_, i32>(3)?,
+                row.get::<_, String>(4)?,
+                row.get::<_, String>(5)?,
+            ))
+        })?
+        .collect::<rusqlite::Result<Vec<_>>>()?;
+
+    rows.into_iter()
+        .map(|(show_id, show_name, date, segment_id, plan, report)| {
+            let plan: SegmentPlan = decode(plan)?;
+            let report: SegmentReport = decode(report)?;
+            let kind = match &plan {
+                SegmentPlan::Match(_) => ProfileAppearanceKind::Match,
+                SegmentPlan::Angle(_) => ProfileAppearanceKind::Angle,
+            };
+            Ok(ProfileAppearance {
+                show_id,
+                show_name,
+                date,
+                segment_id,
+                kind,
+                title: report.title.clone(),
+                participants: profile_participants(connection, &plan, Some(&report))?,
+                winner_id: report.winner_id.clone(),
+                result: report.result.clone(),
+                duration_seconds: report.duration_seconds,
+                performance: report.performance,
+                reasons: report.reasons,
+            })
+        })
+        .collect()
+}
+
+fn next_profile_booking(
+    connection: &Connection,
+    worker_id: &str,
+) -> Result<Option<ProfileBooking>, PersistenceError> {
+    let row = connection
+        .query_row(
+            "SELECT sh.id,sh.name,sh.show_date,seg.id,seg.title,seg.plan
+             FROM shows sh
+             JOIN segments seg ON seg.show_id=sh.id
+             WHERE sh.status!='complete' AND (
+               (json_extract(seg.plan,'$.kind')='match' AND
+                (json_extract(seg.plan,'$.plan.workerA')=?1 OR json_extract(seg.plan,'$.plan.workerB')=?1))
+               OR
+               (json_extract(seg.plan,'$.kind')='angle' AND EXISTS(
+                 SELECT 1 FROM json_each(seg.plan,'$.plan.participants') WHERE value=?1
+               ))
+             )
+             AND NOT EXISTS(
+               SELECT 1 FROM worker_history h
+               WHERE h.worker_id=?1 AND h.segment_id=seg.id
+             )
+             ORDER BY sh.show_date,seg.position,seg.id
+             LIMIT 1",
+            [worker_id],
+            |row| {
+                Ok((
+                    row.get::<_, i32>(0)?,
+                    row.get::<_, String>(1)?,
+                    row.get::<_, String>(2)?,
+                    row.get::<_, i32>(3)?,
+                    row.get::<_, String>(4)?,
+                    row.get::<_, String>(5)?,
+                ))
+            },
+        )
+        .optional()?;
+    row.map(|(show_id, show_name, date, segment_id, title, plan)| {
+        let plan: SegmentPlan = decode(plan)?;
+        let kind = match &plan {
+            SegmentPlan::Match(_) => ProfileAppearanceKind::Match,
+            SegmentPlan::Angle(_) => ProfileAppearanceKind::Angle,
+        };
+        Ok(ProfileBooking {
+            show_id,
+            show_name,
+            date,
+            segment_id,
+            kind,
+            title,
+            participants: profile_participants(connection, &plan, None)?,
+        })
+    })
+    .transpose()
+}
+
+fn profile_news(
+    connection: &Connection,
+    worker_id: &str,
+) -> Result<Vec<NewsItem>, PersistenceError> {
+    connection
+        .prepare(
+            "SELECT id,category,title,body,occurred_on,show_id,worker_id,is_read
+             FROM news_items INDEXED BY news_date WHERE worker_id=?1
+             ORDER BY occurred_on DESC,id DESC LIMIT 8",
+        )?
+        .query_map([worker_id], |row| {
+            Ok(NewsItem {
+                id: row.get(0)?,
+                category: row.get(1)?,
+                title: row.get(2)?,
+                body: row.get(3)?,
+                date: row.get(4)?,
+                show_id: row.get(5)?,
+                worker_id: row.get(6)?,
+                read: row.get(7)?,
+            })
+        })?
+        .collect::<rusqlite::Result<Vec<_>>>()
+        .map_err(Into::into)
+}
+
 fn get_session(connection: &Connection, id: i32) -> Result<Session, PersistenceError> {
     let data = connection
         .query_row(
@@ -350,17 +514,13 @@ impl SaveRepository {
         id: &str,
     ) -> Result<WorkerProfile, PersistenceError> {
         let connection = self.career_connection(save_id)?;
-        let history = connection
-            .prepare(
-                "SELECT report FROM worker_history WHERE worker_id=?1 ORDER BY id DESC LIMIT 30",
-            )?
-            .query_map([id], |r| r.get::<_, String>(0))?
-            .map(|r| decode(r?))
-            .collect::<Result<_, _>>()?;
+        let history = profile_history(&connection, id)?;
+        let next_booking = next_profile_booking(&connection, id)?;
+        let recent_news = profile_news(&connection, id)?;
         let mut worker = worker(&connection, id)?;
-        let company = read_overview(&connection)?.promotion_id;
-        worker.identity = worker.identity.for_viewer(Some(&company));
-        let personality_description = worker.identity.describe(Some(&company));
+        let promotion = read_overview(&connection)?;
+        worker.identity = worker.identity.for_viewer(Some(&promotion.promotion_id));
+        let personality_description = worker.identity.describe(Some(&promotion.promotion_id));
         worker.personality = personality_description.text.clone();
         worker.ambition = worker.identity.motivation_text();
         let biography = worker.identity.biography_text(
@@ -370,14 +530,24 @@ impl SaveRepository {
             &worker.background,
             worker.condition.matches,
         );
-        let exceptional_traits = super::identity::ledger(&connection, id)?.view(Some(&company));
-        let relationships = super::relationships::profile(&connection, id, &company)?;
+        let exceptional_traits =
+            super::identity::ledger(&connection, id)?.view(Some(&promotion.promotion_id));
+        let relationships =
+            super::relationships::profile(&connection, id, &promotion.promotion_id)?;
         let character = super::characters::profile(&connection, id)?;
         let wrestling = worker.wrestling_style.summary(&worker.attributes);
         Ok(WorkerProfile {
             worker,
             wrestling,
+            company: ProfileCompany {
+                id: promotion.promotion_id,
+                name: promotion.name,
+                initials: promotion.initials,
+                region: promotion.region,
+            },
             history,
+            next_booking,
+            recent_news,
             personality_description,
             biography,
             exceptional_traits,
