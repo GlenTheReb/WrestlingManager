@@ -1,11 +1,11 @@
-# PD-132 — Optional retro 3D broadcast engine
+# PD-132 — Release-gated retro 3D broadcast engine
 
-Status: Accepted direction 12 September 2026. This is a conditional post-core presentation capability,
-not current implementation and not a dependency of WM-025 or the first playable management milestones.
+Status: Accepted direction 12 September 2026; commercial-release requirement amended 13 September 2026. This is a spike-gated later presentation capability, not current implementation and not a
+dependency of WM-025 or the first playable management milestones.
 
 ## Player promise
 
-Players may eventually watch WM's canonical match and show timeline as a lightweight, stylised 3D
+Players can watch WM's canonical match and show timeline as a lightweight, stylised 3D
 broadcast without changing results, requiring modern high-end hardware or losing the complete text-led
 experience.
 
@@ -56,6 +56,10 @@ experience.
   timeline inside the real Tauri/WebView2 application. Continue only if contact, conversion, fallback
   and performance criteria pass, including sustained 60 FPS (16.7 ms frame budget) on a documented
   ordinary-PC baseline at the spike's target resolution and quality preset.
+- A viable implementation is required before commercial release. This does not bypass the spike:
+  if it fails, resolve the demonstrated workflow or performance problem and repeat a bounded spike;
+  do not commit to the long production programme blindly and do not remove the release requirement
+  without a new owner decision.
 - Current planning estimate after a successful spike: roughly 6–9 full-time engineering months for
   the main move-family and complete show engine, and 12–18 months for broad release-quality polish.
   These are planning ranges, exclude uncertain asset production/licensing and increase substantially
@@ -66,7 +70,7 @@ experience.
 
 ## Ownership
 
-WM-043 owns the optional renderer and asset playback. WM-013 owns presentation events; WM-014 the
+WM-043 owns the release-gated renderer and asset playback. WM-013 owns presentation events; WM-014 the
 guaranteed text/2.5D viewer; WM-029 structured scenes; WM-034 production facts; WM-041 safe custom
 content and optional 3D-pack manifests; WM-018 performance/accessibility evidence.
 

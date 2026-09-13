@@ -43,7 +43,7 @@ Implement deterministic performance events from the booked plan. Locked outcomes
 hold over large property-test samples. Separate performance dimensions and emit causal
 evidence. Add a renderer-neutral timeline and basic event view; changing playback speed,
 skipping or hiding any current/future renderer cannot change the result. The complete text/2.5D
-viewer and conditional WM-043 retro 3D expansion remain later capabilities.
+viewer and spike-gated WM-043 retro 3D capability remain later work.
 
 Apply momentum, morale, fatigue, cohort popularity, money and storyline consequences
 once, transactionally. Generate a fictional social feed from committed events using

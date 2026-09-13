@@ -1,8 +1,8 @@
 # PD-131 — Temporary alumni returns and event rumour rules
 
-Status: Partially accepted by the owner on 11 September 2026. This records the confirmed direction
-for temporary legend/alumni appearances and pre-event media speculation. Exact balance, contract
-terms and generation rates remain open.
+Status: Accepted by the owner on 13 September 2026 through PD-134. This records the direction for
+temporary legend/alumni appearances and pre-event media speculation. Exact balance, contract variants
+and generation rates are execution-ticket calibration rather than open product design.
 
 ## Player promise
 
